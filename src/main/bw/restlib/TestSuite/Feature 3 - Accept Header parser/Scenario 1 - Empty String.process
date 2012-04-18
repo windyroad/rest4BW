@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://windyroad.org/RESTlib.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://windyroad.org/RESTlib.xsd" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd">
     <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/RESTlib.xsd" schemaLocation="/REST/Public/Schemas/RESTlib.xsd"/>
-    <pd:name>TestSuite/Feature 1 - QueryParser TestCase/Scenario 1 - Empty String.process</pd:name>
+    <pd:name>TestSuite/Feature 3 - Accept Header parser/Scenario 1 - Empty String.process</pd:name>
     <pd:description>@Timeout(60000)</pd:description>
     <pd:startName>Start</pd:startName>
     <pd:startX>150</pd:startX>
@@ -13,19 +13,6 @@
     <pd:errorSchemas/>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1301865816031</pd:targetNamespace>
-    <pd:activity name="parseQuery">
-        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-        <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:description>When an empty query string is parsed</pd:description>
-        <pd:x>312</pd:x>
-        <pd:y>62</pd:y>
-        <config>
-            <processName>/REST/Public/Process/BWUnit/parseQuery.process</processName>
-        </config>
-        <pd:inputBindings>
-            <query/>
-        </pd:inputBindings>
-    </pd:activity>
     <pd:activity name="AssertEqual">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
@@ -38,31 +25,44 @@
         <pd:inputBindings>
             <ns:equal-input>
                 <ns:expected>
-                    <ns1:query/>
+                    <ns1:accepts/>
                 </ns:expected>
                 <ns:actual>
-                    <xsl:copy-of select="$parseQuery/ns1:query"/>
+                    <xsl:copy-of select="$parseAccept/ns1:accepts"/>
                 </ns:actual>
             </ns:equal-input>
         </pd:inputBindings>
     </pd:activity>
-    <pd:transition>
-        <pd:from>Start</pd:from>
-        <pd:to>parseQuery</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>parseQuery</pd:from>
-        <pd:to>AssertEqual</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
+    <pd:activity name="parseAccept">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:description>When an empty query string is parsed</pd:description>
+        <pd:x>312</pd:x>
+        <pd:y>64</pd:y>
+        <config>
+            <processName>/REST/Public/Process/BWUnit/parseAccept.process</processName>
+        </config>
+        <pd:inputBindings>
+            <accept/>
+        </pd:inputBindings>
+    </pd:activity>
     <pd:transition>
         <pd:from>AssertEqual</pd:from>
         <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>parseAccept</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>parseAccept</pd:from>
+        <pd:to>AssertEqual</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
