@@ -13,3 +13,7 @@ lib/*
 # Ignore generated files/folders
 build
 src/main/bw/restlib/.designtimelibs
+src/main/bw/.designtimelibs
+
+
+
