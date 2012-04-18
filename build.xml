@@ -423,7 +423,7 @@ To Releases Version: ${releases.new.revision}</echo>
 			</propertyset>
 			<echo message="run-bwunit-tests - phase: @{phase}" />
 			<for param="testsuite">
-				<dirset dir="src/main/bw" includes="**/@{phase}TestSuite" id="@{phase}.dirs" />
+				<dirset dir="src/main/bw/restlib" includes="**/@{phase}TestSuite" id="@{phase}.dirs" />
 				<sequential>
 					<dirname property="@{testsuite}.project.path" file="@{testsuite}/.." />
 					<basename property="@{testsuite}.project.name" file="${@{testsuite}.project.path}" />
@@ -475,7 +475,7 @@ To Releases Version: ${releases.new.revision}</echo>
 
 	<target name="report-quick-tests"
 	        description="Run Quick tests and create a JUnit compatible report"
-	        depends="-load-ant-contrib,-load-antunit">
+	        depends="-load-ant-contrib,-load-antunit,build">
 		<bwubuild:report-bwunit-tests phase="quick" />
 <!--
 		<bwubuild:report-antunit-tests phase="quick" />
