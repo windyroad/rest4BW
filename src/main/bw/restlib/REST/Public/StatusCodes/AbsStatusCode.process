@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://windyroad.org/bwunit-abstract" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://windyroad.org/RESTlib.xsd" xmlns:pfx="http://windyroad.org/bwunit-0.0.0.xsd">
+    <pd:name>REST/Public/StatusCodes/AbsStatusCode.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="message" type="xsd:string"/>
+                    <xsd:element name="code" type="xsd:int"/>
+                    <xsd:element name="additionalInfo" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="max-age-delta-seconds" type="xsd:long" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>74</pd:startX>
+    <pd:startY>65</pd:startY>
+    <pd:returnBindings>
+        <pfx2:response>
+            <pfx2:text-content>
+                <xsl:value-of select="$Transform-XML/xmlString"/>
+            </pfx2:text-content>
+        </pfx2:response>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endX>684</pd:endX>
+    <pd:endY>65</pd:endY>
+    <pd:errorSchemas>
+        <Error ref="pfx2:error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1301599510965</pd:targetNamespace>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>682</pd:x>
+        <pd:y>192</pd:y>
+        <config>
+            <faultName>Error</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <message>
+                    <xsl:value-of select="$concat-message/root/message"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="$Start/root/code"/>
+                </messageCode>
+                <data>
+                    <pfx2:error>
+                        <xsl:copy-of select="$Build-default-REST-Headers/pfx2:headers"/>
+                        <pfx2:msg>
+                            <xsl:value-of select="$concat-message/root/message"/>
+                        </pfx2:msg>
+                    </pfx2:error>
+                </data>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Build default REST Headers">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>454</pd:x>
+        <pd:y>74</pd:y>
+        <config>
+            <processName>/REST/Public/Builders/Build default REST Headers.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <max-age-delta-seconds>
+                    <xsl:value-of select="$Start/root/max-age-delta-seconds"/>
+                </max-age-delta-seconds>
+                <statusLine>
+                    <xsl:value-of select="concat($Start/root/code, ' ',$Start/root/message)"/>
+                </statusLine>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="concat message">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>251</pd:x>
+        <pd:y>65</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="message" type="xsd:string"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <message>
+                    <xsl:value-of select="concat($Start/root/code, ' ',$Start/root/message, ' ',$Start/root/additionalInfo)"/>
+                </message>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Build default REST Headers</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Build default REST Headers</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>false()</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>concat message</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>concat message</pd:from>
+        <pd:to>Build default REST Headers</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>
