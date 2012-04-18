@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx2="http://windyroad.org/wr-http.xsd" xmlns:pfx="http://windyroad.org/RESTlib.xsd">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/REST/Public/Schemas/Http.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/RESTlib.xsd" schemaLocation="/REST/Public/Schemas/RESTlib.xsd"/>
+    <pd:name>REST/Public/Process/REST Interface.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx2:request"/>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$Map-Exception-to-HTTP-Response/pfx2:response"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx2:response"/>
+    <pd:endX>1016</pd:endX>
+    <pd:endY>70</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1334627030682</pd:targetNamespace>
+    <pd:activity name="Catch All">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>687</pd:x>
+        <pd:y>335</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="parseQuery">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>285</pd:x>
+        <pd:y>67</pd:y>
+        <config>
+            <processName>/REST/Public/Process/BWUnit/parseQuery.process</processName>
+        </config>
+        <pd:inputBindings>
+            <query>
+                <xsl:value-of select="$Start/pfx2:request/pfx2:QueryString"/>
+            </query>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="parsePost">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>408</pd:x>
+        <pd:y>65</pd:y>
+        <config>
+            <processName>/REST/Public/Process/BWUnit/parsePost.process</processName>
+        </config>
+        <pd:inputBindings>
+            <input>
+                <post>
+                    <xsl:value-of select="$Start/pfx2:request/pfx2:PostData"/>
+                </post>
+                <contentType>
+                    <xsl:value-of select="$Start/pfx2:request/pfx2:Headers/pfx2:Content-Type"/>
+                </contentType>
+            </input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="parseAccept">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>524</pd:x>
+        <pd:y>64</pd:y>
+        <config>
+            <processName>/REST/Public/Process/BWUnit/parseAccept.process</processName>
+        </config>
+        <pd:inputBindings>
+            <accept>
+                <xsl:value-of select="$Start/pfx2:request/pfx2:Headers/pfx2:Accept"/>
+            </accept>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="de-multiplex">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>673</pd:x>
+        <pd:y>65</pd:y>
+        <config>
+            <processName>/REST/Public/Process/BWUnit/de-multiplex.process</processName>
+        </config>
+        <pd:inputBindings>
+            <pfx:request>
+                <pfx:method>
+                    <xsl:value-of select="$Start/pfx2:request/pfx2:Method"/>
+                </pfx:method>
+                <pfx:command>
+                    <xsl:value-of select="$Start/pfx2:request/pfx2:Command"/>
+                </pfx:command>
+                <xsl:copy-of select="$parsePost/pfx:post"/>
+                <xsl:copy-of select="$parseQuery/pfx:query"/>
+                <pfx:host>
+                    <xsl:value-of select="$Start/pfx2:request/pfx2:Headers/pfx2:host"/>
+                </pfx:host>
+                <xsl:copy-of select="$parseAccept/pfx:accepts"/>
+            </pfx:request>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map REST response to HTTP response">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>841</pd:x>
+        <pd:y>76</pd:y>
+        <config>
+            <processName>/REST/Public/Mappers/Map REST to HTTP response.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$de-multiplex/pfx:response"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch HTTP Error">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>685</pd:x>
+        <pd:y>227</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <fault>localname=error namespace=http://windyroad.org/RESTlib.xsd</fault>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="500 Internal Server Error">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>852</pd:x>
+        <pd:y>341</pd:y>
+        <config>
+            <processName>/REST/Public/StatusCodes/500 Internal Server Error.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <errorMessage>
+                    <xsl:value-of select="$Catch-All/exceptiondata/*"/>
+                </errorMessage>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map Exception to HTTP Response">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>848</pd:x>
+        <pd:y>235</pd:y>
+        <config>
+            <processName>/REST/Public/Mappers/Map Exception to HTTP Response.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Catch-HTTP-Error/pfx:error"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>parseQuery</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>parseQuery</pd:from>
+        <pd:to>parsePost</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>parsePost</pd:from>
+        <pd:to>parseAccept</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>parseAccept</pd:from>
+        <pd:to>de-multiplex</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map REST response to HTTP response</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>de-multiplex</pd:from>
+        <pd:to>Map REST response to HTTP response</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch All</pd:from>
+        <pd:to>500 Internal Server Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch HTTP Error</pd:from>
+        <pd:to>Map Exception to HTTP Response</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Exception to HTTP Response</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>
