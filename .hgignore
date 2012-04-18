@@ -1,10 +1,14 @@
 # use glob syntax.
 syntax:glob
 
+
+# Ignore sys files
+*~
+
+# Ignore downloaded dependencies
 lib/*
 !lib/placeholder.txt
 
-
-build/working/restlib/.TIBCO/Designer5.prefs
-build/working/restlib/.tibco/logs/restlib.log
+# Ignore generated files/folders
+build
 src/main/bw/restlib/.designtimelibs
