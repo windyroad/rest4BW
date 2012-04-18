@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/RESTlib.xsd">
     <xsd:import namespace="http://windyroad.org/RESTlib.xsd" schemaLocation="/REST/Public/Schemas/RESTlib.xsd"/>
-    <pd:name>REST/Public/Process/BWUnit/de-multiplex.process</pd:name>
+    <pd:name>REST/Public/Process/Http/de-multiplex.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType ref="pfx:request"/>
     <pd:startX>113</pd:startX>
@@ -31,7 +31,7 @@
         <pd:x>411</pd:x>
         <pd:y>81</pd:y>
         <config>
-            <processName>/REST/Public/Process/BWUnit/root.process</processName>
+            <processName>/REST/Public/Process/Http/root.process</processName>
         </config>
         <pd:inputBindings>
             <xsl:copy-of select="$Start/pfx:request"/>
@@ -43,7 +43,7 @@
         <pd:x>420</pd:x>
         <pd:y>196</pd:y>
         <config>
-            <processName>/REST/Public/Process/BWUnit/getStatic.process</processName>
+            <processName>/REST/Public/Process/Http/getStatic.process</processName>
         </config>
         <pd:inputBindings>
             <input>

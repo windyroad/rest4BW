@@ -42,7 +42,7 @@
 
 	<target name="projlib" depends="-load-ant-contrib">
 		<property name="restlib.projlib" location="build/RESTlib.projlib" />
-		<tibant:build-library lib="."
+		<tibant:build-library lib="/Build/RESTLib"
 		                      dir="src/main/bw"
 		                      project="restlib"
 		                      aliases-refid="bwunit.aliases"

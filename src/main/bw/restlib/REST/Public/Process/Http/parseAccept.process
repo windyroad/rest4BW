@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://windyroad.org/RESTlib.xsd">
     <xsd:import namespace="http://windyroad.org/RESTlib.xsd" schemaLocation="/BWUnit/Private/REST/BWUnit Rest.xsd"/>
-    <pd:name>REST/Public/Process/BWUnit/parseAccept.process</pd:name>
+    <pd:name>REST/Public/Process/Http/parseAccept.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType>
         <xsd:element name="accept" type="xsd:string"/>
@@ -26,14 +26,14 @@
     <pd:activity name="Map Data">
         <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
         <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-        <pd:x>588</pd:x>
-        <pd:y>64</pd:y>
+        <pd:x>569</pd:x>
+        <pd:y>63</pd:y>
         <config>
             <element ref="pfx:accepts"/>
         </config>
         <pd:inputBindings>
             <pfx:accepts>
-                <xsl:for-each select="$Map-Data-1/root/segements">
+                <xsl:for-each select="$Split-accept/root/segments">
                     <pfx:accept>
                         <xsl:if test="params[1]">
                             <xsl:attribute name="type">
@@ -58,43 +58,17 @@
             </pfx:accepts>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="Split segements">
+    <pd:activity name="Split accept">
         <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
         <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-        <pd:x>300</pd:x>
-        <pd:y>63</pd:y>
+        <pd:x>367</pd:x>
+        <pd:y>64</pd:y>
         <config>
             <element>
                 <xsd:element name="root">
                     <xsd:complexType>
                         <xsd:sequence>
-                            <xsd:element name="segements" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
-                        </xsd:sequence>
-                    </xsd:complexType>
-                </xsd:element>
-            </element>
-        </config>
-        <pd:inputBindings>
-            <root>
-                <xsl:for-each xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="tib:tokenize($Start/accept, &quot;,&quot;)">
-                    <segements>
-                        <xsl:value-of select="."/>
-                    </segements>
-                </xsl:for-each>
-            </root>
-        </pd:inputBindings>
-    </pd:activity>
-    <pd:activity name="Map-Data-1">
-        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
-        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-        <pd:x>443</pd:x>
-        <pd:y>65</pd:y>
-        <config>
-            <element>
-                <xsd:element name="root">
-                    <xsd:complexType>
-                        <xsd:sequence>
-                            <xsd:element name="segements" minOccurs="0" maxOccurs="unbounded">
+                            <xsd:element name="segments" minOccurs="0" maxOccurs="unbounded">
                                 <xsd:complexType>
                                     <xsd:sequence>
                                         <xsd:element name="params" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
@@ -108,21 +82,21 @@
         </config>
         <pd:inputBindings>
             <root>
-                <xsl:for-each select="$Split-segements/root/segements">
-                    <segements>
+                <xsl:for-each select="tib:tokenize($Start/accept, &quot;,&quot;)">
+                    <segments>
                         <xsl:for-each select="tib:tokenize(., &quot;;&quot;)">
                             <params>
                                 <xsl:value-of select="."/>
                             </params>
                         </xsl:for-each>
-                    </segements>
+                    </segments>
                 </xsl:for-each>
             </root>
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>
         <pd:from>Start</pd:from>
-        <pd:to>Split segements</pd:to>
+        <pd:to>Split accept</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
@@ -135,14 +109,7 @@
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>Split segements</pd:from>
-        <pd:to>Map-Data-1</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Map-Data-1</pd:from>
+        <pd:from>Split accept</pd:from>
         <pd:to>Map Data</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
