@@ -5,3 +5,6 @@ lib/*
 !lib/placeholder.txt
 
 
+build/working/restlib/.TIBCO/Designer5.prefs
+build/working/restlib/.tibco/logs/restlib.log
+src/main/bw/restlib/.designtimelibs
