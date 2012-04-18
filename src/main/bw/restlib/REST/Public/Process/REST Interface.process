@@ -34,7 +34,7 @@
         <pd:x>285</pd:x>
         <pd:y>67</pd:y>
         <config>
-            <processName>/REST/Public/Process/BWUnit/parseQuery.process</processName>
+            <processName>/REST/Public/Process/Http/parseQuery.process</processName>
         </config>
         <pd:inputBindings>
             <query>
@@ -48,7 +48,7 @@
         <pd:x>408</pd:x>
         <pd:y>65</pd:y>
         <config>
-            <processName>/REST/Public/Process/BWUnit/parsePost.process</processName>
+            <processName>/REST/Public/Process/Http/parsePost.process</processName>
         </config>
         <pd:inputBindings>
             <input>
@@ -67,7 +67,7 @@
         <pd:x>524</pd:x>
         <pd:y>64</pd:y>
         <config>
-            <processName>/REST/Public/Process/BWUnit/parseAccept.process</processName>
+            <processName>/REST/Public/Process/Http/parseAccept.process</processName>
         </config>
         <pd:inputBindings>
             <accept>
@@ -81,7 +81,7 @@
         <pd:x>673</pd:x>
         <pd:y>65</pd:y>
         <config>
-            <processName>/REST/Public/Process/BWUnit/de-multiplex.process</processName>
+            <processName>/REST/Public/Process/Http/de-multiplex.process</processName>
         </config>
         <pd:inputBindings>
             <pfx:request>

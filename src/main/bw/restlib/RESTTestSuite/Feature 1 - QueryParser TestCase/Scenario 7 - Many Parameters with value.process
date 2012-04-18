@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://windyroad.org/RESTlib.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://windyroad.org/RESTlib.xsd" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd">
     <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/RESTlib.xsd" schemaLocation="/REST/Public/Schemas/RESTlib.xsd"/>
-    <pd:name>TestSuite/QueryParser TestCase/Scenario 7 - Many Parameters with value.process</pd:name>
+    <pd:name>RESTTestSuite/Feature 1 - QueryParser TestCase/Scenario 7 - Many Parameters with value.process</pd:name>
     <pd:description>@Timeout(60000)</pd:description>
     <pd:startName>Start</pd:startName>
     <pd:startX>150</pd:startX>
@@ -20,7 +20,7 @@
         <pd:x>312</pd:x>
         <pd:y>62</pd:y>
         <config>
-            <processName>/REST/Public/Process/BWUnit/parseQuery.process</processName>
+            <processName>/REST/Public/Process/Http/parseQuery.process</processName>
         </config>
         <pd:inputBindings>
             <query>thisisatest=hello&amp;arg2=val2&amp;arg3=val3&amp;arg4=val4</query>
