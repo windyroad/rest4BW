@@ -17,13 +17,5 @@
 			<type>Integer</type>
 			<modTime>1334624360252</modTime>
 		</globalVariable>
-		<globalVariable>
-			<name>project-home</name>
-			<value>/home/developer/Documents/workspace/restlib/restlib</value>
-			<deploymentSettable>true</deploymentSettable>
-			<serviceSettable>false</serviceSettable>
-			<type>String</type>
-			<modTime>1334648450852</modTime>
-		</globalVariable>
 	</globalVariables>
 </repository>
