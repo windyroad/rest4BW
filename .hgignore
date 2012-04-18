@@ -4,6 +4,7 @@ syntax:glob
 
 # Ignore sys files
 *~
+lib/*~
 
 # Ignore downloaded dependencies
 lib/*
