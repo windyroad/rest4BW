@@ -423,11 +423,12 @@ To Releases Version: ${releases.new.revision}</echo>
 			</propertyset>
 			<echo message="run-bwunit-tests - phase: @{phase}" />
 			<for param="testsuite">
-				<dirset dir="src/main/bw" includes="**/test/@{phase}TestSuite" id="@{phase}.dirs" />
+				<dirset dir="src/main/bw" includes="**/@{phase}TestSuite" id="@{phase}.dirs" />
 				<sequential>
 					<dirname property="@{testsuite}.project.path" file="@{testsuite}/.." />
 					<basename property="@{testsuite}.project.name" file="${@{testsuite}.project.path}" />
 					<mkdir dir="build/@{phase}/${@{testsuite}.project.name}" />
+					<echo message="Found Test Suite - @{testsuite}" />
 					<bwunit:run-tests dir="${@{testsuite}.project.path}/.."
 					                  project="${@{testsuite}.project.name}"
 					                  result-dest-dir="build/@{phase}/${@{testsuite}.project.name}"
@@ -436,7 +437,7 @@ To Releases Version: ${releases.new.revision}</echo>
 					                  license="${bwunit.license}"
 					                  create-dtl-file="true"
 					                  global-variables-refid="bwunit.selftest.gvars"
-					                  scope="test/@{phase}TestSuite/" />
+					                  scope="@{phase}TestSuite/" />
 				</sequential>
 			</for>
 		</sequential>
@@ -466,9 +467,15 @@ To Releases Version: ${releases.new.revision}</echo>
 		</subant>
 	</target>
 
+	<target name="report-REST-tests"
+	        description="Run REST tests and create a JUnit compatible report"
+	        depends="-load-ant-contrib,-load-antunit">
+		<bwubuild:report-bwunit-tests phase="REST" />
+	</target>
+
 	<target name="report-quick-tests"
 	        description="Run Quick tests and create a JUnit compatible report"
-	        depends="-load-ant-contrib,-load-antunit,build">
+	        depends="-load-ant-contrib,-load-antunit">
 		<bwubuild:report-bwunit-tests phase="quick" />
 <!--
 		<bwubuild:report-antunit-tests phase="quick" />
