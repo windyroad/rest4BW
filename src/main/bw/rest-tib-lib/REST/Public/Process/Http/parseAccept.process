@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://windyroad.org/RESTlib.xsd">
-    <xsd:import namespace="http://windyroad.org/RESTlib.xsd" schemaLocation="/BWUnit/Private/REST/BWUnit Rest.xsd"/>
+<pd:ProcessDefinition xmlns:pfx="http://windyroad.org/RESTlib.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
+    <xsd:import namespace="http://windyroad.org/RESTlib.xsd" schemaLocation="/REST/Public/Schemas/RESTlib.xsd"/>
     <pd:name>REST/Public/Process/Http/parseAccept.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType>
@@ -10,7 +10,7 @@
     <pd:startY>64</pd:startY>
     <pd:returnBindings>
         <pfx:accepts>
-            <xsl:for-each select="$Map-Data/pfx:accepts/pfx:accept">
+            <xsl:for-each select="$Parse-Accepts/pfx:accepts/pfx:accept">
                 <xsl:sort select="@q" order="descending" data-type="number"/>
                 <xsl:copy-of select="."/>
             </xsl:for-each>
@@ -23,7 +23,7 @@
     <pd:errorSchemas/>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1329808531854</pd:targetNamespace>
-    <pd:activity name="Map Data">
+    <pd:activity name="Parse Accepts">
         <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
         <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
         <pd:x>569</pd:x>
@@ -33,7 +33,7 @@
         </config>
         <pd:inputBindings>
             <pfx:accepts>
-                <xsl:for-each select="$Split-accept/root/segments">
+                <xsl:for-each select="$Split-Accepts/root/segments">
                     <pfx:accept>
                         <xsl:if test="params[1]">
                             <xsl:attribute name="type">
@@ -58,7 +58,7 @@
             </pfx:accepts>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="Split accept">
+    <pd:activity name="Split Accepts">
         <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
         <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
         <pd:x>367</pd:x>
@@ -96,21 +96,21 @@
     </pd:activity>
     <pd:transition>
         <pd:from>Start</pd:from>
-        <pd:to>Split accept</pd:to>
+        <pd:to>Split Accepts</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>Map Data</pd:from>
+        <pd:from>Parse Accepts</pd:from>
         <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>Split accept</pd:from>
-        <pd:to>Map Data</pd:to>
+        <pd:from>Split Accepts</pd:from>
+        <pd:to>Parse Accepts</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
