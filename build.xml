@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project default="build"
-         name="RESTlib-build"
+         name="rest-tib-lib-build"
          xmlns="antlib:org.apache.tools.ant"
          xmlns:bwubuild="org.windyroad.bwunit.build"
          xmlns:bwunit="org.windyroad.bwunit"
@@ -31,7 +31,7 @@
 	<property name="ivy.jar.file" location="${ivy.jar.dir}/ivy-${ivy.install.version}.jar" />
 
 	<property name="bwunit.home" location="lib/bwunit" />
-	<property name="restlib.projlib" location="build/RESTLib.projlib" />
+	<property name="rest-tib-lib.projlib" location="build/rest-tib-lib.projlib" />
 	<import file="lib/bwunit/util/bwunit.xml" optional="true" />
 
 	<target name="-load-ant-contrib" depends="retrieve" unless="ant-contrib.loaded">
@@ -41,12 +41,12 @@
 
 
 	<target name="projlib" depends="-load-ant-contrib">
-		<property name="restlib.projlib" location="build/RESTlib.projlib" />
-		<tibant:build-library lib="/Build/RESTLib"
+		<property name="rest-tib-lib.projlib" location="build/rest-tib-lib.projlib" />
+		<tibant:build-library lib="/Build/rest-tib-lib"
 		                      dir="src/main/bw"
-		                      project="restlib"
+		                      project="rest-tib-lib"
 		                      aliases-refid="bwunit.aliases"
-		                      out="${restlib.projlib}"
+		                      out="${rest-tib-lib.projlib}"
 		                      validate="true"
 		                      validate-max-warnings="100"
 		                      validate-expected-errors="0"
@@ -54,7 +54,8 @@
 	</target>
 
 	<target name="dist" depends="build" description="creates a zip distribution of the current build">
-		<zip destfile="build/BWUnit.zip">
+		<zip destfile="build/rest-tib-lib.zip">
+			<!--
 			<zipfileset dir="build" includes="BWUnit*User*Guide.html" prefix="" />
 			<zipfileset dir="Examples"
 			            includes="**"
@@ -72,9 +73,10 @@
 				<include name="shell.html" />
 				<include name="shell.xhtml" />
 			</zipfileset>
-			<zipfileset dir="build" includes="BWUnit.projlib" />
 			<zipfileset dir="build" includes="BWUnit.jar" />
 			<zipfileset dir="." includes="copyright.html" />
+			-->
+			<zipfileset dir="build" includes="rest-tib-lib.projlib" />
 		</zip>
 	</target>
 
@@ -95,15 +97,13 @@
 			<else>
 				<echo level="info">Getting Release Version...</echo>
 
-				<!-- TODO: Remove once v2 is releases -->
-				<property name="releases.new.revision" value="2" />
+				<property name="default.base.revision" value="1" />
 
 				<ivy:buildnumber organisation="${ivy.organisation}"
 				                 module="${ivy.module}"
-				                 default="2"
+				                 default="${default.base.revision}"
 				                 resolver="releases"
 				                 prefix="releases" />
-                <var name="releases.new.revision" value="2" />
 
 				<echo level="info">Releases Version: ${releases.new.revision}</echo>
 				<echo level="info">Getting Snapshots Version...</echo>
@@ -127,7 +127,7 @@
 	<target name="check-version" depends="-determine-version" description="" />
 
 	<target name="designer" depends="-load-ant-contrib" description="Launch BWUnit in TIBCO Designer">
-		<tibant:designer dir="src/main/bw" project="restlib" aliases-refid="bwunit.aliases" create-dtl-file="true" />
+		<tibant:designer dir="src/main/bw" project="rest-tib-lib" aliases-refid="bwunit.aliases" create-dtl-file="true" />
 	</target>
 
 	<target name="designer-test-example"
@@ -298,6 +298,7 @@
 	</target>
 
 	<target name="publish" depends="dist,-determine-version" description="">
+		<echo message="Ivy Resolver - ${ivy.resolver}" />
 		<fail message="Cannot publish directly to releases">
 			<condition>
 				<equals arg1="${ivy.resolver}" arg2="releases" />
@@ -471,6 +472,15 @@ To Releases Version: ${releases.new.revision}</echo>
 	        description="Run REST tests and create a JUnit compatible report"
 	        depends="-load-ant-contrib,-load-antunit">
 		<bwubuild:report-bwunit-tests phase="REST" />
+	</target>
+
+	<target name="validate-projlib"
+	        description="Validate the compiled projlib">
+		<tibant:designer dir="src/main/bw" project="rest-tib-lib"
+			expected-errors="0"
+			max-warnings="0"
+						
+			/>
 	</target>
 
 	<target name="report-quick-tests"
