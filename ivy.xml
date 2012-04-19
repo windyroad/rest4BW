@@ -3,11 +3,13 @@
        xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
     <info
         organisation="org.windyroad"
-        module="restlib"
+        module="rest-tib-lib"
         status="release"/>
 	<publications>
-		<artifact name="RESTlib" type="zip"/>
-		<artifact name="RESTlib-User-Guide" type="html" />
+		<artifact name="rest-tib-lib" type="zip"/>
+<!--
+		<artifact name="rest-tib-lib-lib-User-Guide" type="html" />
+-->
 	</publications>
 	<dependencies>
         <dependency org="org.apache.ant" name="ant-antunit" rev="1.1"/>
