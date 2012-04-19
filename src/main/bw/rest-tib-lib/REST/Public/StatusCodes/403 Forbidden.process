@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://windyroad.org/bwunit-abstract" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://windyroad.org/RESTlib.xsd" xmlns:pfx="http://windyroad.org/bwunit-0.0.0.xsd">
+    <pd:name>REST/Public/StatusCodes/403 Forbidden.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>74</pd:startX>
+    <pd:startY>65</pd:startY>
+    <pd:returnBindings>
+        <pfx2:response>
+            <pfx2:text-content>
+                <xsl:value-of select="$Transform-XML/xmlString"/>
+            </pfx2:text-content>
+        </pfx2:response>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endX>500</pd:endX>
+    <pd:endY>66</pd:endY>
+    <pd:errorSchemas>
+        <Error ref="pfx2:error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1301599510965</pd:targetNamespace>
+    <pd:activity name="AbsStatusCode">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>277</pd:x>
+        <pd:y>69</pd:y>
+        <config>
+            <processName>/REST/Public/StatusCodes/AbsHTTPErrorCode.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <message>
+                    <xsl:value-of select="'Forbidden'"/>
+                </message>
+                <code>
+                    <xsl:value-of select="403"/>
+                </code>
+                <max-age-delta-seconds>
+                    <xsl:value-of select="60"/>
+                </max-age-delta-seconds>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>AbsStatusCode</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>AbsStatusCode</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

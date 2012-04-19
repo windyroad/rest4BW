@@ -1,0 +1,18 @@
+# use glob syntax.
+syntax:glob
+
+
+# Ignore sys files
+*~
+lib/*~
+
+# Ignore downloaded dependencies
+lib/*
+!lib/placeholder.txt
+
+# Ignore generated files/folders
+build
+src/main/bw/.designtimelibs
+src/main/bw/rest-tib-lib/.designtimelibs
+
+

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://windyroad.org/RESTlib.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/RESTlib.xsd" schemaLocation="/REST/Public/Schemas/RESTlib.xsd"/>
+    <pd:name>RESTTestSuite/Feature 3 - Accept Header parser TestCase/Scenario 5 - Single Parameter with params.process</pd:name>
+    <pd:description>@Timeout(60000)</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>150</pd:startX>
+    <pd:startY>63</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>605</pd:endX>
+    <pd:endY>68</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1301865816031</pd:targetNamespace>
+    <pd:activity name="AssertEqual">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:description>Then and empty set of name value pairs in returns</pd:description>
+        <pd:x>478</pd:x>
+        <pd:y>65</pd:y>
+        <config>
+            <processName>/BWUnit/Public/Asserts/AssertEqual.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:equal-input>
+                <ns:expected>
+                    <ns1:accepts>
+                        <ns1:accept>
+                            <xsl:attribute name="type">text/plain</xsl:attribute>
+                            <xsl:attribute name="q">1.0</xsl:attribute>
+                            <ns1:parameters>
+                                <xsl:attribute name="name">arg1</xsl:attribute>
+                                <xsl:attribute name="value">val1</xsl:attribute>
+                            </ns1:parameters>
+                            <ns1:parameters>
+                                <xsl:attribute name="name">arg2</xsl:attribute>
+                                <xsl:attribute name="value">val2</xsl:attribute>
+                            </ns1:parameters>
+                        </ns1:accept>
+                    </ns1:accepts>
+                </ns:expected>
+                <ns:actual>
+                    <xsl:copy-of select="$parseAccept/ns1:accepts"/>
+                </ns:actual>
+            </ns:equal-input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="parseAccept">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:description>When the accept value "text/plain;arg1=val1;arg2=val2" is parsed</pd:description>
+        <pd:x>312</pd:x>
+        <pd:y>64</pd:y>
+        <config>
+            <processName>/REST/Public/Process/Http/parseAccept.process</processName>
+        </config>
+        <pd:inputBindings>
+            <accept>text/plain;arg1=val1;arg2=val2</accept>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>AssertEqual</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>parseAccept</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>parseAccept</pd:from>
+        <pd:to>AssertEqual</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:iconImage>R0lGODlhMAAwAOemACk6Rys8SSw9SS09SjNEUDREUTVFUTZGUjdHUzhHUzhIVDlJVUBPW0NRXUNS&#xD;
+XkZVYFJfalNha2BsdmdzfGdzfWh0fWl1fnB7hHN+h2KRwGWTwWmWxImTmmqZxI2WnW+bx3GdyHah&#xD;
+y3eizHymzn+nzp+mrKCnrYOs0oWt0o6w0oqx1aatsoyy1ZKy06mwtZO01KqxtpC22Za21pO32Zi3&#xD;
+1660ua62u5u52LC3u7G3vJe83J272Zm83Z+92qG/3KTB3Li+wqbB26bD3qPF46rE3ajF36TH47HF&#xD;
+2K7G36rH4bPG2q3I4cDFyLXI27LK4a/L47jL3bHN5LXN5K/P6rTO5rDP6bvN3rzO27zO3bbP5sjM&#xD;
+0L7P4LnQ5cDR38DS4bzT587S1cPU4r3V68XV47/W68DW6dDU17vY8MfW4bzZ8MTY683X38rZ5tXZ&#xD;
+28Xc78fc78ve79De6cji99Ti7M7j9Mrk9s/k9NLk89/i5ODi5eHj5eLk5uPl59bp+Nnp9tjq+Obo&#xD;
+6ufp6t7r9ujq6+nq7Ors7evt7uzt7+zu8O3u7+3v8O3v8e7v8O7w8u/w8e/w8u/x8vDx8vHy8/Lz&#xD;
+9PT19vb39/f4+Pj4+fj5+fn5+fn5+vn6+vr6+/r7+/v7/Pv8/Pz8/Pz8/fz9/f39/f39/v7+/v//&#xD;
+////////////////////////////////////////////////////////////////////////////&#xD;
+////////////////////////////////////////////////////////////////////////////&#xD;
+////////////////////////////////////////////////////////////////////////////&#xD;
+////////////////////////////////////////////////////////////////////////////&#xD;
+/////////////////////////////////////////////////////yH5BAEKAP8ALAAAAAAwADAA&#xD;
+AAj+AP8JHPjPlMGDCBMqXKiQoMOBDCNKnPhQ4MSLGBsSzGgQiAUKIEOCrGCCo6mNGQsBWMmy5Uot&#xD;
+HCFybAPgAZObOG9KAIDDpEWOZgAcWKEQCAMANXyaNFXJAYABkhIuAFCAz9Krkw4ASJRQK56rYKcy&#xD;
+6gogKtilYsmaPctRAQBHatmadAsXoda1ci/SjZsXYwIAkPj2nfg3sN2ygy8WFpyY4eLDeBsrRAAg&#xD;
+EmPJCSlbhoyZIeUjKVpoyBBE6+bOmQEoeSGjwwYiWhGhngygCY0bID4g0bpodmooO3qICOGEt2+E&#xD;
+lK34+EFihBTjxw1S3iKkCIoTXKBHp+wlyRIWKr7MaD9OOcyTKDNilBnvm/IYKll46FCjtVF06QDY&#xD;
+iCFjZAic+veZQlkcbrxRxRR3AHgfZXPQYUcaZ/ih1SMBNgDAGn38UYccgggQACcBYgCAB2hcgUUX&#xD;
+NgAQQYCmBAUAB3kckgMBAMDAoiUluATABaUEiIkihoAxgQEDQODCKCwmqeSSTF5UUJMG/QSlTBmR&#xD;
+EgoomBCyhx6ATAIWShyVQskggQQyyJmG+QQmRp44AkkloYyiSSSOXKLmQxltYkknpIji5yeWZJJR&#xD;
+RQ4dV1FAADs=&#xD;
+</pd:iconImage>
+</pd:ProcessDefinition>

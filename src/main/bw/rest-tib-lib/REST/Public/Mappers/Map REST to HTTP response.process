@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx2="http://windyroad.org/wr-http.xsd" xmlns:pfx="http://windyroad.org/RESTlib.xsd">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/REST/Public/Schemas/Http.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/RESTlib.xsd" schemaLocation="/REST/Public/Schemas/RESTlib.xsd"/>
+    <pd:name>REST/Public/Mappers/Map REST to HTTP response.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:response"/>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$Map-REST-to-HTTP/pfx2:response"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx2:response"/>
+    <pd:endX>465</pd:endX>
+    <pd:endY>65</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1334632481163</pd:targetNamespace>
+    <pd:activity name="Map REST to HTTP">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>312</pd:x>
+        <pd:y>70</pd:y>
+        <config>
+            <element ref="pfx2:response"/>
+        </config>
+        <pd:inputBindings>
+            <pfx2:response>
+                <xsl:if test="$Start/pfx:response/pfx:binary-content">
+                    <pfx2:binaryContent>
+                        <xsl:value-of select="$Start/pfx:response/pfx:binary-content"/>
+                    </pfx2:binaryContent>
+                </xsl:if>
+                <xsl:if test="$Start/pfx:response/pfx:text-content">
+                    <pfx2:asciiContent>
+                        <xsl:value-of select="$Start/pfx:response/pfx:text-content"/>
+                    </pfx2:asciiContent>
+                </xsl:if>
+                <xsl:for-each select="$Start/pfx:response/pfx:headers">
+                    <pfx2:respHeaders/>
+                </xsl:for-each>
+            </pfx2:response>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Map REST to HTTP</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map REST to HTTP</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>
