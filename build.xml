@@ -468,12 +468,6 @@ To Releases Version: ${releases.new.revision}</echo>
 		</subant>
 	</target>
 
-	<target name="report-REST-tests"
-	        description="Run REST tests and create a JUnit compatible report"
-	        depends="-load-ant-contrib,-load-antunit">
-		<bwubuild:report-bwunit-tests phase="REST" />
-	</target>
-
 	<target name="validate-projlib"
 	        description="Validate the compiled projlib">
 		<tibant:designer dir="src/main/bw" project="rest-tib-lib"
