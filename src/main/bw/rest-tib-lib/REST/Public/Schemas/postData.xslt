@@ -1,7 +1,7 @@
 <?xml version = "1.0" encoding = "UTF-8"?>
 <xsl:stylesheet exclude-result-prefixes="bw tib xsl"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions"
-    xmlns:bw="http://windyroad.org/bwunit-0.0.0.xsd" xmlns:bur="http://windyroad.org/RESTlib.xsd" version="2.0">
+    xmlns:bw="http://windyroad.org/bwunit-0.0.0.xsd" xmlns:bur="http://windyroad.org/rest-tib-lib.xsd" version="2.0">
     <xsl:output omit-xml-declaration="no" />
     <xsl:preserve-space elements="content" />
     <xsl:param name="contentType"/>
