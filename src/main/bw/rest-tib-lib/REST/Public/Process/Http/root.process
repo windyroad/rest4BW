@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:ns2="http://windyroad.org/bwunit-abstract" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://windyroad.org/bwunit-0.0.0.xsd" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://windyroad.org/bwunit-abstract" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://windyroad.org/bwunit-0.0.0.xsd" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd">
     <xsd:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Public/Schemas/rest-tib-lib.xsd"/>
     <pd:name>REST/Public/Process/Http/root.process</pd:name>
     <pd:startName>Start</pd:startName>
@@ -217,7 +217,7 @@ or$FilterAccepts/pfx:accepts/pfx:accept[1]/@type="application/xhtml+xml"</pd:xpa
         <pd:conditionType>xpath</pd:conditionType>
         <pd:xpath>($FilterAccepts/pfx:accepts/pfx:accept[1]/@type="application/vnd.org.windyroad.bwunit+xml"
 or $FilterAccepts/pfx:accepts/pfx:accept[1]/@type="*/*")
-and (empty($FilterAccepts/pfx:accepts/pfx:accept/pfx:entry[lower-case(pfx:key)='charset'])
-or lower-case($FilterAccepts/pfx:accepts/pfx:accept/pfx:entry[lower-case(pfx:key)='charset']/pfx:value) = 'utf-8')</pd:xpath>
+and (empty($FilterAccepts/pfx:accepts/pfx:accept/pfx:parameter[lower-case(@name)='charset'])
+or lower-case($FilterAccepts/pfx:accepts/pfx:accept/pfx:parameter[lower-case(@name)='charset']/@value) = 'utf-8')</pd:xpath>
     </pd:transition>
 </pd:ProcessDefinition>

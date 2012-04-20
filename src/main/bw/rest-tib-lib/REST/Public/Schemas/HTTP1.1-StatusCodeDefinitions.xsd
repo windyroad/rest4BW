@@ -7,115 +7,18 @@
 	 elementFormDefault="qualified"
 	 attributeFormDefault="unqualified">
 	<xs:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="rest-tib-lib.xsd"/>
-	<xs:complexType name="statusCodeDefinitionType">
-		<xs:sequence>
-			<xs:element name="code">
-				<xs:simpleType>
-					<xs:restriction base="xs:int">
-						<xs:enumeration value="100"/>
-						<xs:enumeration value="101"/>
-						<xs:enumeration value="200"/>
-						<xs:enumeration value="201"/>
-						<xs:enumeration value="202"/>
-						<xs:enumeration value="203"/>
-						<xs:enumeration value="204"/>
-						<xs:enumeration value="205"/>
-						<xs:enumeration value="206"/>
-						<xs:enumeration value="300"/>
-						<xs:enumeration value="301"/>
-						<xs:enumeration value="302"/>
-						<xs:enumeration value="303"/>
-						<xs:enumeration value="304"/>
-						<xs:enumeration value="305"/>
-						<xs:enumeration value="306"/>
-						<xs:enumeration value="307"/>
-						<xs:enumeration value="400"/>
-						<xs:enumeration value="401"/>
-						<xs:enumeration value="402"/>
-						<xs:enumeration value="403"/>
-						<xs:enumeration value="404"/>
-						<xs:enumeration value="405"/>
-						<xs:enumeration value="406"/>
-						<xs:enumeration value="407"/>
-						<xs:enumeration value="408"/>
-						<xs:enumeration value="409"/>
-						<xs:enumeration value="410"/>
-						<xs:enumeration value="411"/>
-						<xs:enumeration value="412"/>
-						<xs:enumeration value="413"/>
-						<xs:enumeration value="414"/>
-						<xs:enumeration value="415"/>
-						<xs:enumeration value="416"/>
-						<xs:enumeration value="417"/>
-						<xs:enumeration value="500"/>
-						<xs:enumeration value="501"/>
-						<xs:enumeration value="502"/>
-						<xs:enumeration value="503"/>
-						<xs:enumeration value="504"/>
-						<xs:enumeration value="505"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:element>
-			<xs:element name="message">
-				<xs:simpleType>
-					<xs:restriction base="xs:string">
-						<xs:enumeration value="Continue"/>
-						<xs:enumeration value="Switching Protocols"/>
-						<xs:enumeration value="OK"/>
-						<xs:enumeration value="Created"/>
-						<xs:enumeration value="Accepted"/>
-						<xs:enumeration value="Non-Authoritative Information"/>
-						<xs:enumeration value="No Content"/>
-						<xs:enumeration value="Reset Content"/>
-						<xs:enumeration value="Partial Content"/>
-						<xs:enumeration value="Multiple Choices"/>
-						<xs:enumeration value="Moved Permanently"/>
-						<xs:enumeration value="Found"/>
-						<xs:enumeration value="See Other"/>
-						<xs:enumeration value="Not Modified"/>
-						<xs:enumeration value="Use Proxy"/>
-						<xs:enumeration value="(Unused)"/>
-						<xs:enumeration value="Temporary Redirect"/>
-						<xs:enumeration value="Bad Request"/>
-						<xs:enumeration value="Unauthorized"/>
-						<xs:enumeration value="Payment Required"/>
-						<xs:enumeration value="Forbidden"/>
-						<xs:enumeration value="Not Found"/>
-						<xs:enumeration value="Method Not Allowed"/>
-						<xs:enumeration value="Not Acceptable"/>
-						<xs:enumeration value="Proxy Authentication Required"/>
-						<xs:enumeration value="Request Timeout"/>
-						<xs:enumeration value="Conflict"/>
-						<xs:enumeration value="Gone"/>
-						<xs:enumeration value="Length Required"/>
-						<xs:enumeration value="Precondition Failed"/>
-						<xs:enumeration value="Request Entity Too Large"/>
-						<xs:enumeration value="Request-URI Too Long"/>
-						<xs:enumeration value="Unsupported Media Type"/>
-						<xs:enumeration value="Requested Range Not Satisfiable"/>
-						<xs:enumeration value="Expectation Failed"/>
-						<xs:enumeration value="Internal Server Error"/>
-						<xs:enumeration value="Not Implemented"/>
-						<xs:enumeration value="Bad Gateway"/>
-						<xs:enumeration value="Service Unavailable"/>
-						<xs:enumeration value="Gateway Timeout"/>
-						<xs:enumeration value="HTTP Version Not Supported"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:element>
-		</xs:sequence>
-	</xs:complexType>
+	<xs:complexType name="statusCodeDefTyp"/>
 	<xs:element name="sc100-Continue">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType"/>
+				<xs:extension base="http1.1:statusCodeDefTyp"/>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="sc101-Switching_Protocols">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType">
+				<xs:extension base="http1.1:statusCodeDefTyp">
 					<xs:sequence>
 						<xs:element ref="http1.1:upgrade"/>
 					</xs:sequence>
@@ -126,7 +29,7 @@
 	<xs:element name="sc200-OK">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType">
+				<xs:extension base="http1.1:statusCodeDefTyp">
 					<xs:sequence>
 						<xs:element ref="rest:response"/>
 					</xs:sequence>
@@ -137,7 +40,7 @@
 	<xs:element name="sc201-Created">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType">
+				<xs:extension base="http1.1:statusCodeDefTyp">
 					<xs:sequence>
 						<xs:element ref="http1.1:content-location"/>
 					</xs:sequence>
@@ -148,7 +51,7 @@
 	<xs:element name="sc202-Accepted">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType">
+				<xs:extension base="http1.1:statusCodeDefTyp">
 					<xs:sequence>
 						<xs:element ref="rest:response"/>
 					</xs:sequence>
@@ -159,7 +62,7 @@
 	<xs:element name="sc203-Non-Authoritative_Information">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType">
+				<xs:extension base="http1.1:statusCodeDefTyp">
 					<xs:sequence>
 						<xs:element ref="rest:response"/>
 					</xs:sequence>
@@ -170,7 +73,7 @@
 	<xs:element name="sc204-No_Content">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType">
+				<xs:extension base="http1.1:statusCodeDefTyp">
 					<xs:sequence>
 						<xs:element ref="rest:headers"/>
 					</xs:sequence>
@@ -181,14 +84,14 @@
 	<xs:element name="sc205-Reset_Content">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType"/>
+				<xs:extension base="http1.1:statusCodeDefTyp"/>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="sc206-Partial_Content">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType">
+				<xs:extension base="http1.1:statusCodeDefTyp">
 					<xs:sequence>
 						<xs:element ref="rest:headers"/>
 					</xs:sequence>
@@ -199,7 +102,7 @@
 	<xs:element name="sc300-Multiple_Choices">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType">
+				<xs:extension base="http1.1:statusCodeDefTyp">
 					<xs:sequence>
 						<xs:element ref="rest:response"/>
 					</xs:sequence>
@@ -210,7 +113,7 @@
 	<xs:element name="sc301-Moved_Permanently">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType">
+				<xs:extension base="http1.1:statusCodeDefTyp">
 					<xs:sequence>
 						<xs:choice minOccurs="0">
 							<xs:element ref="rest:text-content"/>
@@ -225,7 +128,7 @@
 	<xs:element name="sc302-Found">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType">
+				<xs:extension base="http1.1:statusCodeDefTyp">
 					<xs:sequence>
 						<xs:choice minOccurs="0">
 							<xs:element ref="rest:text-content"/>
@@ -240,7 +143,7 @@
 	<xs:element name="sc303-See_Other">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType">
+				<xs:extension base="http1.1:statusCodeDefTyp">
 					<xs:sequence>
 						<xs:choice minOccurs="0">
 							<xs:element ref="rest:text-content"/>
@@ -255,63 +158,63 @@
 	<xs:element name="sc304-Not_Modified">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType"/>
+				<xs:extension base="http1.1:statusCodeDefTyp"/>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="sc305-Use_Proxy">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType"/>
+				<xs:extension base="http1.1:statusCodeDefTyp"/>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="sc306-Unused">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType"/>
+				<xs:extension base="http1.1:statusCodeDefTyp"/>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="sc307-Temporary_Redirect">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType"/>
+				<xs:extension base="http1.1:statusCodeDefTyp"/>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="sc400-Bad_Request">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType"/>
+				<xs:extension base="http1.1:statusCodeDefTyp"/>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="sc401-Unauthorized">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType"/>
+				<xs:extension base="http1.1:statusCodeDefTyp"/>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="sc402-Payment_Required">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType"/>
+				<xs:extension base="http1.1:statusCodeDefTyp"/>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="sc403-Forbidden">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType"/>
+				<xs:extension base="http1.1:statusCodeDefTyp"/>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="sc404-Not_Found">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType">
+				<xs:extension base="http1.1:statusCodeDefTyp">
 					<xs:sequence>
 						<xs:element ref="http1.1:content-location" minOccurs="0"/>
 					</xs:sequence>
@@ -322,133 +225,133 @@
 	<xs:element name="sc405-Method_Not_Allowed">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType"/>
+				<xs:extension base="http1.1:statusCodeDefTyp"/>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="sc406-Not_Acceptable">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType"/>
+				<xs:extension base="http1.1:statusCodeDefTyp"/>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="sc407-Proxy_Authentication_Required">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType"/>
+				<xs:extension base="http1.1:statusCodeDefTyp"/>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="sc408-Request_Timeout">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType"/>
+				<xs:extension base="http1.1:statusCodeDefTyp"/>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="sc409-Conflict">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType"/>
+				<xs:extension base="http1.1:statusCodeDefTyp"/>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="sc410-Gone">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType"/>
+				<xs:extension base="http1.1:statusCodeDefTyp"/>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="sc411-Length_Required">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType"/>
+				<xs:extension base="http1.1:statusCodeDefTyp"/>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="sc412-Precondition_Failed">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType"/>
+				<xs:extension base="http1.1:statusCodeDefTyp"/>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="sc413-Request_Entity_Too_Large">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType"/>
+				<xs:extension base="http1.1:statusCodeDefTyp"/>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="sc414-Request-URI_Too_Long">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType"/>
+				<xs:extension base="http1.1:statusCodeDefTyp"/>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="sc415-Unsupported_Media_Type">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType"/>
+				<xs:extension base="http1.1:statusCodeDefTyp"/>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="sc416-Requested_Range_Not_Satisfiable">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType"/>
+				<xs:extension base="http1.1:statusCodeDefTyp"/>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="sc417-Expectation_Failed">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType"/>
+				<xs:extension base="http1.1:statusCodeDefTyp"/>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="sc500-Internal_Server_Error">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType"/>
+				<xs:extension base="http1.1:statusCodeDefTyp"/>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="sc501-Not_Implemented">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType"/>
+				<xs:extension base="http1.1:statusCodeDefTyp"/>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="sc502-Bad_Gateway">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType"/>
+				<xs:extension base="http1.1:statusCodeDefTyp"/>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="sc503-Service_Unavailable">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType"/>
+				<xs:extension base="http1.1:statusCodeDefTyp"/>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="sc504-Gateway_Timeout">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType"/>
+				<xs:extension base="http1.1:statusCodeDefTyp"/>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="sc505-HTTP_Version_Not_Supported">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType"/>
+				<xs:extension base="http1.1:statusCodeDefTyp"/>
 			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
@@ -456,25 +359,25 @@
 	<xs:element name="upgrade" type="xs:string"/>
 	<xs:element name="content-range" type="xs:string"/>
 	<xs:element name="content-type" type="xs:string"/>
-	<xs:element name="cacheableStatusCodeDefType">
+	<xs:element name="cacheableStatusCodeDefTyp">
 		<xs:complexType>
 			<xs:complexContent>
-				<xs:extension base="http1.1:statusCodeDefinitionType">
+				<xs:extension base="http1.1:statusCodeDefTyp">
 					<xs:sequence>
 						<xs:element name="cache-response-directive" minOccurs="0" maxOccurs="unbounded">
 							<xs:complexType>
 								<xs:sequence>
 									<xs:element name="simple" minOccurs="0" maxOccurs="unbounded">
-							<xs:simpleType>
-								<xs:restriction base="xs:string">
-									<xs:enumeration value="no-cache"/>
-									<xs:enumeration value="no-store"/>
-									<xs:enumeration value="no-transform"/>
-									<xs:enumeration value="must-revalidate"/>
-									<xs:enumeration value="proxy-revalidate"/>
-									<xs:enumeration value="cache-extension"/>
-								</xs:restriction>
-							</xs:simpleType>
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:enumeration value="no-cache"/>
+												<xs:enumeration value="no-store"/>
+												<xs:enumeration value="no-transform"/>
+												<xs:enumeration value="must-revalidate"/>
+												<xs:enumeration value="proxy-revalidate"/>
+												<xs:enumeration value="cache-extension"/>
+											</xs:restriction>
+										</xs:simpleType>
 									</xs:element>
 									<xs:element name="private" type="xs:string" minOccurs="0"/>
 									<xs:element name="no-cache" type="xs:string" minOccurs="0"/>

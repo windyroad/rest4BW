@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd">
     <xsd:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/BWUnit/Private/REST/BWUnit Rest.xsd"/>
-    <pd:name>REST/Public/Process/BWUnit/parsePost.process</pd:name>
+    <pd:name>REST/Public/Process/Http/parsePost.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType>
         <xsd:element name="input">
@@ -68,6 +68,16 @@
                 <xsl:value-of select="$Transform-XML/xmlString"/>
             </xmlString>
         </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="parsePost">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>294</pd:x>
+        <pd:y>162</pd:y>
+        <config>
+            <element/>
+        </config>
+        <pd:inputBindings/>
     </pd:activity>
     <pd:transition>
         <pd:from>Start</pd:from>
