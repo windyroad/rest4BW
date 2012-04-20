@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pfx="http://windyroad.org/RESTlib.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://windyroad.org/RESTlib.xsd">
     <xsd:import namespace="http://windyroad.org/RESTlib.xsd" schemaLocation="/REST/Public/Schemas/RESTlib.xsd"/>
     <pd:name>REST/Public/Process/Http/parseAccept.process</pd:name>
     <pd:startName>Start</pd:startName>
@@ -86,7 +86,7 @@
                     <segments>
                         <xsl:for-each select="tib:tokenize(., &quot;;&quot;)">
                             <params>
-                                <xsl:value-of select="."/>
+                                <xsl:value-of select="tib:trim(.)"/>
                             </params>
                         </xsl:for-each>
                     </segments>
