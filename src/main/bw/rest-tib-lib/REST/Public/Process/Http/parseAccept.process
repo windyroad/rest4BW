@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://windyroad.org/RESTlib.xsd">
-    <xsd:import namespace="http://windyroad.org/RESTlib.xsd" schemaLocation="/BWUnit/Private/REST/BWUnit Rest.xsd"/>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd">
+    <xsd:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/BWUnit/Private/REST/BWUnit Rest.xsd"/>
     <pd:name>REST/Public/Process/Http/parseAccept.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType>
