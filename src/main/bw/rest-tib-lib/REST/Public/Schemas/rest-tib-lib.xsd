@@ -34,13 +34,15 @@
 		<xs:complexType>
 			<xs:sequence>
 				<xs:choice minOccurs="0">
-					<xs:element name="text-content" type="xs:string"/>
-					<xs:element name="binary-content" type="xs:string"/>
+					<xs:element ref="rest:text-content"/>
+					<xs:element ref="rest:binary-content"/>
 				</xs:choice>
 				<xs:element ref="rest:headers" minOccurs="0"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
+	<xs:element name="text-content" type="xs:string"/>
+	<xs:element name="binary-content" type="xs:string"/>
 	<xs:element name="post">
 		<xs:complexType>
 			<xs:sequence>
@@ -89,12 +91,7 @@
 				<xs:element name="accept" minOccurs="0" maxOccurs="unbounded">
 					<xs:complexType>
 						<xs:sequence>
-							<xs:element name="parameters" minOccurs="0" maxOccurs="unbounded">
-								<xs:complexType>
-									<xs:attribute name="name" type="xs:string"/>
-									<xs:attribute name="value" type="xs:string"/>
-								</xs:complexType>
-							</xs:element>
+							<xs:element ref="rest:entry" minOccurs="0" maxOccurs="unbounded"/>
 						</xs:sequence>
 						<xs:attribute name="type" type="xs:string"/>
 						<xs:attribute name="q" type="xs:string"/>
@@ -108,8 +105,27 @@
 	</xs:simpleType>
 	<xs:element name="header">
 		<xs:complexType>
-			<xs:attribute name="key" type="xs:string"/>
-			<xs:attribute name="value" type="xs:string"/>
+			<xs:sequence>
+				<xs:element ref="rest:key" minOccurs="0"/>
+				<xs:element ref="rest:entries" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="entry">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="rest:key"/>
+				<xs:element ref="rest:value" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="key" type="xs:string"/>
+	<xs:element name="value" type="xs:string"/>
+	<xs:element name="entries">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="rest:entry" maxOccurs="unbounded"/>
+			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
 </xs:schema>
