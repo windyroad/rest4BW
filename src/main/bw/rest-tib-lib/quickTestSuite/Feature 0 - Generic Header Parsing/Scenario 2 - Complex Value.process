@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://windyroad.org/rest-tib-lib.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://windyroad.org/rest-tib-lib.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd">
     <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Public/Schemas/rest-tib-lib.xsd"/>
-    <pd:name>quickTestSuite/Feature 3 - Accept Header parser TestCase/Scenario 2 - Many Parameters with Values.process</pd:name>
+    <pd:name>quickTestSuite/Feature 0 - Generic Header Parsing/Scenario 2 - Complex Value.process</pd:name>
     <pd:description>@Timeout(60000)</pd:description>
     <pd:startName>Start</pd:startName>
     <pd:startX>150</pd:startX>
@@ -25,67 +25,51 @@
         <pd:inputBindings>
             <ns:equal-input>
                 <ns:expected>
-                    <ns1:accepts>
-                        <ns1:accept>
-                            <xsl:attribute name="type">text/html</xsl:attribute>
-                            <xsl:attribute name="q">1.0</xsl:attribute>
-                        </ns1:accept>
-                        <ns1:accept>
-                            <xsl:attribute name="type">application/xhtml+xml</xsl:attribute>
-                            <xsl:attribute name="q">1.0</xsl:attribute>
-                        </ns1:accept>
-                        <ns1:accept>
-                            <xsl:attribute name="type">text/plain</xsl:attribute>
-                            <xsl:attribute name="q">1.0</xsl:attribute>
+                    <ns1:header>
+                        <ns1:key/>
+                        <ns1:entries>
+                            <ns1:entry>
+                                <ns1:key>text/plain</ns1:key>
+                            </ns1:entry>
+                            <ns1:entry>
+                                <ns1:key>q</ns1:key>
+                                <ns1:value>0.8</ns1:value>
+                            </ns1:entry>
+                        </ns1:entries>
+                        <ns1:entries>
+                            <ns1:entry>
+                                <ns1:key>text/html</ns1:key>
+                            </ns1:entry>
                             <ns1:entry>
                                 <ns1:key>arg1</ns1:key>
                                 <ns1:value>val1</ns1:value>
                             </ns1:entry>
+                        </ns1:entries>
+                        <ns1:entries>
                             <ns1:entry>
-                                <ns1:key>arg2</ns1:key>
-                                <ns1:value>val2</ns1:value>
+                                <ns1:key>jpeg</ns1:key>
                             </ns1:entry>
-                        </ns1:accept>
-                        <ns1:accept>
-                            <xsl:attribute name="type">application/xml</xsl:attribute>
-                            <xsl:attribute name="q">0.9</xsl:attribute>
-                            <ns1:entry>
-                                <ns1:key>arg3</ns1:key>
-                                <ns1:value>val3</ns1:value>
-                            </ns1:entry>
-                        </ns1:accept>
-                        <ns1:accept>
-                            <xsl:attribute name="type">*/*</xsl:attribute>
-                            <xsl:attribute name="q">0.8</xsl:attribute>
-                        </ns1:accept>
-                    </ns1:accepts>
+                        </ns1:entries>
+                    </ns1:header>
                 </ns:expected>
                 <ns:actual>
-                    <xsl:copy-of select="$parseAccept/ns1:accepts"/>
+                    <xsl:copy-of select="$ParseHeader/root/ns1:header"/>
                 </ns:actual>
             </ns:equal-input>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="parseAccept">
+    <pd:activity name="ParseHeader">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:description>When the accept value "text/html,application/xhtml+xml,application/xml;arg3=val3;q=0.9,text/plain;arg1=val1;arg2=val2,*/*;q=0.8" is parsed</pd:description>
-        <pd:x>312</pd:x>
-        <pd:y>64</pd:y>
+        <pd:x>311</pd:x>
+        <pd:y>67</pd:y>
         <config>
-            <processName>/REST/Public/Process/Http/parseAccept.process</processName>
+            <processName>/REST/Public/Process/Http/ParseHeader.process</processName>
         </config>
         <pd:inputBindings>
-            <xsl:variable name="segments">
-                <segment>text/html</segment>
-                <segment>application/xhtml+xml</segment>
-                <segment>application/xml;q=0.9;arg3=val3</segment>
-                <segment>text/plain;arg1=val1;arg2=val2</segment>
-                <segment>*/*;q=0.8</segment>
-            </xsl:variable>
-            <accept>
-                <xsl:value-of select="tib:concat-sequence-format($segments/segment,',')"/>
-            </accept>
+            <root>
+                <header> text/plain ; q=0.8, text/html;arg1=val1 ,jpeg</header>
+            </root>
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>
@@ -97,13 +81,13 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Start</pd:from>
-        <pd:to>parseAccept</pd:to>
+        <pd:to>ParseHeader</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>parseAccept</pd:from>
+        <pd:from>ParseHeader</pd:from>
         <pd:to>AssertEqual</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>

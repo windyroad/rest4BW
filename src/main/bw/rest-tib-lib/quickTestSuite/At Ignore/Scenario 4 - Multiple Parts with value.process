@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://windyroad.org/rest-tib-lib.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://windyroad.org/rest-tib-lib.xsd" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd">
     <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Public/Schemas/rest-tib-lib.xsd"/>
-    <pd:name>quickTestSuite/Feature 3 - Accept Header parser TestCase/Scenario 2 - Many Parameters with Values.process</pd:name>
+    <pd:name>quickTestSuite/At Ignore/Scenario 4 - Multiple Parts with value.process</pd:name>
     <pd:description>@Timeout(60000)</pd:description>
     <pd:startName>Start</pd:startName>
     <pd:startX>150</pd:startX>
@@ -16,7 +16,8 @@
     <pd:activity name="AssertEqual">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:description>Then and empty set of name value pairs in returns</pd:description>
+        <pd:description>Then the returned set has an entry with the name "somefield" and the value:
+"""value"""</pd:description>
         <pd:x>478</pd:x>
         <pd:y>65</pd:y>
         <config>
@@ -25,67 +26,73 @@
         <pd:inputBindings>
             <ns:equal-input>
                 <ns:expected>
-                    <ns1:accepts>
-                        <ns1:accept>
-                            <xsl:attribute name="type">text/html</xsl:attribute>
-                            <xsl:attribute name="q">1.0</xsl:attribute>
-                        </ns1:accept>
-                        <ns1:accept>
-                            <xsl:attribute name="type">application/xhtml+xml</xsl:attribute>
-                            <xsl:attribute name="q">1.0</xsl:attribute>
-                        </ns1:accept>
-                        <ns1:accept>
-                            <xsl:attribute name="type">text/plain</xsl:attribute>
-                            <xsl:attribute name="q">1.0</xsl:attribute>
-                            <ns1:entry>
-                                <ns1:key>arg1</ns1:key>
-                                <ns1:value>val1</ns1:value>
-                            </ns1:entry>
-                            <ns1:entry>
-                                <ns1:key>arg2</ns1:key>
-                                <ns1:value>val2</ns1:value>
-                            </ns1:entry>
-                        </ns1:accept>
-                        <ns1:accept>
-                            <xsl:attribute name="type">application/xml</xsl:attribute>
-                            <xsl:attribute name="q">0.9</xsl:attribute>
-                            <ns1:entry>
-                                <ns1:key>arg3</ns1:key>
-                                <ns1:value>val3</ns1:value>
-                            </ns1:entry>
-                        </ns1:accept>
-                        <ns1:accept>
-                            <xsl:attribute name="type">*/*</xsl:attribute>
-                            <xsl:attribute name="q">0.8</xsl:attribute>
-                        </ns1:accept>
-                    </ns1:accepts>
+                    <ns1:post>
+                        <ns1:part>
+                            <ns1:meta>
+                                <xsl:attribute name="name">Content-Disposition</xsl:attribute>
+                                <xsl:attribute name="value">form-data</xsl:attribute>
+                            </ns1:meta>
+                            <ns1:meta>
+                                <xsl:attribute name="name">name</xsl:attribute>
+                                <xsl:attribute name="value">somefield</xsl:attribute>
+                            </ns1:meta>
+                            <ns1:meta>
+                                <xsl:attribute name="name">Content-Type</xsl:attribute>
+                                <xsl:attribute name="value">text/plain</xsl:attribute>
+                            </ns1:meta>
+                            <ns1:content>value</ns1:content>
+                        </ns1:part>
+                    </ns1:post>
                 </ns:expected>
                 <ns:actual>
-                    <xsl:copy-of select="$parseAccept/ns1:accepts"/>
+                    <xsl:copy-of select="$parsePost/ns1:post"/>
                 </ns:actual>
             </ns:equal-input>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="parseAccept">
+    <pd:activity name="parsePost">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:description>When the accept value "text/html,application/xhtml+xml,application/xml;arg3=val3;q=0.9,text/plain;arg1=val1;arg2=val2,*/*;q=0.8" is parsed</pd:description>
-        <pd:x>312</pd:x>
-        <pd:y>64</pd:y>
+        <pd:description>Given the content-type "Content-type: multipart/mixed; boundary="simple boundary""
+and the post "This is the preamble. It is to be ignored, though it
+is a handy place for mail composers to include an
+explanatory note to non-MIME compliant readers.
+--simple boundary
+
+This is implicitly typed plain ASCII text.
+It does NOT end with a linebreak.
+--simple boundary
+Content-type: text/plain; charset=us-ascii
+
+This is explicitly typed plain ASCII text.
+It DOES end with a linebreak.
+
+--simple boundary--
+This is the epilogue. It is also to be ignored."</pd:description>
+        <pd:x>315</pd:x>
+        <pd:y>66</pd:y>
         <config>
-            <processName>/REST/Public/Process/Http/parseAccept.process</processName>
+            <processName>/REST/Public/Process/Http/parsePost.process</processName>
         </config>
         <pd:inputBindings>
-            <xsl:variable name="segments">
-                <segment>text/html</segment>
-                <segment>application/xhtml+xml</segment>
-                <segment>application/xml;q=0.9;arg3=val3</segment>
-                <segment>text/plain;arg1=val1;arg2=val2</segment>
-                <segment>*/*;q=0.8</segment>
-            </xsl:variable>
-            <accept>
-                <xsl:value-of select="tib:concat-sequence-format($segments/segment,',')"/>
-            </accept>
+            <input>
+                <post>This is the preamble. It is to be ignored, though it
+is a handy place for mail composers to include an
+explanatory note to non-MIME compliant readers.
+--simple boundary
+
+This is implicitly typed plain ASCII text.
+It does NOT end with a linebreak.
+--simple boundary
+Content-type: text/plain; charset=us-ascii
+
+This is explicitly typed plain ASCII text.
+It DOES end with a linebreak.
+
+--simple boundary--
+This is the epilogue. It is also to be ignored.</post>
+                <contentType>Content-type: multipart/mixed; boundary="simple boundary"</contentType>
+            </input>
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>
@@ -97,13 +104,13 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Start</pd:from>
-        <pd:to>parseAccept</pd:to>
+        <pd:to>parsePost</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>parseAccept</pd:from>
+        <pd:from>parsePost</pd:from>
         <pd:to>AssertEqual</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
