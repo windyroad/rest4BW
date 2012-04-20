@@ -42,16 +42,14 @@
                             <xsl:value-of select="tib:if-absent(pfx:entry[2]/pfx:key[.='q']/../pfx:value, '1.0')"/>
                         </xsl:attribute>
                         <xsl:for-each select="pfx:entry[position() > 1 and not(pfx:key[.='q'])]">
-                            <pfx:entry>
-                                <pfx:key>
+                            <pfx:parameter>
+                                <xsl:attribute name="name">
                                     <xsl:value-of select="pfx:key"/>
-                                </pfx:key>
-                                <xsl:if test="pfx:value">
-                                    <pfx:value>
-                                        <xsl:value-of select="pfx:value"/>
-                                    </pfx:value>
-                                </xsl:if>
-                            </pfx:entry>
+                                </xsl:attribute>
+                                <xsl:attribute name="value">
+                                    <xsl:value-of select="pfx:value"/>
+                                </xsl:attribute>
+                            </pfx:parameter>
                         </xsl:for-each>
                     </pfx:accept>
                 </xsl:for-each>
