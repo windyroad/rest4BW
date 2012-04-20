@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://windyroad.org/RESTlib.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://windyroad.org/RESTlib.xsd" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
     <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/RESTlib.xsd" schemaLocation="/REST/Public/Schemas/RESTlib.xsd"/>
-    <pd:name>RESTTestSuite/Feature 3 - Accept Header parser TestCase/Scenario 2 - Many Parameters with Values.process</pd:name>
+    <pd:name>quickTestSuite/Feature 3 - Accept Header parser TestCase/Scenario 2 - Many Parameters with Values.process</pd:name>
     <pd:description>@Timeout(60000)</pd:description>
     <pd:startName>Start</pd:startName>
     <pd:startX>150</pd:startX>
@@ -79,7 +79,7 @@
             <xsl:variable name="segments">
                 <segment>text/html</segment>
                 <segment>application/xhtml+xml</segment>
-                <segment>application/xml;q=0.9;arg3=val3</segment>
+                <segment> application/xml; q=0.9; arg3=val3</segment>
                 <segment>text/plain;arg1=val1;arg2=val2</segment>
                 <segment>*/*;q=0.8</segment>
             </xsl:variable>
