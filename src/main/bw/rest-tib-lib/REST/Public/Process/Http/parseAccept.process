@@ -42,14 +42,14 @@
                             <xsl:value-of select="tib:if-absent(pfx:entry[2]/pfx:key[.='q']/../pfx:value, '1.0')"/>
                         </xsl:attribute>
                         <xsl:for-each select="pfx:entry[position() > 1 and not(pfx:key[.='q'])]">
-                            <pfx:parameter>
+                            <pfx:meta>
                                 <xsl:attribute name="name">
                                     <xsl:value-of select="pfx:key"/>
                                 </xsl:attribute>
                                 <xsl:attribute name="value">
                                     <xsl:value-of select="pfx:value"/>
                                 </xsl:attribute>
-                            </pfx:parameter>
+                            </pfx:meta>
                         </xsl:for-each>
                     </pfx:accept>
                 </xsl:for-each>
@@ -62,7 +62,7 @@
         <pd:x>360</pd:x>
         <pd:y>62</pd:y>
         <config>
-            <processName>/REST/Public/Process/Http/ParseHeader.process</processName>
+            <processName>/REST/Public/Process/Http/ParseHeaders.process</processName>
         </config>
         <pd:inputBindings>
             <root>

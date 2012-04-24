@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://windyroad.org/rest-tib-lib.xsd" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://windyroad.org/rest-tib-lib.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd">
     <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Public/Schemas/rest-tib-lib.xsd"/>
-    <pd:name>quickTestSuite/Feature 2 - Multipart Form Data parser TestCase/Scenario 2 - Text File Upload.process</pd:name>
+    <pd:name>quickTestSuite/Feature 0 - Generic Header Parsing/Scenario 1 - Complex String.process</pd:name>
     <pd:description>@Timeout(60000)</pd:description>
     <pd:startName>Start</pd:startName>
     <pd:startX>150</pd:startX>
@@ -25,64 +25,51 @@
         <pd:inputBindings>
             <ns:equal-input>
                 <ns:expected>
-                    <ns1:post>
-                        <ns1:part>
-                            <ns1:meta>
-                                <xsl:attribute name="name">Content-Disposition</xsl:attribute>
-                                <xsl:attribute name="value">form-data</xsl:attribute>
-                            </ns1:meta>
-                            <ns1:meta>
-                                <xsl:attribute name="name">Content-Type</xsl:attribute>
-                                <xsl:attribute name="value">text/plain</xsl:attribute>
-                            </ns1:meta>
-                            <ns1:meta>
-                                <xsl:attribute name="name">name</xsl:attribute>
-                                <xsl:attribute name="value">somefield</xsl:attribute>
-                            </ns1:meta>
-                            <ns1:meta>
-                                <xsl:attribute name="name">filename</xsl:attribute>
-                                <xsl:attribute name="value">sometest.txt</xsl:attribute>
-                            </ns1:meta>
-                            <ns1:content>This is an example
-of some data from a file</ns1:content>
-                        </ns1:part>
-                    </ns1:post>
+                    <ns1:header>
+                        <ns1:key>Accept</ns1:key>
+                        <ns1:entries>
+                            <ns1:entry>
+                                <ns1:key>text/plain</ns1:key>
+                            </ns1:entry>
+                            <ns1:entry>
+                                <ns1:key>q</ns1:key>
+                                <ns1:value>0.8</ns1:value>
+                            </ns1:entry>
+                        </ns1:entries>
+                        <ns1:entries>
+                            <ns1:entry>
+                                <ns1:key>text/html</ns1:key>
+                            </ns1:entry>
+                            <ns1:entry>
+                                <ns1:key>arg1</ns1:key>
+                                <ns1:value>val1</ns1:value>
+                            </ns1:entry>
+                        </ns1:entries>
+                        <ns1:entries>
+                            <ns1:entry>
+                                <ns1:key>jpeg</ns1:key>
+                            </ns1:entry>
+                        </ns1:entries>
+                    </ns1:header>
                 </ns:expected>
                 <ns:actual>
-                    <xsl:copy-of select="$parsePost/ns1:post"/>
+                    <xsl:copy-of select="$ParseHeader/root/ns1:header"/>
                 </ns:actual>
             </ns:equal-input>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="parsePost">
+    <pd:activity name="ParseHeader">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:description>When the content type "multipart/form-data; boundary=----WebKitFormBoundaryBqB4t3RT1FgEAv7v" is parsed with the following post data:
-"""------WebKitFormBoundaryBqB4t3RT1FgEAv7v
-Content-Disposition: form-data; name="somefield"; filename="sometest.txt"
-Content-Type: text/plain
-
-This is an example
-of some data from a file
-
-------WebKitFormBoundaryBqB4t3RT1FgEAv7v--"""</pd:description>
-        <pd:x>315</pd:x>
-        <pd:y>66</pd:y>
+        <pd:x>311</pd:x>
+        <pd:y>67</pd:y>
         <config>
-            <processName>/REST/Public/Process/Http/parseMultipart.process</processName>
+            <processName>/REST/Public/Process/Http/ParseHeaders.process</processName>
         </config>
         <pd:inputBindings>
-            <input>
-                <post>------WebKitFormBoundaryBqB4t3RT1FgEAv7v
-Content-Disposition: form-data; name="somefield"; filename="sometest.txt"
-Content-Type: text/plain
-
-This is an example
-of some data from a file
-
-------WebKitFormBoundaryBqB4t3RT1FgEAv7v--</post>
-                <contentType>multipart/form-data; boundary=----WebKitFormBoundaryBqB4t3RT1FgEAv7v</contentType>
-            </input>
+            <root>
+                <header>Accept: text/plain ; q=0.8, text/html;arg1=val1 ,jpeg</header>
+            </root>
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>
@@ -94,13 +81,13 @@ of some data from a file
     </pd:transition>
     <pd:transition>
         <pd:from>Start</pd:from>
-        <pd:to>parsePost</pd:to>
+        <pd:to>ParseHeader</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>parsePost</pd:from>
+        <pd:from>ParseHeader</pd:from>
         <pd:to>AssertEqual</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>

@@ -28,19 +28,22 @@
                 <ns:expected>
                     <ns1:post>
                         <ns1:part>
+                            <ns1:content>This is implicitly typed plain ASCII text.
+It does NOT end with a linebreak.
+</ns1:content>
+                        </ns1:part>
+                        <ns1:part>
                             <ns1:meta>
-                                <xsl:attribute name="name">Content-Disposition</xsl:attribute>
-                                <xsl:attribute name="value">form-data</xsl:attribute>
-                            </ns1:meta>
-                            <ns1:meta>
-                                <xsl:attribute name="name">name</xsl:attribute>
-                                <xsl:attribute name="value">somefield</xsl:attribute>
-                            </ns1:meta>
-                            <ns1:meta>
-                                <xsl:attribute name="name">Content-Type</xsl:attribute>
+                                <xsl:attribute name="name">Content-type</xsl:attribute>
                                 <xsl:attribute name="value">text/plain</xsl:attribute>
                             </ns1:meta>
-                            <ns1:content>value</ns1:content>
+                            <ns1:meta>
+                                <xsl:attribute name="name">charset</xsl:attribute>
+                                <xsl:attribute name="value">us-ascii</xsl:attribute>
+                            </ns1:meta>
+                            <ns1:content>This is explicitly typed plain ASCII text.
+It DOES end with a linebreak.
+</ns1:content>
                         </ns1:part>
                     </ns1:post>
                 </ns:expected>
@@ -72,7 +75,7 @@ This is the epilogue. It is also to be ignored."</pd:description>
         <pd:x>315</pd:x>
         <pd:y>66</pd:y>
         <config>
-            <processName>/REST/Public/Process/Http/parsePost.process</processName>
+            <processName>/REST/Public/Process/Http/parseMultipart.process</processName>
         </config>
         <pd:inputBindings>
             <input>

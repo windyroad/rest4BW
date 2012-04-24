@@ -48,7 +48,7 @@
         <pd:x>408</pd:x>
         <pd:y>65</pd:y>
         <config>
-            <processName>/REST/Public/Process/Http/parsePost.process</processName>
+            <processName>/REST/Public/Process/Http/parseMultipart.process</processName>
         </config>
         <pd:inputBindings>
             <input>
