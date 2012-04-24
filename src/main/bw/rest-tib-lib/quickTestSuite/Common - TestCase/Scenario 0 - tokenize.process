@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://windyroad.org/rest-tib-lib.xsd" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd">
     <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Public/Schemas/rest-tib-lib.xsd"/>
-    <pd:name>quickTestSuite/Feature 2 - Multipart Form Data parser TestCase/Scenario 2 - Text File Upload.process</pd:name>
+    <pd:name>quickTestSuite/Common - TestCase/Scenario 0 - tokenize.process</pd:name>
     <pd:description>@Timeout(60000)</pd:description>
     <pd:startName>Start</pd:startName>
     <pd:startX>150</pd:startX>
@@ -25,64 +25,31 @@
         <pd:inputBindings>
             <ns:equal-input>
                 <ns:expected>
-                    <ns1:post>
-                        <ns1:part>
-                            <ns1:meta>
-                                <xsl:attribute name="name">Content-Disposition</xsl:attribute>
-                                <xsl:attribute name="value">form-data</xsl:attribute>
-                            </ns1:meta>
-                            <ns1:meta>
-                                <xsl:attribute name="name">Content-Type</xsl:attribute>
-                                <xsl:attribute name="value">text/plain</xsl:attribute>
-                            </ns1:meta>
-                            <ns1:meta>
-                                <xsl:attribute name="name">name</xsl:attribute>
-                                <xsl:attribute name="value">somefield</xsl:attribute>
-                            </ns1:meta>
-                            <ns1:meta>
-                                <xsl:attribute name="name">filename</xsl:attribute>
-                                <xsl:attribute name="value">sometest.txt</xsl:attribute>
-                            </ns1:meta>
-                            <ns1:content>This is an example
-of some data from a file</ns1:content>
-                        </ns1:part>
-                    </ns1:post>
+                    <root>
+                        <output>a</output>
+                        <output>c</output>
+                        <output>e</output>
+                    </root>
                 </ns:expected>
                 <ns:actual>
-                    <xsl:copy-of select="$parsePost/ns1:post"/>
+                    <xsl:copy-of select="$tokenize/root"/>
                 </ns:actual>
             </ns:equal-input>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="parsePost">
+    <pd:activity name="tokenize">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:description>When the content type "multipart/form-data; boundary=----WebKitFormBoundaryBqB4t3RT1FgEAv7v" is parsed with the following post data:
-"""------WebKitFormBoundaryBqB4t3RT1FgEAv7v
-Content-Disposition: form-data; name="somefield"; filename="sometest.txt"
-Content-Type: text/plain
-
-This is an example
-of some data from a file
-
-------WebKitFormBoundaryBqB4t3RT1FgEAv7v--"""</pd:description>
-        <pd:x>315</pd:x>
+        <pd:x>306</pd:x>
         <pd:y>66</pd:y>
         <config>
-            <processName>/REST/Public/Process/Http/parseMultipart.process</processName>
+            <processName>/REST/Private/Common/xslt2/tokenize.process</processName>
         </config>
         <pd:inputBindings>
-            <input>
-                <post>------WebKitFormBoundaryBqB4t3RT1FgEAv7v
-Content-Disposition: form-data; name="somefield"; filename="sometest.txt"
-Content-Type: text/plain
-
-This is an example
-of some data from a file
-
-------WebKitFormBoundaryBqB4t3RT1FgEAv7v--</post>
-                <contentType>multipart/form-data; boundary=----WebKitFormBoundaryBqB4t3RT1FgEAv7v</contentType>
-            </input>
+            <tokenize>
+                <string>a,b,c,b,e</string>
+                <pattern>,b,</pattern>
+            </tokenize>
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>
@@ -94,13 +61,13 @@ of some data from a file
     </pd:transition>
     <pd:transition>
         <pd:from>Start</pd:from>
-        <pd:to>parsePost</pd:to>
+        <pd:to>tokenize</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>parsePost</pd:from>
+        <pd:from>tokenize</pd:from>
         <pd:to>AssertEqual</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>

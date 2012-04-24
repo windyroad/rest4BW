@@ -46,19 +46,7 @@
 	<xs:element name="post">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element name="part" minOccurs="0" maxOccurs="unbounded">
-					<xs:complexType>
-						<xs:sequence>
-							<xs:element name="meta" maxOccurs="unbounded">
-								<xs:complexType>
-									<xs:attribute name="name" type="xs:string"/>
-									<xs:attribute name="value" type="xs:string"/>
-								</xs:complexType>
-							</xs:element>
-							<xs:element name="content" type="xs:string"/>
-						</xs:sequence>
-					</xs:complexType>
-				</xs:element>
+				<xs:element ref="rest:part" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -91,7 +79,7 @@
 				<xs:element name="accept" minOccurs="0" maxOccurs="unbounded">
 					<xs:complexType>
 						<xs:sequence>
-							<xs:element ref="rest:parameter" minOccurs="0" maxOccurs="unbounded"/>
+							<xs:element ref="rest:meta" minOccurs="0" maxOccurs="unbounded"/>
 						</xs:sequence>
 						<xs:attribute name="type" type="xs:string"/>
 						<xs:attribute name="q" type="xs:string"/>
@@ -128,10 +116,18 @@
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="parameter">
+	<xs:element name="meta">
 		<xs:complexType>
 			<xs:attribute name="name" type="xs:string"/>
 			<xs:attribute name="value" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="part">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="rest:meta" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="content" type="xs:string"/>
+			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
 </xs:schema>
