@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd">
     <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
-    <pd:name>REST/Private/Process/REST Interface/Delegator/Delegator Placeholder.process</pd:name>
+    <pd:name>REST/Private/Process/REST Interface/Delegator Placeholder.process</pd:name>
     <pd:description>N.B. Throws an exception if invoked!</pd:description>
     <pd:startName>Start</pd:startName>
     <pd:startType ref="pfx:request"/>
@@ -14,7 +14,9 @@
     <pd:endType ref="pfx:response"/>
     <pd:endX>534</pd:endX>
     <pd:endY>62</pd:endY>
-    <pd:errorSchemas/>
+    <pd:errorSchemas>
+        <HTTP-Error ref="pfx:error"/>
+    </pd:errorSchemas>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1338181537186</pd:targetNamespace>
     <pd:activity name="500 Internal Server Error">

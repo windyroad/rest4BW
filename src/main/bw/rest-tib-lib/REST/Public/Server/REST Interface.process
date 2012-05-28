@@ -1,27 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx3="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx2="http://windyroad.org/wr-http.xsd" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd">
-    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/REST/Private/Schemas/HttpConnection.xsd"/>
-    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx3="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx2="http://windyroad.org/wr-http.xsd" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd">
+    <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/REST/Private/Schemas/HttpConnection.xsd"/>
+    <xsd:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
     <pd:name>REST/Public/Server/REST Interface.process</pd:name>
     <pd:startName>Start</pd:startName>
-    <pd:startType ref="pfx2:request"/>
-    <pd:startX>170</pd:startX>
-    <pd:startY>66</pd:startY>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:request"/>
+                    <xsd:element name="dynamicDelegatorProcessOverride" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>79</pd:startX>
+    <pd:startY>67</pd:startY>
     <pd:returnBindings>
-        <xsl:copy-of select="$Map-Exception-to-HTTP-Response/pfx2:response"/>
+        <xsl:choose>
+            <xsl:when test="exists($Map-REST-response-to-HTTP-response/pfx2:response)">
+                <xsl:copy-of select="$Map-REST-response-to-HTTP-response/pfx2:response"/>
+            </xsl:when>
+            <xsl:when test="exists($Map-Exception-to-HTTP-Response-1/pfx2:response)">
+                <xsl:copy-of select="$Map-Exception-to-HTTP-Response-1/pfx2:response"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:copy-of select="$Map-Exception-to-HTTP-Response/pfx2:response"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
     <pd:endType ref="pfx2:response"/>
-    <pd:endX>904</pd:endX>
-    <pd:endY>66</pd:endY>
+    <pd:endX>803</pd:endX>
+    <pd:endY>71</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1334627030682</pd:targetNamespace>
-    <pd:activity name="500 Internal Server Error">
+    <pd:activity name="Internal Server Error">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>667</pd:x>
-        <pd:y>195</pd:y>
+        <pd:x>400</pd:x>
+        <pd:y>388</pd:y>
         <config>
             <processName>/REST/Public/Server/StatusCodes/500 Internal Server Error.process</processName>
         </config>
@@ -30,14 +49,17 @@
                 <errorMessage>
                     <xsl:value-of select="$Catch-All/exceptiondata/*"/>
                 </errorMessage>
+                <generateError>
+                    <xsl:value-of select="false()"/>
+                </generateError>
             </root>
         </pd:inputBindings>
     </pd:activity>
     <pd:activity name="Catch All">
         <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
         <pd:resourceType>ae.activities.catch</pd:resourceType>
-        <pd:x>504</pd:x>
-        <pd:y>188</pd:y>
+        <pd:x>237</pd:x>
+        <pd:y>381</pd:y>
         <pd:handler>true</pd:handler>
         <config>
             <catchAll>true</catchAll>
@@ -47,8 +69,8 @@
     <pd:activity name="Catch HTTP Error">
         <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
         <pd:resourceType>ae.activities.catch</pd:resourceType>
-        <pd:x>507</pd:x>
-        <pd:y>319</pd:y>
+        <pd:x>237</pd:x>
+        <pd:y>218</pd:y>
         <pd:handler>true</pd:handler>
         <config>
             <fault>localname=error namespace=http://windyroad.org/rest-tib-lib.xsd</fault>
@@ -59,11 +81,11 @@
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
         <pd:description>N.B. This must be configured via the Global Variable!</pd:description>
-        <pd:x>509</pd:x>
-        <pd:y>66</pd:y>
+        <pd:x>418</pd:x>
+        <pd:y>67</pd:y>
         <config>
-            <processName>/REST/Private/Process/REST Interface/Delegator/Delegator Placeholder.process</processName>
-            <processNameXPath>$_globalVariables/pfx3:GlobalVariables/rest-tib-lib/delegator</processNameXPath>
+            <processName>/REST/Private/Process/REST Interface/Delegator Placeholder.process</processName>
+            <processNameXPath>$Start/root/dynamicDelegatorProcessOverride</processNameXPath>
         </config>
         <pd:inputBindings>
             <xsl:copy-of select="$Map-HTTP-request-to-REST-request/pfx:request"/>
@@ -72,8 +94,8 @@
     <pd:activity name="Map Exception to HTTP Response">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>674</pd:x>
-        <pd:y>327</pd:y>
+        <pd:x>568</pd:x>
+        <pd:y>227</pd:y>
         <config>
             <processName>/REST/Private/Process/Mappers/Map Exception to HTTP Response.process</processName>
         </config>
@@ -84,25 +106,37 @@
     <pd:activity name="Map HTTP request to REST request">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>336</pd:x>
-        <pd:y>73</pd:y>
+        <pd:x>245</pd:x>
+        <pd:y>74</pd:y>
         <config>
             <processName>/REST/Private/Process/Mappers/Map HTTP request to REST request.process</processName>
         </config>
         <pd:inputBindings>
-            <xsl:copy-of select="$Start/pfx2:request"/>
+            <xsl:copy-of select="$Start/root/pfx2:request"/>
         </pd:inputBindings>
     </pd:activity>
     <pd:activity name="Map REST response to HTTP response">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>672</pd:x>
-        <pd:y>73</pd:y>
+        <pd:x>581</pd:x>
+        <pd:y>74</pd:y>
         <config>
             <processName>/REST/Private/Process/Mappers/Map REST response to HTTP response.process</processName>
         </config>
         <pd:inputBindings>
             <xsl:copy-of select="$Dynamic-Delegator/pfx:response"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map-Exception-to-HTTP-Response-1">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>569</pd:x>
+        <pd:y>384</pd:y>
+        <config>
+            <processName>/REST/Private/Process/Mappers/Map Exception to HTTP Response.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Internal-Server-Error/pfx:error"/>
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>
@@ -121,14 +155,7 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Catch All</pd:from>
-        <pd:to>500 Internal Server Error</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Catch HTTP Error</pd:from>
-        <pd:to>Map Exception to HTTP Response</pd:to>
+        <pd:to>Internal Server Error</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
@@ -154,4 +181,70 @@
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
+    <pd:transition>
+        <pd:from>Catch HTTP Error</pd:from>
+        <pd:to>Map Exception to HTTP Response</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Internal Server Error</pd:from>
+        <pd:to>Map-Exception-to-HTTP-Response-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map-Exception-to-HTTP-Response-1</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:label>
+        <pd:name>Label</pd:name>
+        <pd:description>Catch anything else, and wrap it in a 500 Internal Server Exception. 
+
+N.B. Warning - May result in a circular dependency!?</pd:description>
+        <pd:x>401</pd:x>
+        <pd:y>360</pd:y>
+        <pd:width>476</pd:width>
+        <pd:height>139</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-13382401</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
+    <pd:label>
+        <pd:name>Label (1)</pd:name>
+        <pd:description>Catch "HTTP" errors, and convert them to a HTTP response.</pd:description>
+        <pd:x>399</pd:x>
+        <pd:y>217</pd:y>
+        <pd:width>492</pd:width>
+        <pd:height>118</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-10040065</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
+    <pd:label>
+        <pd:name>Label (2)</pd:name>
+        <pd:description>Having trouble with the above "End" process (re: de-multiplexing the paths, exists(__) function is reporting "always true").
+
+Also redundancy with the "Map Exception to HTTP response" (being duplicated for the two error paths).
+
+Regards, Nick</pd:description>
+        <pd:x>947</pd:x>
+        <pd:y>205</pd:y>
+        <pd:width>400</pd:width>
+        <pd:height>129</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-103</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
 </pd:ProcessDefinition>

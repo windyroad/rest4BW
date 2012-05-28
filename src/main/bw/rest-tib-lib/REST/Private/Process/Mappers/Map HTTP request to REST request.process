@@ -14,7 +14,9 @@
     <pd:endType ref="pfx2:request"/>
     <pd:endX>822</pd:endX>
     <pd:endY>82</pd:endY>
-    <pd:errorSchemas/>
+    <pd:errorSchemas>
+        <HTTP-Error ref="pfx2:error"/>
+    </pd:errorSchemas>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1338178977987</pd:targetNamespace>
     <pd:activity name="de-multiplex">
