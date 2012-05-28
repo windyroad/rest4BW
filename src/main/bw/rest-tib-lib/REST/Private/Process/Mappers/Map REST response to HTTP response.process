@@ -14,7 +14,9 @@
     <pd:endType ref="pfx2:response"/>
     <pd:endX>465</pd:endX>
     <pd:endY>65</pd:endY>
-    <pd:errorSchemas/>
+    <pd:errorSchemas>
+        <HTTP-Error ref="pfx:error"/>
+    </pd:errorSchemas>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1334632481163</pd:targetNamespace>
     <pd:activity name="Map REST to HTTP">

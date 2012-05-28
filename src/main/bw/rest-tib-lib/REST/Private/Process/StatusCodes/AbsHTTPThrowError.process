@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:ns2="http://windyroad.org/bwunit-abstract" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://windyroad.org/rest-tib-lib.xsd" xmlns:pfx="http://windyroad.org/bwunit-0.0.0.xsd">
-    <xsd:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
-    <pd:name>REST/Public/Server/StatusCodes/500 Internal Server Error.process</pd:name>
+    <pd:name>REST/Private/Process/StatusCodes/AbsHTTPThrowError.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType>
         <xsd:element name="root">
             <xsd:complexType>
                 <xsd:sequence>
-                    <xsd:element name="errorMessage" type="xsd:string" minOccurs="0"/>
-                    <xsd:element name="generateError" type="xsd:boolean" minOccurs="0"/>
+                    <xsd:element name="message" type="xsd:string"/>
+                    <xsd:element name="code" type="xsd:int"/>
+                    <xsd:element name="additionalInfo" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="max-age-delta-seconds" type="xsd:long" minOccurs="0"/>
                 </xsd:sequence>
             </xsd:complexType>
         </xsd:element>
@@ -16,58 +17,60 @@
     <pd:startX>74</pd:startX>
     <pd:startY>65</pd:startY>
     <pd:returnBindings>
-        <xsl:copy-of select="$AbsHTTPErrorCodeBuilder/pfx2:error"/>
+        <pfx2:response>
+            <pfx2:text-content>
+                <xsl:value-of select="$Transform-XML/xmlString"/>
+            </pfx2:text-content>
+        </pfx2:response>
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
-    <pd:endType ref="pfx2:error"/>
-    <pd:endX>542</pd:endX>
-    <pd:endY>67</pd:endY>
+    <pd:endType/>
+    <pd:endX>539</pd:endX>
+    <pd:endY>65</pd:endY>
     <pd:errorSchemas>
-        <Error ref="pfx2:error"/>
+        <HTTP-Error ref="pfx2:error"/>
     </pd:errorSchemas>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1301599510965</pd:targetNamespace>
     <pd:activity name="AbsHTTPErrorCodeBuilder">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>334</pd:x>
-        <pd:y>184</pd:y>
+        <pd:x>291</pd:x>
+        <pd:y>65</pd:y>
         <config>
             <processName>/REST/Private/Process/StatusCodes/AbsHTTPErrorCodeBuilder.process</processName>
         </config>
         <pd:inputBindings>
-            <root>
-                <message>
-                    <xsl:value-of select="'Internal Server Error'"/>
-                </message>
-                <code>
-                    <xsl:value-of select="500"/>
-                </code>
-                <xsl:if test="$Start/root/errorMessage">
-                    <additionalInfo>
-                        <xsl:value-of select="$Start/root/errorMessage"/>
-                    </additionalInfo>
-                </xsl:if>
-            </root>
+            <xsl:copy-of select="$Start/root"/>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="AbsHTTPThrowError">
-        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-        <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>331</pd:x>
-        <pd:y>70</pd:y>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>291</pd:x>
+        <pd:y>236</pd:y>
         <config>
-            <processName>/REST/Private/Process/StatusCodes/AbsHTTPThrowError.process</processName>
+            <faultName>HTTP-Error</faultName>
         </config>
         <pd:inputBindings>
-            <root>
+            <ns:ActivityInput>
                 <message>
-                    <xsl:value-of select="$Start/root/errorMessage"/>
+                    <xsl:value-of select="$AbsHTTPErrorCodeBuilder/pfx2:error/pfx2:msg"/>
                 </message>
-                <code>
-                    <xsl:value-of select="500"/>
-                </code>
-            </root>
+                <messageCode>
+                    <xsl:value-of select="$Start/root/code"/>
+                </messageCode>
+                <data>
+                    <pfx2:error>
+                        <xsl:copy-of select="$AbsHTTPErrorCodeBuilder/pfx2:error/pfx2:headers"/>
+                        <xsl:if test="$AbsHTTPErrorCodeBuilder/pfx2:error/pfx2:msg">
+                            <pfx2:msg>
+                                <xsl:value-of select="$AbsHTTPErrorCodeBuilder/pfx2:error/pfx2:msg"/>
+                            </pfx2:msg>
+                        </xsl:if>
+                    </pfx2:error>
+                </data>
+            </ns:ActivityInput>
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>
@@ -75,29 +78,21 @@
         <pd:to>AbsHTTPErrorCodeBuilder</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>otherwise</pd:conditionType>
+        <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
         <pd:from>AbsHTTPErrorCodeBuilder</pd:from>
         <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Start</pd:from>
-        <pd:to>AbsHTTPThrowError</pd:to>
-        <pd:xpathDescription>generate error</pd:xpathDescription>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>xpath</pd:conditionType>
-        <pd:xpath>$Start/root/generateError = "true"</pd:xpath>
+        <pd:xpath>false()</pd:xpath>
     </pd:transition>
     <pd:transition>
-        <pd:from>AbsHTTPThrowError</pd:from>
-        <pd:to>End</pd:to>
+        <pd:from>AbsHTTPErrorCodeBuilder</pd:from>
+        <pd:to>Generate Error</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
+        <pd:conditionType>otherwise</pd:conditionType>
     </pd:transition>
 </pd:ProcessDefinition>
