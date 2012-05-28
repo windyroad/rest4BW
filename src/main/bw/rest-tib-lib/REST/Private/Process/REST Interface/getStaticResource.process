@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:bwu="java://org.windyroad.bwunit.CustomFunctions" xmlns:ns5="www.tibco.com/plugin/java/JavaMethodActivityOutput" xmlns:ns12="www.tibco.com/plugin/java/JavaToXmlActivityInput" xmlns:ns13="www.tibco.com/plugin/java/JavaMethodActivityInput" xmlns:ns6="www.tibco.com/plugin/java/xmlSchema/org.windyroad.bwunit.Resource" xmlns:ns7="www.tibco.com/plugin/java/JavaToXmlActivityOutput" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://schemas.tibco.com/bw/plugins/file/5.0/fileExceptions" xmlns:ns3="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
+    <xsd:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
+    <pd:name>REST/Private/Process/REST Interface/getStaticResource.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="path" type="xsd:string"/>
+                    <xsd:element name="if-modified-since" type="xsd:dateTime" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>32</pd:startX>
+    <pd:startY>71</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$OK/pfx:response"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx:response"/>
+    <pd:endX>670</pd:endX>
+    <pd:endY>70</pd:endY>
+    <pd:errorSchemas>
+        <Error ref="pfx:error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1324323299283</pd:targetNamespace>
+    <pd:activity name="404">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>663</pd:x>
+        <pd:y>201</pd:y>
+        <config>
+            <processName>/REST/Public/Server/StatusCodes/404 Not Found.process</processName>
+        </config>
+        <pd:inputBindings>
+            <path>
+                <xsl:value-of select="$Start/input/path"/>
+            </path>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch Not Found">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>421</pd:x>
+        <pd:y>200</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <fault>localname=FileIOException namespace=http://schemas.tibco.com/bw/plugins/file/5.0/fileExceptions</fault>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Read File">
+        <pd:type>com.tibco.plugin.file.FileReadActivity</pd:type>
+        <pd:resourceType>ae.activities.FileReadActivity</pd:resourceType>
+        <pd:x>215</pd:x>
+        <pd:y>73</pd:y>
+        <config>
+            <encoding>binary</encoding>
+        </config>
+        <pd:inputBindings>
+            <ns3:ReadActivityInputClass>
+                <fileName>
+                    <xsl:value-of select="$Start/input/path"/>
+                </fileName>
+            </ns3:ReadActivityInputClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="200 OK">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>429</pd:x>
+        <pd:y>73</pd:y>
+        <config>
+            <processName>/REST/Public/Server/StatusCodes/200 OK.process</processName>
+        </config>
+        <pd:inputBindings>
+            <pfx:response>
+                <pfx:text-content>
+                    <xsl:value-of select="$Read-File/ns3:ReadActivityOutputBinaryClass/fileContent/binaryContent"/>
+                </pfx:text-content>
+                <pfx:headers>
+                    <xsl:attribute name="content-type">
+                        <xsl:value-of select="$Read-File/ns3:ReadActivityOutputBinaryClass/fileInfo/type"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="last-modified">
+                        <xsl:value-of select="$Read-File/ns3:ReadActivityOutputBinaryClass/fileInfo/lastModified"/>
+                    </xsl:attribute>
+                </pfx:headers>
+            </pfx:response>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Catch Not Found</pd:from>
+        <pd:to>404</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Read File</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Read File</pd:from>
+        <pd:to>200 OK</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>200 OK</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>
