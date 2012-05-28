@@ -13,8 +13,8 @@
 	</publications>
 	<dependencies>
         <dependency org="org.apache.ant" name="ant-antunit" rev="1.1"/>
-        <dependency org="org.windyroad" name="bwunit" rev="2" transitive="false"/>
-        <dependency org="org.windyroad" name="tibant" rev="5" transitive="false"/>
+        <dependency org="org.windyroad" name="bwunit" rev="6" transitive="false"/>
+        <dependency org="org.windyroad" name="tibant" rev="6" transitive="false"/>
         <dependency org="org.apache.ant" name="ant-jsch" rev="1.8.2"  transitive="false"/>
         <dependency org="net.sf.mime-util" name="mime-util" rev="1.2"  transitive="false"/>
        </dependencies>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://windyroad.org/rest-tib-lib.xsd" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
-    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Public/Schemas/rest-tib-lib.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
     <pd:name>quickTestSuite/Feature 3 - Accept Header parser TestCase/Scenario 6 - Single Parameter with q value and params.process</pd:name>
     <pd:description>@Timeout(60000)</pd:description>
     <pd:startName>Start</pd:startName>
@@ -53,7 +53,7 @@
         <pd:x>312</pd:x>
         <pd:y>64</pd:y>
         <config>
-            <processName>/REST/Public/Process/Http/parseAccept.process</processName>
+            <processName>/REST/Private/Process/Mappers/Components/parseAccept.process</processName>
         </config>
         <pd:inputBindings>
             <accept>text/plain;q=0.7;arg1=val1;arg2=val2</accept>

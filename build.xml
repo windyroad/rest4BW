@@ -358,7 +358,7 @@ To Releases Version: ${releases.new.revision}</echo>
 		<sequential>
 			<mkdir dir="build/@{phase}" />
 			<for param="antunit">
-				<fileset dir="test/@{phase}" includes="*.xml" />
+				<fileset dir="build/@{phase}" includes="*.xml" />
 				<sequential>
 					<au:antunit failonerror="@{failonerror}">
 						<propertyset>
