@@ -463,9 +463,11 @@ To Releases Version: ${releases.new.revision}</echo>
 	<target name="run-quick-tests" description="Run Quick tests" depends="-load-ant-contrib,-load-antunit,build">
 		<bwubuild:run-bwunit-tests phase="quick" />
 		<bwubuild:run-antunit-tests phase="quick" />
+<!--
 		<subant target="run-quick-tests">
 			<fileset dir="Examples" includes="**/build.xml" />
 		</subant>
+-->	
 	</target>
 
 	<target name="validate-projlib"

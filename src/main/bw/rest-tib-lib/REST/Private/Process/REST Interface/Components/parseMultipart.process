@@ -22,18 +22,18 @@
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
     <pd:endType ref="pfx:post"/>
-    <pd:endX>1210</pd:endX>
-    <pd:endY>70</pd:endY>
+    <pd:endX>822</pd:endX>
+    <pd:endY>74</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1301905132783</pd:targetNamespace>
     <pd:group name="for each part">
         <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
         <pd:resourceType>ae.process.group</pd:resourceType>
-        <pd:x>619</pd:x>
-        <pd:y>155</pd:y>
-        <pd:width>577</pd:width>
-        <pd:height>161</pd:height>
+        <pd:x>426</pd:x>
+        <pd:y>146</pd:y>
+        <pd:width>523</pd:width>
+        <pd:height>158</pd:height>
         <pd:collapsedWidth>57</pd:collapsedWidth>
         <pd:collapsedHeight>70</pd:collapsedHeight>
         <pd:groupVariables/>
@@ -81,8 +81,8 @@
         <pd:activity name="ParseHeaders">
             <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
             <pd:resourceType>ae.process.subprocess</pd:resourceType>
-            <pd:x>908</pd:x>
-            <pd:y>241</pd:y>
+            <pd:x>680</pd:x>
+            <pd:y>225</pd:y>
             <config>
                 <processName>/REST/Private/Process/REST Interface/Components/ParseHeaders.process</processName>
             </config>
@@ -99,8 +99,8 @@
         <pd:activity name="data aggregator">
             <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
             <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-            <pd:x>1080</pd:x>
-            <pd:y>240</pd:y>
+            <pd:x>830</pd:x>
+            <pd:y>221</pd:y>
             <config>
                 <element ref="pfx:part"/>
             </config>
@@ -141,8 +141,8 @@
         <pd:activity name="split header and content">
             <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
             <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-            <pd:x>735</pd:x>
-            <pd:y>243</pd:y>
+            <pd:x>541</pd:x>
+            <pd:y>230</pd:y>
             <config>
                 <element>
                     <xsd:element name="root">
@@ -279,8 +279,8 @@
     <pd:label>
         <pd:name>Label</pd:name>
         <pd:description>N.B. We're not strictly adhereing to the HTTP 1.0 RFC, the split boundary delimiter *SHOULD* have a CRLF prepended to it!</pd:description>
-        <pd:x>242</pd:x>
-        <pd:y>229</pd:y>
+        <pd:x>1067</pd:x>
+        <pd:y>79</pd:y>
         <pd:width>304</pd:width>
         <pd:height>72</pd:height>
         <pd:fontColor>-16777216</pd:fontColor>

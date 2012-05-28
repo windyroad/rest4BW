@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://windyroad.org/wr-http.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://windyroad.org/rest-tib-lib.xsd" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd">
+<pd:ProcessDefinition xmlns:ns2="http://windyroad.org/wr-http.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://windyroad.org/rest-tib-lib.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd">
     <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
-    <pd:name>quickTestSuite/Feature 4 - Rest Interface/Scenario 3 - Invalid delegate interface.process</pd:name>
+    <pd:name>quickTestSuite/Feature 4 - Rest Interface TestCase/Scenario 3 - Invalid delegate interface.process</pd:name>
     <pd:description>@Timeout(60000)</pd:description>
     <pd:startName>Start</pd:startName>
     <pd:startX>150</pd:startX>
@@ -28,7 +28,7 @@
                     <ns2:StatusLine>HTTP/1.x 500 Internal Server Error</ns2:StatusLine>
                 </ns:expected>
                 <ns:actual>
-                    <xsl:copy-of select="$REST-Interface/ns2:response/ns2:respHeaders/ns2:StatusLine"/>
+                    <xsl:copy-of select="$REST-Interface/ns2:response/ns2:Headers/ns2:StatusLine"/>
                 </ns:actual>
             </ns:equal-input>
         </pd:inputBindings>

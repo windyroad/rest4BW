@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd">
     <xsd:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
-    <pd:name>REST/Private/Process/REST Interface/Delegator Placeholder.process</pd:name>
-    <pd:description>N.B. Throws an exception if invoked!</pd:description>
+    <xsd:import namespace="http://windyroad.org/rest-delegate.xsd"/>
+    <pd:name>REST/Public/Server/Example/Default Delegate.process</pd:name>
+    <pd:description/>
     <pd:startName>Start</pd:startName>
     <pd:startType ref="pfx:request"/>
-    <pd:startX>125</pd:startX>
-    <pd:startY>92</pd:startY>
+    <pd:startX>121</pd:startX>
+    <pd:startY>82</pd:startY>
     <pd:returnBindings>
-        <pfx:response/>
+        <xsl:copy-of select="$Not-Implemented/pfx:error"/>
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
     <pd:endType>
@@ -17,8 +18,8 @@
             <xsd:element ref="pfx:error"/>
         </xsd:choice>
     </pd:endType>
-    <pd:endX>509</pd:endX>
-    <pd:endY>92</pd:endY>
+    <pd:endX>505</pd:endX>
+    <pd:endY>82</pd:endY>
     <pd:errorSchemas>
         <HTTP-Error ref="pfx:error"/>
     </pd:errorSchemas>
@@ -27,8 +28,8 @@
     <pd:activity name="501 Not Implemented">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>323</pd:x>
-        <pd:y>99</pd:y>
+        <pd:x>319</pd:x>
+        <pd:y>89</pd:y>
         <config>
             <processName>/REST/Public/Server/StatusCodes/501 Not Implemented.process</processName>
         </config>
@@ -57,4 +58,19 @@
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
+    <pd:label>
+        <pd:name>Label</pd:name>
+        <pd:description> This is an example implementation of the Delegate Interface.
+ This process is invoked dynamically from the 'REST Interface'.
+ When implementing, it is responsible for handling the REST request, and generating a response.</pd:description>
+        <pd:x>380</pd:x>
+        <pd:y>196</pd:y>
+        <pd:width>631</pd:width>
+        <pd:height>67</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-6697729</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
 </pd:ProcessDefinition>

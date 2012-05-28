@@ -123,8 +123,8 @@
             <pd:x>418</pd:x>
             <pd:y>67</pd:y>
             <config>
-                <processName>/REST/Private/Process/REST Interface/Delegator Placeholder.process</processName>
                 <processNameXPath>$Start/root/dynamicDelegatorProcessOverride</processNameXPath>
+                <processName>/REST/Public/Server/Example/Default Delegate.process</processName>
             </config>
             <pd:inputBindings>
                 <xsl:copy-of select="$Parse-HTTP-request/pfx:request"/>

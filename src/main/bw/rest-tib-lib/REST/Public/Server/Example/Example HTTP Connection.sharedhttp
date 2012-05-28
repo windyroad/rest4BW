@@ -41,5 +41,6 @@
             </row>
         </HttpConnectionProperties>
         <Port>8080</Port>
+        <description>N.B. This connection is for illustrative purposes only, it should never be used/deployed to a Production environment!</description>
     </config>
 </ns0:httpSharedResource>
