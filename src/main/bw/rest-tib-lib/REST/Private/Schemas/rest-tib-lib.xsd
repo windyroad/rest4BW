@@ -17,17 +17,22 @@
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
+	<xs:complexType name="t_request">
+		<xs:sequence>
+			<xs:element name="method" type="xs:string"/>
+			<xs:element name="command" type="xs:string"/>
+			<xs:element ref="rest:post"/>
+			<xs:element ref="rest:query"/>
+			<xs:element name="host" type="xs:string"/>
+			<xs:element ref="rest:accepts"/>
+		</xs:sequence>
+		<xs:attribute name="if-modified-since" type="xs:dateTime"/>
+	</xs:complexType>
 	<xs:element name="request">
 		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="method" type="xs:string"/>
-				<xs:element name="command" type="xs:string"/>
-				<xs:element ref="rest:post"/>
-				<xs:element ref="rest:query"/>
-				<xs:element name="host" type="xs:string"/>
-				<xs:element ref="rest:accepts"/>
-			</xs:sequence>
-			<xs:attribute name="if-modified-since" type="xs:dateTime"/>
+			<xs:complexContent>
+				<xs:extension base="rest:t_request"/>
+			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="response">

@@ -1,0 +1,23 @@
+<html>
+<head>
+<style>legend{font-weight:bold;}fieldset{background:lightgray;width:600px;}</style>
+</head>
+<body>
+
+<fieldset><legend>Simple Get</legend>
+<a href="http://localhost:8080/ApplicationContext/SomePath/Some%20Resource.txt?q=some+search+term&key=value">Simple Request</a>
+</fieldset>
+<p/>
+<fieldset><legend>Multipart Form</legend>
+ <FORM action="http://localhost:8080/submitform"
+       enctype="multipart/form-data"
+       method="post">
+   <P>
+   What is your first name? <INPUT type="text" name="firstname" value="John"><br/>
+   What is your last name? <INPUT type="text" name="lastname" value="Doe"><br/>
+   What files are you sending? <INPUT type="file" name="uploadedfile"><p/>
+   <INPUT type="submit" value="Send"> <INPUT type="reset">
+ </FORM>
+</fieldset>
+</body>
+</html>

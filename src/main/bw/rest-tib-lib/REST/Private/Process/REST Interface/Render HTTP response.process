@@ -51,9 +51,43 @@
                         <xsl:value-of select="$Start/pfx:response/pfx:text-content"/>
                     </pfx2:asciiContent>
                 </xsl:if>
-                <xsl:for-each select="$Start/pfx:response/pfx:headers">
-                    <pfx2:respHeaders/>
-                </xsl:for-each>
+                <pfx2:Headers>
+                    <xsl:if test="$Start/pfx:response/pfx:headers/@allow">
+                        <pfx2:Allow>
+                            <xsl:value-of select="$Start/pfx:response/pfx:headers/@allow"/>
+                        </pfx2:Allow>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx:response/pfx:headers/@cache-control">
+                        <pfx2:Cache-Control>
+                            <xsl:value-of select="$Start/pfx:response/pfx:headers/@cache-control"/>
+                        </pfx2:Cache-Control>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx:response/pfx:headers/@last-modified">
+                        <pfx2:Last-Modified>
+                            <xsl:value-of select="$Start/pfx:response/pfx:headers/@last-modified"/>
+                        </pfx2:Last-Modified>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx:response/pfx:headers/@expires">
+                        <pfx2:Expires>
+                            <xsl:value-of select="$Start/pfx:response/pfx:headers/@expires"/>
+                        </pfx2:Expires>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx:response/pfx:headers/@status">
+                        <pfx2:StatusLine>
+                            <xsl:value-of select="$Start/pfx:response/pfx:headers/@status"/>
+                        </pfx2:StatusLine>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx:response/pfx:headers/@content-type">
+                        <pfx2:Content-Type>
+                            <xsl:value-of select="$Start/pfx:response/pfx:headers/@content-type"/>
+                        </pfx2:Content-Type>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx:response/pfx:headers/@content-location">
+                        <pfx2:Location>
+                            <xsl:value-of select="$Start/pfx:response/pfx:headers/@content-location"/>
+                        </pfx2:Location>
+                    </xsl:if>
+                </pfx2:Headers>
             </pfx2:response>
         </pd:inputBindings>
     </pd:activity>
@@ -72,36 +106,50 @@
                         <xsl:value-of select="$Start/pfx:error/pfx:msg"/>
                     </pfx2:asciiContent>
                 </xsl:if>
-                <pfx2:respHeaders>
-                    <pfx2:Allow>
-                        <xsl:value-of select="$Start/pfx:error/pfx:headers/@allow"/>
-                    </pfx2:Allow>
-                    <xsl:if test="$Start/pfx:error/pfx:headers/@cache-control">
-                        <pfx2:Cache-Control>
-                            <xsl:value-of select="$Start/pfx:error/pfx:headers/@cache-control"/>
-                        </pfx2:Cache-Control>
-                    </xsl:if>
-                    <xsl:if test="$Start/pfx:error/pfx:headers/@last-modified">
-                        <pfx2:Last-Modified>
-                            <xsl:value-of select="$Start/pfx:error/pfx:headers/@last-modified"/>
-                        </pfx2:Last-Modified>
-                    </xsl:if>
-                    <xsl:if test="$Start/pfx:error/pfx:headers/@expires">
-                        <pfx2:Expires>
-                            <xsl:value-of select="$Start/pfx:error/pfx:headers/@expires"/>
-                        </pfx2:Expires>
-                    </xsl:if>
-                    <xsl:if test="$Start/pfx:error/pfx:headers/@status">
-                        <pfx2:StatusLine>
-                            <xsl:value-of select="$Start/pfx:error/pfx:headers/@status"/>
-                        </pfx2:StatusLine>
-                    </xsl:if>
-                    <xsl:if test="$Start/pfx:error/pfx:headers/@content-type">
-                        <pfx2:Content-Type>
-                            <xsl:value-of select="$Start/pfx:error/pfx:headers/@content-type"/>
-                        </pfx2:Content-Type>
-                    </xsl:if>
-                </pfx2:respHeaders>
+                <xsl:for-each select="$Start/pfx:error/pfx:headers">
+                    <pfx2:Headers>
+                        <xsl:if test="@allow">
+                            <pfx2:Allow>
+                                <xsl:value-of select="@allow"/>
+                            </pfx2:Allow>
+                        </xsl:if>
+                        <xsl:if test="@cache-control">
+                            <pfx2:Cache-Control>
+                                <xsl:value-of select="@cache-control"/>
+                            </pfx2:Cache-Control>
+                        </xsl:if>
+                        <xsl:if test="@last-modified">
+                            <pfx2:Last-Modified>
+                                <xsl:value-of select="@last-modified"/>
+                            </pfx2:Last-Modified>
+                        </xsl:if>
+                        <xsl:if test="@expires">
+                            <pfx2:Expires>
+                                <xsl:value-of select="@expires"/>
+                            </pfx2:Expires>
+                        </xsl:if>
+                        <xsl:if test="@status">
+                            <pfx2:StatusLine>
+                                <xsl:value-of select="@status"/>
+                            </pfx2:StatusLine>
+                        </xsl:if>
+                        <xsl:if test="@content-type">
+                            <pfx2:Content-Type>
+                                <xsl:value-of select="@content-type"/>
+                            </pfx2:Content-Type>
+                        </xsl:if>
+                        <xsl:if test="@content-location">
+                            <pfx2:Location>
+                                <xsl:value-of select="@content-location"/>
+                            </pfx2:Location>
+                        </xsl:if>
+                        <xsl:if test="@etag">
+                            <pfx2:ETag>
+                                <xsl:value-of select="@etag"/>
+                            </pfx2:ETag>
+                        </xsl:if>
+                    </pfx2:Headers>
+                </xsl:for-each>
             </pfx2:response>
         </pd:inputBindings>
     </pd:activity>

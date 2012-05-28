@@ -5,6 +5,34 @@
 	 targetNamespace="http://windyroad.org/wr-http.xsd"
 	 elementFormDefault="qualified"
 	 attributeFormDefault="unqualified">
+	<xs:element name="mimeEnvelopeElement">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="mimePart" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="mimeHeaders">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="content-disposition" type="xs:string" minOccurs="0"/>
+										<xs:element name="content-type" type="xs:string"/>
+										<xs:element name="content-transfer-encoding" type="xs:string" minOccurs="0"/>
+										<xs:element name="content-id" type="xs:string" minOccurs="0"/>
+										<xs:element name="anyelement" type="xs:anyType" minOccurs="0" maxOccurs="unbounded"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:choice>
+								<xs:element name="binaryContent" type="xs:base64Binary"/>
+								<xs:element name="textContent" type="xs:string"/>
+								<xs:element name="fileName" type="xs:string"/>
+							</xs:choice>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
 	<xs:element name="request">
 		<xs:complexType>
 			<xs:sequence>
@@ -17,7 +45,6 @@
 				<xs:element name="Header" type="xs:string" minOccurs="0"/>
 				<xs:element name="Protocol" type="xs:string" minOccurs="0"/>
 				<xs:element name="Port" type="xs:string" minOccurs="0"/>
-				<xs:element ref="http:reqHeaders" minOccurs="0"/>
 				<xs:element name="Headers" minOccurs="0">
 					<xs:complexType>
 						<xs:sequence>
@@ -31,9 +58,11 @@
 							<xs:element name="Pragma" type="xs:string" minOccurs="0"/>
 							<xs:element name="host" type="xs:string" minOccurs="0"/>
 							<xs:element name="If-Modified-Since" type="xs:string" minOccurs="0"/>
+							<xs:element name="ETag" type="xs:string" minOccurs="0"/>
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
+				<xs:element ref="http:mimeEnvelopeElement" minOccurs="0"/>
 				<xs:element name="Context">
 					<xs:complexType>
 						<xs:sequence>
@@ -49,24 +78,24 @@
 			<xs:sequence>
 				<xs:element name="binaryContent" type="xs:base64Binary" minOccurs="0"/>
 				<xs:element name="asciiContent" type="xs:string" minOccurs="0"/>
-				<xs:element ref="http:respHeaders"/>
+				<xs:element name="Headers" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Allow" type="xs:string" minOccurs="0"/>
+							<xs:element name="Cache-Control" type="xs:string" minOccurs="0"/>
+							<xs:element name="Last-Modified" type="xs:string" minOccurs="0"/>
+							<xs:element name="Expires" type="xs:string" minOccurs="0"/>
+							<xs:element name="StatusLine" type="xs:string" minOccurs="0"/>
+							<xs:element name="Content-Type" type="xs:string" minOccurs="0"/>
+							<xs:element name="Set-Cookie" type="xs:string" minOccurs="0"/>
+							<xs:element name="Pragma" type="xs:string" minOccurs="0"/>
+							<xs:element name="Location" type="xs:string" minOccurs="0"/>
+							<xs:element name="ETag" type="xs:string" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element ref="http:mimeEnvelopeElement" minOccurs="0"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="respHeaders">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="Allow" type="xs:string" minOccurs="0"/>
-				<xs:element name="Cache-Control" type="xs:string" minOccurs="0"/>
-				<xs:element name="Last-Modified" type="xs:string" minOccurs="0"/>
-				<xs:element name="Expires" type="xs:string" minOccurs="0"/>
-				<xs:element name="StatusLine" type="xs:string" minOccurs="0"/>
-				<xs:element name="Content-Type" type="xs:string" minOccurs="0"/>
-				<xs:element name="Set-Cookie" type="xs:string" minOccurs="0"/>
-				<xs:element name="Pragma" type="xs:string" minOccurs="0"/>
-				<xs:element name="Location" type="xs:string" minOccurs="0"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="reqHeaders" type="xs:string"/>
 </xs:schema>
