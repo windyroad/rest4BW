@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd">
-    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd">
+    <xsd:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
     <pd:name>quickTestSuite/Dynamic Process Overrides/Throw HTTP exception.process</pd:name>
     <pd:description>N.B. Throws an exception if invoked!</pd:description>
     <pd:startName>Start</pd:startName>
@@ -11,7 +11,12 @@
         <pfx:response/>
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
-    <pd:endType ref="pfx:response"/>
+    <pd:endType>
+        <xsd:choice>
+            <xsd:element ref="pfx:response"/>
+            <xsd:element ref="pfx:error"/>
+        </xsd:choice>
+    </pd:endType>
     <pd:endX>534</pd:endX>
     <pd:endY>62</pd:endY>
     <pd:errorSchemas>
@@ -19,34 +24,29 @@
     </pd:errorSchemas>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1338181537186</pd:targetNamespace>
-    <pd:activity name="500 Internal Server Error">
+    <pd:activity name="405 Method Not Allowed">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>336</pd:x>
-        <pd:y>73</pd:y>
+        <pd:x>337</pd:x>
+        <pd:y>72</pd:y>
         <config>
-            <processName>/REST/Public/Server/StatusCodes/500 Internal Server Error.process</processName>
+            <processName>/REST/Public/Server/StatusCodes/405 Method Not Allowed.process</processName>
         </config>
         <pd:inputBindings>
-            <root>
-                <errorMessage>
-                    <xsl:value-of select="'The &quot;Delegator&quot; Dynamic Process Override was not invoked!'"/>
-                </errorMessage>
-                <generateError>
-                    <xsl:value-of select="true()"/>
-                </generateError>
-            </root>
+            <allow>
+                <xsl:value-of select="'these, methods, are, allowed, for the requested resource'"/>
+            </allow>
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>
         <pd:from>Start</pd:from>
-        <pd:to>500 Internal Server Error</pd:to>
+        <pd:to>405 Method Not Allowed</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>500 Internal Server Error</pd:from>
+        <pd:from>405 Method Not Allowed</pd:from>
         <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>

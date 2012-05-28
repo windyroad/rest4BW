@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Repository:repository xmlns:Repository="http://www.tibco.com/xmlns/repo/types/2002">
     <folder resourceType="ae.designerfolder" name="Feature 3 - Accept Header parser TestCase" propLocks="" allowUserToChangeIcon="false" sortContents="false" acceptsResources="true" allowDuplicates="false">
-        <description>In order to support accept headers in forms in REST services, developers should be able to parse the acceot data into their name value pairs</description>
+        <description>In order to support accept headers in forms in REST services, developers should be able to parse the accept data into their name value pairs.</description>
         <fixedChildren/>
     </folder>
 </Repository:repository>

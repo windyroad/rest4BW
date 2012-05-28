@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://windyroad.org/bwunit-abstract" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://windyroad.org/rest-tib-lib.xsd" xmlns:pfx="http://windyroad.org/bwunit-0.0.0.xsd">
+<pd:ProcessDefinition xmlns:ns2="http://windyroad.org/bwunit-abstract" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://windyroad.org/rest-tib-lib.xsd" xmlns:pfx="http://windyroad.org/bwunit-0.0.0.xsd">
     <xsd:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
-    <pd:name>REST/Private/Process/StatusCodes/AbsHTTPErrorCodeBuilder.process</pd:name>
+    <pd:name>REST/Private/Process/StatusCodes/AbsHTTPErrorBuilder.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType>
         <xsd:element name="root">
@@ -11,12 +11,13 @@
                     <xsd:element name="code" type="xsd:int"/>
                     <xsd:element name="additionalInfo" type="xsd:string" minOccurs="0"/>
                     <xsd:element name="max-age-delta-seconds" type="xsd:long" minOccurs="0"/>
+                    <xsd:element name="generateError" type="xsd:boolean" minOccurs="0"/>
                 </xsd:sequence>
             </xsd:complexType>
         </xsd:element>
     </pd:startType>
-    <pd:startX>74</pd:startX>
-    <pd:startY>65</pd:startY>
+    <pd:startX>85</pd:startX>
+    <pd:startY>109</pd:startY>
     <pd:returnBindings>
         <pfx2:error>
             <xsl:copy-of select="$Build-default-REST-Headers/pfx2:headers"/>
@@ -27,8 +28,8 @@
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
     <pd:endType ref="pfx2:error"/>
-    <pd:endX>735</pd:endX>
-    <pd:endY>65</pd:endY>
+    <pd:endX>722</pd:endX>
+    <pd:endY>182</pd:endY>
     <pd:errorSchemas>
         <Error ref="pfx2:error"/>
     </pd:errorSchemas>
@@ -37,8 +38,8 @@
     <pd:activity name="Build default REST Headers">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>459</pd:x>
-        <pd:y>72</pd:y>
+        <pd:x>478</pd:x>
+        <pd:y>116</pd:y>
         <config>
             <processName>/REST/Private/Builders/Build default REST Headers.process</processName>
         </config>
@@ -60,8 +61,8 @@
     <pd:activity name="concat message">
         <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
         <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-        <pd:x>251</pd:x>
-        <pd:y>65</pd:y>
+        <pd:x>262</pd:x>
+        <pd:y>109</pd:y>
         <config>
             <element>
                 <xsd:element name="root">
@@ -81,13 +82,40 @@
             </root>
         </pd:inputBindings>
     </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>723</pd:x>
+        <pd:y>66</pd:y>
+        <config>
+            <faultName>Error</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <message>
+                    <xsl:value-of select="$concat-message/root/message"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="$Start/root/code"/>
+                </messageCode>
+                <data>
+                    <pfx2:error>
+                        <xsl:copy-of select="$Build-default-REST-Headers/pfx2:headers"/>
+                        <pfx2:msg>
+                            <xsl:value-of select="$concat-message/root/message"/>
+                        </pfx2:msg>
+                    </pfx2:error>
+                </data>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
     <pd:transition>
         <pd:from>Build default REST Headers</pd:from>
         <pd:to>End</pd:to>
         <pd:xpathDescription/>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
+        <pd:conditionType>otherwise</pd:conditionType>
     </pd:transition>
     <pd:transition>
         <pd:from>Start</pd:from>
@@ -102,5 +130,14 @@
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Build default REST Headers</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:xpathDescription>generate error</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/root/generateError = "true"</pd:xpath>
     </pd:transition>
 </pd:ProcessDefinition>
