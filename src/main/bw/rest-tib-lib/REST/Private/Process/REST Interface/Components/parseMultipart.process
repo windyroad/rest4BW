@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd">
     <xsd:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
-    <pd:name>REST/Private/Process/Mappers/Components/parseMultipart.process</pd:name>
+    <pd:name>REST/Private/Process/REST Interface/Components/parseMultipart.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType>
         <xsd:element name="input">
@@ -84,7 +84,7 @@
             <pd:x>908</pd:x>
             <pd:y>241</pd:y>
             <config>
-                <processName>/REST/Private/Process/Mappers/Components/ParseHeaders.process</processName>
+                <processName>/REST/Private/Process/REST Interface/Components/ParseHeaders.process</processName>
             </config>
             <pd:inputBindings>
                 <root>
@@ -174,7 +174,7 @@
         <pd:x>221</pd:x>
         <pd:y>70</pd:y>
         <config>
-            <processName>/REST/Private/Process/Mappers/Components/ParseHeaders.process</processName>
+            <processName>/REST/Private/Process/REST Interface/Components/ParseHeaders.process</processName>
         </config>
         <pd:inputBindings>
             <root>

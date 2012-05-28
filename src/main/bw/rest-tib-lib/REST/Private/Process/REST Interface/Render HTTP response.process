@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="http://windyroad.org/wr-http.xsd" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd">
+    <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/REST/Private/Schemas/HttpConnection.xsd"/>
+    <xsd:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
+    <pd:name>REST/Private/Process/REST Interface/Render HTTP response.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:choice>
+            <xsd:element ref="pfx:response"/>
+            <xsd:element ref="pfx:error"/>
+        </xsd:choice>
+    </pd:startType>
+    <pd:startX>135</pd:startX>
+    <pd:startY>112</pd:startY>
+    <pd:returnBindings>
+        <xsl:choose>
+            <xsl:when test="not(exists($Parse-Error-to-HTTP/pfx2:response))">
+                <xsl:copy-of select="$Parse-Response-to-HTTP/pfx2:response"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:copy-of select="$Parse-Error-to-HTTP/pfx2:response"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx2:response"/>
+    <pd:endX>663</pd:endX>
+    <pd:endY>107</pd:endY>
+    <pd:errorSchemas>
+        <HTTP-Error ref="pfx:error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1334632481163</pd:targetNamespace>
+    <pd:activity name="Parse Response to HTTP">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>397</pd:x>
+        <pd:y>74</pd:y>
+        <config>
+            <element ref="pfx2:response"/>
+        </config>
+        <pd:inputBindings>
+            <pfx2:response>
+                <xsl:if test="$Start/pfx:response/pfx:binary-content">
+                    <pfx2:binaryContent>
+                        <xsl:value-of select="$Start/pfx:response/pfx:binary-content"/>
+                    </pfx2:binaryContent>
+                </xsl:if>
+                <xsl:if test="$Start/pfx:response/pfx:text-content">
+                    <pfx2:asciiContent>
+                        <xsl:value-of select="$Start/pfx:response/pfx:text-content"/>
+                    </pfx2:asciiContent>
+                </xsl:if>
+                <xsl:for-each select="$Start/pfx:response/pfx:headers">
+                    <pfx2:respHeaders/>
+                </xsl:for-each>
+            </pfx2:response>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Parse Error to HTTP">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>398</pd:x>
+        <pd:y>166</pd:y>
+        <config>
+            <element ref="pfx2:response"/>
+        </config>
+        <pd:inputBindings>
+            <pfx2:response>
+                <xsl:if test="$Start/pfx:error/pfx:msg">
+                    <pfx2:asciiContent>
+                        <xsl:value-of select="$Start/pfx:error/pfx:msg"/>
+                    </pfx2:asciiContent>
+                </xsl:if>
+                <pfx2:respHeaders>
+                    <pfx2:Allow>
+                        <xsl:value-of select="$Start/pfx:error/pfx:headers/@allow"/>
+                    </pfx2:Allow>
+                    <xsl:if test="$Start/pfx:error/pfx:headers/@cache-control">
+                        <pfx2:Cache-Control>
+                            <xsl:value-of select="$Start/pfx:error/pfx:headers/@cache-control"/>
+                        </pfx2:Cache-Control>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx:error/pfx:headers/@last-modified">
+                        <pfx2:Last-Modified>
+                            <xsl:value-of select="$Start/pfx:error/pfx:headers/@last-modified"/>
+                        </pfx2:Last-Modified>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx:error/pfx:headers/@expires">
+                        <pfx2:Expires>
+                            <xsl:value-of select="$Start/pfx:error/pfx:headers/@expires"/>
+                        </pfx2:Expires>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx:error/pfx:headers/@status">
+                        <pfx2:StatusLine>
+                            <xsl:value-of select="$Start/pfx:error/pfx:headers/@status"/>
+                        </pfx2:StatusLine>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx:error/pfx:headers/@content-type">
+                        <pfx2:Content-Type>
+                            <xsl:value-of select="$Start/pfx:error/pfx:headers/@content-type"/>
+                        </pfx2:Content-Type>
+                    </xsl:if>
+                </pfx2:respHeaders>
+            </pfx2:response>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Parse Response to HTTP</pd:to>
+        <pd:xpathDescription>no error</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>not(exists($Start/pfx:error))</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse Response to HTTP</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Parse Error to HTTP</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse Error to HTTP</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

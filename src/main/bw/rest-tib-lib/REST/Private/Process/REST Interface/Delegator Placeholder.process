@@ -1,49 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd">
-    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd">
+    <xsd:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
     <pd:name>REST/Private/Process/REST Interface/Delegator Placeholder.process</pd:name>
     <pd:description>N.B. Throws an exception if invoked!</pd:description>
     <pd:startName>Start</pd:startName>
     <pd:startType ref="pfx:request"/>
-    <pd:startX>150</pd:startX>
-    <pd:startY>64</pd:startY>
+    <pd:startX>125</pd:startX>
+    <pd:startY>92</pd:startY>
     <pd:returnBindings>
         <pfx:response/>
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
-    <pd:endType ref="pfx:response"/>
-    <pd:endX>534</pd:endX>
-    <pd:endY>62</pd:endY>
+    <pd:endType>
+        <xsd:choice>
+            <xsd:element ref="pfx:response"/>
+            <xsd:element ref="pfx:error"/>
+        </xsd:choice>
+    </pd:endType>
+    <pd:endX>509</pd:endX>
+    <pd:endY>92</pd:endY>
     <pd:errorSchemas>
         <HTTP-Error ref="pfx:error"/>
     </pd:errorSchemas>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1338181537186</pd:targetNamespace>
-    <pd:activity name="500 Internal Server Error">
+    <pd:activity name="501 Not Implemented">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>336</pd:x>
-        <pd:y>73</pd:y>
+        <pd:x>323</pd:x>
+        <pd:y>99</pd:y>
         <config>
-            <processName>/REST/Public/Server/StatusCodes/500 Internal Server Error.process</processName>
+            <processName>/REST/Public/Server/StatusCodes/501 Not Implemented.process</processName>
         </config>
         <pd:inputBindings>
             <root>
                 <errorMessage>
-                    <xsl:value-of select="'The &quot;Delegator&quot; Dynamic Process Override was not invoked!'"/>
+                    <xsl:value-of select="'The &quot;Delegator&quot; Dynamic Process Override was not overridden!'"/>
                 </errorMessage>
+                <generateError>
+                    <xsl:value-of select="true()"/>
+                </generateError>
             </root>
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>
         <pd:from>Start</pd:from>
-        <pd:to>500 Internal Server Error</pd:to>
+        <pd:to>501 Not Implemented</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>500 Internal Server Error</pd:from>
+        <pd:from>501 Not Implemented</pd:from>
         <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
