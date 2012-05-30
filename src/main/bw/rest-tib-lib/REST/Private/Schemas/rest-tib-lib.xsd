@@ -25,6 +25,7 @@
 			<xs:element ref="rest:query"/>
 			<xs:element name="host" type="xs:string"/>
 			<xs:element ref="rest:accepts"/>
+			<xs:element name="etag" type="xs:string"/>
 		</xs:sequence>
 		<xs:attribute name="if-modified-since" type="xs:dateTime"/>
 	</xs:complexType>

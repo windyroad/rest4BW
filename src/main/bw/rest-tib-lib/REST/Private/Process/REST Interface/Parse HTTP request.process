@@ -41,6 +41,9 @@
                     <xsl:value-of select="$Start/pfx:request/pfx:Headers/pfx:host"/>
                 </pfx2:host>
                 <xsl:copy-of select="$parseAccept/pfx2:accepts"/>
+                <pfx2:etag>
+                    <xsl:value-of select="$Start/pfx:request/pfx:Headers/pfx:ETag"/>
+                </pfx2:etag>
             </pfx2:request>
         </pd:inputBindings>
     </pd:activity>
