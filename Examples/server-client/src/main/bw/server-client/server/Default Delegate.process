@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx3="http://www.tibco.com/schemas/server-client/server/shared variables/Schema.xsd" xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd">
+    <xsd:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
+    <xsd:import namespace="http://windyroad.org/rest-delegate.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/server-client/server/shared variables/Schema.xsd" schemaLocation="/server/shared variables/Schema.xsd"/>
+    <pd:name>server/Default Delegate.process</pd:name>
+    <pd:description/>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:request"/>
+    <pd:startX>97</pd:startX>
+    <pd:startY>252</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$OK/pfx:response"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:choice>
+            <xsd:element ref="pfx:response"/>
+            <xsd:element ref="pfx:error"/>
+        </xsd:choice>
+    </pd:endType>
+    <pd:endX>1254</pd:endX>
+    <pd:endY>257</pd:endY>
+    <pd:errorSchemas>
+        <HTTP-Error ref="pfx:error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1338181537186</pd:targetNamespace>
+    <pd:activity name="200 OK">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1151</pd:x>
+        <pd:y>257</pd:y>
+        <config>
+            <processName>/REST/Public/Server/StatusCodes/200 OK.process</processName>
+        </config>
+        <pd:inputBindings>
+            <pfx:response>
+                <pfx:text-content>
+                    <xsl:value-of select="$replace-page-variables/root/output"/>
+                </pfx:text-content>
+            </pfx:response>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="404 Not Found">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>467</pd:x>
+        <pd:y>259</pd:y>
+        <config>
+            <processName>/REST/Public/Server/StatusCodes/404 Not Found.process</processName>
+        </config>
+        <pd:inputBindings>
+            <path>
+                <xsl:value-of select="$Start/pfx:request/pfx:command"/>
+            </path>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="_04-Not-Found-1">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>887</pd:x>
+        <pd:y>505</pd:y>
+        <config>
+            <processName>/REST/Public/Server/StatusCodes/404 Not Found.process</processName>
+        </config>
+        <pd:inputBindings>
+            <path>
+                <xsl:value-of select="$Start/pfx:request/pfx:command"/>
+            </path>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Build New User">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>723</pd:x>
+        <pd:y>287</pd:y>
+        <config>
+            <element ref="pfx3:user"/>
+        </config>
+        <pd:inputBindings>
+            <pfx3:user>
+                <pfx3:etag>
+                    <xsl:value-of select="$_processContext/ns2:ProcessContext/ProcessId"/>
+                </pfx3:etag>
+                <pfx3:firstname>
+                    <xsl:value-of select="$Start/pfx:request/pfx:post/pfx:part/pfx:meta[@name='firstname']/@value"/>
+                </pfx3:firstname>
+                <pfx3:status>
+                    <xsl:value-of select="'User Initialised'"/>
+                </pfx3:status>
+            </pfx3:user>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="create content">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>461</pd:x>
+        <pd:y>373</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="de-multiplex">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>879</pd:x>
+        <pd:y>246</pd:y>
+        <config>
+            <element ref="pfx3:user"/>
+        </config>
+        <pd:inputBindings>
+            <xsl:choose>
+                <xsl:when test="$getUser/pfx3:user">
+                    <xsl:copy-of select="$getUser/pfx3:user"/>
+                </xsl:when>
+                <xsl:when test="$Build-New-User/pfx3:user">
+                    <xsl:copy-of select="$Build-New-User/pfx3:user"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:copy-of select="$Update-User/pfx3:user"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="getUser">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>723</pd:x>
+        <pd:y>199</pd:y>
+        <config>
+            <processName>/server/shared variables/getUser.process</processName>
+        </config>
+        <pd:inputBindings>
+            <etag>
+                <xsl:value-of select="$Start/pfx:request/pfx:query/pfx:item[@name='etag']/@value"/>
+            </etag>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="getUser-1">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>600</pd:x>
+        <pd:y>373</pd:y>
+        <config>
+            <processName>/server/shared variables/getUser.process</processName>
+        </config>
+        <pd:inputBindings>
+            <etag>
+                <xsl:value-of select="$Start/pfx:request/pfx:post/pfx:part/pfx:meta[@name=&quot;etag&quot;]/@value"/>
+            </etag>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="html path">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>100</pd:x>
+        <pd:y>440</pd:y>
+        <config>
+            <element>
+                <xsd:element name="htmlpath" type="xsd:string"/>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <htmlpath>
+                <xsl:value-of select="'/home/developer/Documents/workspace/rest-tib-lib/Examples/server-client/src/main/bw/server-client/server/html'"/>
+            </htmlpath>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="GET">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>317</pd:x>
+        <pd:y>136</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="POST">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>319</pd:x>
+        <pd:y>373</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="read content">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>456</pd:x>
+        <pd:y>137</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Read File">
+        <pd:type>com.tibco.plugin.file.FileReadActivity</pd:type>
+        <pd:resourceType>ae.activities.FileReadActivity</pd:resourceType>
+        <pd:x>723</pd:x>
+        <pd:y>443</pd:y>
+        <config>
+            <encoding>text</encoding>
+        </config>
+        <pd:inputBindings>
+            <ns:ReadActivityInputClass>
+                <fileName>
+                    <xsl:value-of select="if ($Start/pfx:request/pfx:command = &quot;/&quot;)&#xA;then concat($html-path/htmlpath,&quot;/start.txt&quot;)&#xA;else concat($html-path/htmlpath,$Start/pfx:request/pfx:command,&quot;.txt&quot;)"/>
+                </fileName>
+            </ns:ReadActivityInputClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="replace page variables">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1048</pd:x>
+        <pd:y>447</pd:y>
+        <config>
+            <processName>/REST/Private/Common/xslt2/replaceMultiple.process</processName>
+        </config>
+        <pd:inputBindings>
+            <replace>
+                <string>
+                    <xsl:value-of select="$Read-File/ns1:ReadActivityOutputTextClass/fileContent/textContent"/>
+                </string>
+                <param>
+                    <pattern>\{etag\}</pattern>
+                    <replace>
+                        <xsl:value-of select="$de-multiplex/pfx3:user/pfx3:etag"/>
+                    </replace>
+                </param>
+                <param>
+                    <pattern>\{firstname\}</pattern>
+                    <replace>
+                        <xsl:value-of select="$de-multiplex/pfx3:user/pfx3:firstname"/>
+                    </replace>
+                </param>
+                <param>
+                    <pattern>\{coffee\}</pattern>
+                    <replace>
+                        <xsl:value-of select="$de-multiplex/pfx3:user/pfx3:coffee"/>
+                    </replace>
+                </param>
+                <param>
+                    <pattern>\{amount\}</pattern>
+                    <replace>
+                        <xsl:value-of select="$de-multiplex/pfx3:user/pfx3:amount"/>
+                    </replace>
+                </param>
+                <param>
+                    <pattern>\{status\}</pattern>
+                    <replace>
+                        <xsl:value-of select="$de-multiplex/pfx3:user/pfx3:status"/>
+                    </replace>
+                </param>
+                <param>
+                    <pattern>\{numberOfUsers\}</pattern>
+                    <replace>
+                        <xsl:value-of select="count($admin-page---get-users/root/pfx3:user)"/>
+                    </replace>
+                </param>
+            </replace>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="saveUser">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>884</pd:x>
+        <pd:y>373</pd:y>
+        <config>
+            <processName>/server/shared variables/saveUser.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:choose>
+                <xsl:when test="$Build-New-User/pfx3:user">
+                    <xsl:copy-of select="$Build-New-User/pfx3:user"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:copy-of select="$Update-User/pfx3:user"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Update User">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>725</pd:x>
+        <pd:y>373</pd:y>
+        <config>
+            <element ref="pfx3:user"/>
+        </config>
+        <pd:inputBindings>
+            <pfx3:user>
+                <pfx3:etag>
+                    <xsl:value-of select="$getUser-1/pfx3:user/pfx3:etag"/>
+                </pfx3:etag>
+                <pfx3:firstname>
+                    <xsl:value-of select="$getUser-1/pfx3:user/pfx3:firstname"/>
+                </pfx3:firstname>
+                <pfx3:coffee>
+                    <xsl:value-of select="$Start/pfx:request/pfx:post/pfx:part/pfx:meta[@name='coffee']/@value"/>
+                </pfx3:coffee>
+                <pfx3:amount>
+                    <xsl:value-of select="$Start/pfx:request/pfx:post/pfx:part/pfx:meta[@name='amount']/@value"/>
+                </pfx3:amount>
+                <pfx3:status>
+                    <xsl:value-of select="'Coffee Ordered'"/>
+                </pfx3:status>
+            </pfx3:user>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="admin page - get users">
+        <pd:type>com.tibco.pe.core.GetSharedVariableActivity</pd:type>
+        <pd:resourceType>ae.activities.getSharedVariable</pd:resourceType>
+        <pd:x>719</pd:x>
+        <pd:y>75</pd:y>
+        <config>
+            <variableConfig>/server/shared variables/sudo-database.sharedvariable</variableConfig>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>404 Not Found</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>GET</pd:to>
+        <pd:xpathDescription>GET</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/pfx:request/pfx:method = "GET"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>POST</pd:to>
+        <pd:xpathDescription>POST</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/pfx:request/pfx:method = "POST"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>POST</pd:from>
+        <pd:to>404 Not Found</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GET</pd:from>
+        <pd:to>read content</pd:to>
+        <pd:xpathDescription>valid page?</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/pfx:request/pfx:command = "/" 
+or $Start/pfx:request/pfx:command = "/start" 
+or $Start/pfx:request/pfx:command = "/order" 
+or $Start/pfx:request/pfx:command = "/status"
+or $Start/pfx:request/pfx:command = "/admin"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GET</pd:from>
+        <pd:to>404 Not Found</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>read content</pd:from>
+        <pd:to>getUser</pd:to>
+        <pd:xpathDescription>etag?</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>exists($Start/pfx:request/pfx:query/pfx:item[@name="etag"]/@value)</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>200 OK</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>create content</pd:from>
+        <pd:to>Build New User</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>POST</pd:from>
+        <pd:to>create content</pd:to>
+        <pd:xpathDescription>valid page?</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/pfx:request/pfx:command = "/order" or $Start/pfx:request/pfx:command = "/status"</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>html path</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>html path</pd:from>
+        <pd:to>Read File</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Read File</pd:from>
+        <pd:to>replace page variables</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>getUser</pd:from>
+        <pd:to>de-multiplex</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Build New User</pd:from>
+        <pd:to>de-multiplex</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>de-multiplex</pd:from>
+        <pd:to>replace page variables</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>create content</pd:from>
+        <pd:to>getUser-1</pd:to>
+        <pd:xpathDescription>etag?</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>exists($Start/pfx:request/pfx:post/pfx:part/pfx:meta[@name="etag"]/@value)</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>getUser-1</pd:from>
+        <pd:to>Update User</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Update User</pd:from>
+        <pd:to>de-multiplex</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Update User</pd:from>
+        <pd:to>saveUser</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>saveUser</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Build New User</pd:from>
+        <pd:to>saveUser</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>replace page variables</pd:from>
+        <pd:to>200 OK</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>read content</pd:from>
+        <pd:to>replace page variables</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Read File</pd:from>
+        <pd:to>_04-Not-Found-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>read content</pd:from>
+        <pd:to>admin page - get users</pd:to>
+        <pd:xpathDescription>admin?</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/pfx:request/pfx:command = '/admin'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>admin page - get users</pd:from>
+        <pd:to>replace page variables</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:label>
+        <pd:name>Label</pd:name>
+        <pd:description> This is an example implementation of the Delegate Interface.
+ This process is invoked dynamically from the 'REST Interface'.
+ When implementing, it is responsible for handling the REST request, and generating a response.</pd:description>
+        <pd:x>320</pd:x>
+        <pd:y>48</pd:y>
+        <pd:width>631</pd:width>
+        <pd:height>67</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-6697729</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
+</pd:ProcessDefinition>

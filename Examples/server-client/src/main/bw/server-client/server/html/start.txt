@@ -1,0 +1,17 @@
+<html>
+<head>
+<style>legend{font-weight:bold;}fieldset{background:lightgray;}</style></head>
+<body onload="document.f.firstname.focus();">
+<h3>Welcome to the Coffee stand!</h3><p/>
+<fieldset><legend>Coffee Order Form</legend>
+ <FORM name="f" action="order"
+       enctype="multipart/form-data"
+       method="post">
+   <P>
+   What is your name? <INPUT type="text" name="firstname" value=""><p/>
+   <INPUT type="submit" value="Place an order..."> <INPUT type="reset">
+ </FORM>
+</fieldset>
+<p/>
+</body>
+</html>
