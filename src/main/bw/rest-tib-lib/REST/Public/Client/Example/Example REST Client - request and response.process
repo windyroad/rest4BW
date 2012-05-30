@@ -46,6 +46,9 @@ if-modified-sinceUnexpected : 2012-05-28T21Unexpected :33Unexpected :03.914+10Un
                     <pfx:If-Modified-Since>
                         <xsl:value-of select="'2012-05-28T21:33:03.914+10:00'"/>
                     </pfx:If-Modified-Since>
+                    <pfx:ETag>
+                        <xsl:value-of select="'ETAG1234'"/>
+                    </pfx:ETag>
                 </pfx:Headers>
                 <pfx:Context>
                     <pfx:RemoteAddress>127.0.0.1</pfx:RemoteAddress>
@@ -100,6 +103,7 @@ if-modified-sinceUnexpected : 2012-05-28T21Unexpected :33Unexpected :03.914+10Un
                             <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
                             <xsd:element name="host" type="xsd:string" minOccurs="0"/>
                             <xsd:element name="If-Modified-Since" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="ETag" type="xsd:string" minOccurs="0"/>
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>
@@ -196,6 +200,11 @@ if-modified-sinceUnexpected : 2012-05-28T21Unexpected :33Unexpected :03.914+10Un
                                             <xsl:value-of select="pfx:If-Modified-Since"/>
                                         </If-Modified-Since>
                                     </xsl:if>
+                                    <xsl:if test="pfx:ETag">
+                                        <ETag>
+                                            <xsl:value-of select="pfx:ETag"/>
+                                        </ETag>
+                                    </xsl:if>
                                 </Headers>
                             </xsl:for-each>
                         </RequestActivityInput>
@@ -271,6 +280,11 @@ if-modified-sinceUnexpected : 2012-05-28T21Unexpected :33Unexpected :03.914+10Un
                                             <xsl:value-of select="pfx:If-Modified-Since"/>
                                         </If-Modified-Since>
                                     </xsl:if>
+                                    <xsl:if test="pfx:ETag">
+                                        <ETag>
+                                            <xsl:value-of select="pfx:ETag"/>
+                                        </ETag>
+                                    </xsl:if>
                                 </Headers>
                             </xsl:for-each>
                         </RequestActivityInput>
@@ -322,6 +336,7 @@ Continue »
 -----------------------------9849436581144108930470211272--</pfx:PostData>
                 <pfx:Headers>
                     <pfx:Content-Type>multipart/form-data; boundary=---------------------------9849436581144108930470211272</pfx:Content-Type>
+                    <pfx:ETag>ETAG1234</pfx:ETag>
                 </pfx:Headers>
                 <pfx:Context>
                     <pfx:RemoteAddress>127.0.0.1</pfx:RemoteAddress>
