@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://windyroad.org/rest-tib-lib.xsd" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://windyroad.org/rest-tib-lib.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd">
     <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
     <pd:name>quickTestSuite/Feature 2 - Multipart Form Data parser TestCase/Scenario 5 - Multiple Parts with value (part 2).process</pd:name>
     <pd:description>@Timeout(60000)</pd:description>
@@ -30,37 +30,37 @@
                         <ns1:part>
                             <ns1:meta name="Content-Disposition" value="form-data"/>
                             <ns1:meta name="name" value="syx_sid"/>
-                            <ns1:content>6BBgsx9DXFAoNN0WnEyHZDn2weVnEj</ns1:content>
+                            <ns1:text-content>6BBgsx9DXFAoNN0WnEyHZDn2weVnEj</ns1:text-content>
                         </ns1:part>
                         <ns1:part>
                             <ns1:meta name="Content-Disposition" value="form-data"/>
                             <ns1:meta name="name" value="syx_sov"/>
-                            <ns1:content>vzum5e</ns1:content>
+                            <ns1:text-content>vzum5e</ns1:text-content>
                         </ns1:part>
                         <ns1:part>
                             <ns1:meta name="Content-Disposition" value="form-data"/>
                             <ns1:meta name="name" value="syx_efi"/>
-                            <ns1:content/>
+                            <ns1:text-content/>
                         </ns1:part>
                         <ns1:part>
                             <ns1:meta name="Content-Disposition" value="form-data"/>
                             <ns1:meta name="name" value="u_s4w_4607"/>
-                            <ns1:content>test</ns1:content>
+                            <ns1:text-content>test</ns1:text-content>
                         </ns1:part>
                         <ns1:part>
                             <ns1:meta name="Content-Disposition" value="form-data"/>
                             <ns1:meta name="name" value="u_s4w_4608"/>
-                            <ns1:content>john@doe.com</ns1:content>
+                            <ns1:text-content>john@doe.com</ns1:text-content>
                         </ns1:part>
                         <ns1:part>
                             <ns1:meta name="Content-Disposition" value="form-data"/>
                             <ns1:meta name="name" value="u_s4w_4609"/>
-                            <ns1:content>test</ns1:content>
+                            <ns1:text-content>test</ns1:text-content>
                         </ns1:part>
                         <ns1:part>
                             <ns1:meta name="Content-Disposition" value="form-data"/>
                             <ns1:meta name="name" value="submit"/>
-                            <ns1:content>Continue »</ns1:content>
+                            <ns1:text-content>Continue »</ns1:text-content>
                         </ns1:part>
                     </ns1:post>
                 </ns:expected>

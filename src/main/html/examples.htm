@@ -5,11 +5,12 @@
 <body>
 
 <fieldset><legend>Simple Get</legend>
-<a href="http://localhost:8080/ApplicationContext/SomePath/Some%20Resource.txt?q=some+search+term&key=value">Simple Request</a>
+<a href="http://localhost:8123/ApplicationContext/SomePath/Some%20Resource.txt?q=some+search+term&key=value">Simple Request</a>
 </fieldset>
 <p/>
+
 <fieldset><legend>Multipart Form</legend>
- <FORM action="http://localhost:8080/submitform"
+ <FORM action="http://localhost:8123/submitform"
        enctype="multipart/form-data"
        method="post">
    <P>
@@ -19,5 +20,17 @@
    <INPUT type="submit" value="Send"> <INPUT type="reset">
  </FORM>
 </fieldset>
+<p/>
+
+<fieldset><legend>Multipart Form (Empty)</legend>
+ <FORM action="http://localhost:8123/submitform"
+       enctype="multipart/form-data"
+       method="post">
+   <P>
+   <INPUT type="submit" value="Send"> <INPUT type="reset">
+ </FORM>
+</fieldset>
+<p/>
+
 </body>
 </html>

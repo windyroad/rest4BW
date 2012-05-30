@@ -35,7 +35,7 @@
                 <pfx2:command>
                     <xsl:value-of select="$Start/pfx:request/pfx:Command"/>
                 </pfx2:command>
-                <xsl:copy-of select="$parseMultipart/pfx2:post"/>
+                <xsl:copy-of select="$parseHttpReceiverMultipart/pfx2:post"/>
                 <xsl:copy-of select="$parseQuery/pfx2:query"/>
                 <pfx2:host>
                     <xsl:value-of select="$Start/pfx:request/pfx:Headers/pfx:host"/>
@@ -58,23 +58,20 @@
             </accept>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="parseMultipart">
+    <pd:activity name="parseHttpReceiverMultipart">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
         <pd:x>354</pd:x>
         <pd:y>82</pd:y>
         <config>
-            <processName>/REST/Private/Process/REST Interface/Components/parseMultipart.process</processName>
+            <processName>/REST/Private/Process/REST Interface/Components/parseHttpReceiverMultipart.process</processName>
         </config>
         <pd:inputBindings>
-            <input>
-                <post>
-                    <xsl:value-of select="$Start/pfx:request/pfx:PostData"/>
-                </post>
-                <contentType>
-                    <xsl:value-of select="$Start/pfx:request/pfx:Headers/pfx:Content-Type"/>
-                </contentType>
-            </input>
+            <root>
+                <xsl:if test="$Start/pfx:request/pfx:mimeEnvelopeElement">
+                    <xsl:copy-of select="$Start/pfx:request/pfx:mimeEnvelopeElement"/>
+                </xsl:if>
+            </root>
         </pd:inputBindings>
     </pd:activity>
     <pd:activity name="parseQuery">
@@ -100,13 +97,13 @@
     </pd:transition>
     <pd:transition>
         <pd:from>parseQuery</pd:from>
-        <pd:to>parseMultipart</pd:to>
+        <pd:to>parseHttpReceiverMultipart</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>parseMultipart</pd:from>
+        <pd:from>parseHttpReceiverMultipart</pd:from>
         <pd:to>parseAccept</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>

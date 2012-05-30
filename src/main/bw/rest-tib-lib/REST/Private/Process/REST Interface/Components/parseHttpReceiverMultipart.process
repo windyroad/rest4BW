@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://windyroad.org/wr-http.xsd" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd">
+    <xsd:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
+    <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/REST/Private/Schemas/HttpConnection.xsd"/>
+    <pd:name>REST/Private/Process/REST Interface/Components/parseHttpReceiverMultipart.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx2:mimeEnvelopeElement" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>85</pd:startX>
+    <pd:startY>70</pd:startY>
+    <pd:returnBindings>
+        <pfx:post>
+            <xsl:copy-of select="$parts/AccumulatedOutput/pfx:part"/>
+        </pfx:post>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx:post"/>
+    <pd:endX>845</pd:endX>
+    <pd:endY>75</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1301905132783</pd:targetNamespace>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>187</pd:x>
+        <pd:y>23</pd:y>
+        <pd:width>553</pd:width>
+        <pd:height>178</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$Start/root/pfx2:mimeEnvelopeElement/pfx2:mimePart</pd:over>
+            <pd:iterationElementSlot>mimePart</pd:iterationElementSlot>
+            <pd:indexSlot>indexName</pd:indexSlot>
+            <pd:outSlot>parts</pd:outSlot>
+            <pd:activityOutputName>Map to Rest MimePart</pd:activityOutputName>
+            <pd:accumulateOutput>true</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>ParseHeaders</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Map to Rest MimePart</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>ParseHeaders</pd:from>
+            <pd:to>Map Static Meta</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Map Static Meta</pd:from>
+            <pd:to>Map to Rest MimePart</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="ParseHeaders">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>279</pd:x>
+            <pd:y>111</pd:y>
+            <config>
+                <processName>/REST/Private/Process/REST Interface/Components/ParseHeaders.process</processName>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <xsl:if test="$mimePart/pfx2:mimePart/pfx2:mimeHeaders/pfx2:content-disposition">
+                        <header>
+                            <xsl:value-of select="$mimePart/pfx2:mimePart/pfx2:mimeHeaders/pfx2:content-disposition"/>
+                        </header>
+                    </xsl:if>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Map to Rest MimePart">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>623</pd:x>
+            <pd:y>123</pd:y>
+            <config>
+                <element ref="pfx:part"/>
+            </config>
+            <pd:inputBindings>
+                <pfx:part>
+                    <xsl:copy-of select="$Map-Static-Meta/root/pfx:meta"/>
+                    <xsl:for-each select="$ParseHeaders/root/pfx:header/pfx:entries/pfx:entry">
+                        <pfx:meta>
+                            <xsl:attribute name="name">
+                                <xsl:value-of select="pfx:key"/>
+                            </xsl:attribute>
+                            <xsl:if test="pfx:value">
+                                <xsl:attribute name="value">
+                                    <xsl:value-of select="pfx:value"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </pfx:meta>
+                    </xsl:for-each>
+                    <xsl:choose>
+                        <xsl:when test="$mimePart/pfx2:mimePart/pfx2:binaryContent">
+                            <pfx:binary-content>
+                                <xsl:value-of select="$mimePart/pfx2:mimePart/pfx2:binaryContent"/>
+                            </pfx:binary-content>
+                        </xsl:when>
+                        <xsl:when test="$mimePart/pfx2:mimePart/pfx2:textContent">
+                            <pfx:text-content>
+                                <xsl:value-of select="$mimePart/pfx2:mimePart/pfx2:textContent"/>
+                            </pfx:text-content>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <pfx:file-name>
+                                <xsl:value-of select="$mimePart/pfx2:mimePart/pfx2:fileName"/>
+                            </pfx:file-name>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </pfx:part>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Map Static Meta">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>448</pd:x>
+            <pd:y>116</pd:y>
+            <config>
+                <element>
+                    <xsd:element name="root">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element ref="pfx:meta" minOccurs="0" maxOccurs="unbounded"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </element>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <pfx:meta>
+                        <xsl:attribute name="name">content-type</xsl:attribute>
+                        <xsl:attribute name="value">
+                            <xsl:value-of select="$mimePart/pfx2:mimePart/pfx2:mimeHeaders/pfx2:content-type"/>
+                        </xsl:attribute>
+                    </pfx:meta>
+                    <xsl:if test="$mimePart/pfx2:mimePart/pfx2:mimeHeaders/pfx2:content-transfer-encoding">
+                        <pfx:meta>
+                            <xsl:attribute name="name">content-transfer-encoding</xsl:attribute>
+                            <xsl:if test="$mimePart/pfx2:mimePart/pfx2:mimeHeaders/pfx2:content-transfer-encoding">
+                                <xsl:attribute name="value">
+                                    <xsl:value-of select="$mimePart/pfx2:mimePart/pfx2:mimeHeaders/pfx2:content-transfer-encoding"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </pfx:meta>
+                    </xsl:if>
+                    <xsl:if test="$mimePart/pfx2:mimePart/pfx2:mimeHeaders/pfx2:content-id">
+                        <pfx:meta>
+                            <xsl:attribute name="name">content-id</xsl:attribute>
+                            <xsl:if test="$mimePart/pfx2:mimePart/pfx2:mimeHeaders/pfx2:content-id">
+                                <xsl:attribute name="value">
+                                    <xsl:value-of select="$mimePart/pfx2:mimePart/pfx2:mimeHeaders/pfx2:content-id"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </pfx:meta>
+                    </xsl:if>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>
