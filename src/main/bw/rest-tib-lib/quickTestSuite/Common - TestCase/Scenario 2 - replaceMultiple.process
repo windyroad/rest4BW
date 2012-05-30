@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://windyroad.org/rest-tib-lib.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:pfx="http://windyroad.org/wr-http.xsd">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://windyroad.org/rest-tib-lib.xsd" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd">
     <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
-    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/REST/Private/Schemas/HttpConnection.xsd"/>
-    <pd:name>quickTestSuite/Feature 2 - Multipart Form Data parser TestCase/Scenario 1 - Multiple Mimeparts with values.process</pd:name>
+    <pd:name>quickTestSuite/Common - TestCase/Scenario 2 - replaceMultiple.process</pd:name>
     <pd:description>@Timeout(60000)</pd:description>
     <pd:startName>Start</pd:startName>
-    <pd:startX>103</pd:startX>
-    <pd:startY>64</pd:startY>
+    <pd:startX>133</pd:startX>
+    <pd:startY>96</pd:startY>
     <pd:returnBindings/>
     <pd:endName>End</pd:endName>
-    <pd:endX>692</pd:endX>
-    <pd:endY>64</pd:endY>
+    <pd:endX>588</pd:endX>
+    <pd:endY>96</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1301865816031</pd:targetNamespace>
@@ -18,74 +17,45 @@
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
         <pd:description>Then and empty set of name value pairs in returns</pd:description>
-        <pd:x>565</pd:x>
-        <pd:y>64</pd:y>
+        <pd:x>461</pd:x>
+        <pd:y>96</pd:y>
         <config>
             <processName>/BWUnit/Public/Asserts/AssertEqual.process</processName>
         </config>
         <pd:inputBindings>
             <ns:equal-input>
                 <ns:expected>
-                    <ns1:post>
-                        <ns1:part>
-                            <ns1:meta name="content-type" value="text/plain"/>
-                            <ns1:meta name="content-transfer-encoding" value="base64"/>
-                            <ns1:meta name="form-data"/>
-                            <ns1:meta name="name" value="firstname"/>
-                            <ns1:meta name="firstname" value="John"/>
-                            <ns1:text-content>John</ns1:text-content>
-                        </ns1:part>
-                        <ns1:part>
-                            <ns1:meta name="content-type" value="text/plain"/>
-                            <ns1:meta name="content-transfer-encoding" value="base64"/>
-                            <ns1:meta name="form-data"/>
-                            <ns1:meta name="name" value="lastname"/>
-                            <ns1:meta name="lastname" value="Doe"/>
-                            <ns1:text-content>Doe</ns1:text-content>
-                        </ns1:part>
-                        <ns1:part>
-                            <ns1:meta name="content-type" value="text/plain"/>
-                            <ns1:meta name="content-transfer-encoding" value="base64"/>
-                            <ns1:meta name="form-data"/>
-                            <ns1:meta name="name" value="uploadedfile"/>
-                            <ns1:meta name="filename" value="test.txt"/>
-                            <ns1:meta name="uploadedfile" value="Some example content.&#xA;&#xA;This is the end of the file."/>
-                            <ns1:text-content>Some example content.
-
-This is the end of the file.</ns1:text-content>
-                        </ns1:part>
-                    </ns1:post>
+                    <root>
+                        <output>eee,fff,ccc,eee</output>
+                    </root>
                 </ns:expected>
                 <ns:actual>
-                    <xsl:copy-of select="$parseHttpReceiverMultipart/ns1:post"/>
+                    <xsl:copy-of select="$replaceMultiple/root"/>
                 </ns:actual>
             </ns:equal-input>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="parseHttpReceiverMultipart">
+    <pd:activity name="replaceMultiple">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:description>When an emtpy query string is parsed</pd:description>
-        <pd:x>402</pd:x>
-        <pd:y>64</pd:y>
+        <pd:x>285</pd:x>
+        <pd:y>93</pd:y>
         <config>
-            <processName>/REST/Private/Process/REST Interface/Components/parseHttpReceiverMultipart.process</processName>
+            <processName>/REST/Private/Common/xslt2/replaceMultiple.process</processName>
         </config>
         <pd:inputBindings>
-            <root>
-                <xsl:copy-of select="$getMultipartPostRequest/pfx:request/pfx:mimeEnvelopeElement"/>
-            </root>
+            <replace>
+                <string>aaa,bbb,ccc,aaa</string>
+                <param>
+                    <pattern>bbb</pattern>
+                    <replace>fff</replace>
+                </param>
+                <param>
+                    <pattern>aaa</pattern>
+                    <replace>eee</replace>
+                </param>
+            </replace>
         </pd:inputBindings>
-    </pd:activity>
-    <pd:activity name="getMultipartPostRequest">
-        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-        <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>247</pd:x>
-        <pd:y>65</pd:y>
-        <config>
-            <processName>/REST/Private/Testing/getMultipartPostRequest.process</processName>
-        </config>
-        <pd:inputBindings/>
     </pd:activity>
     <pd:transition>
         <pd:from>AssertEqual</pd:from>
@@ -96,21 +66,14 @@ This is the end of the file.</ns1:text-content>
     </pd:transition>
     <pd:transition>
         <pd:from>Start</pd:from>
-        <pd:to>getMultipartPostRequest</pd:to>
+        <pd:to>replaceMultiple</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>parseHttpReceiverMultipart</pd:from>
+        <pd:from>replaceMultiple</pd:from>
         <pd:to>AssertEqual</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>getMultipartPostRequest</pd:from>
-        <pd:to>parseHttpReceiverMultipart</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>

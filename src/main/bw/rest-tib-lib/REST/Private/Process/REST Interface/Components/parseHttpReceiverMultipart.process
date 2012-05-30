@@ -119,6 +119,14 @@
                             </xsl:if>
                         </pfx:meta>
                     </xsl:for-each>
+                    <pfx:meta>
+                        <xsl:attribute name="name">
+                            <xsl:value-of select="$ParseHeaders/root/pfx:header/pfx:entries/pfx:entry[pfx:key='name']/pfx:value"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="value">
+                            <xsl:value-of select="if (exists($mimePart/pfx2:mimePart/pfx2:binaryContent))&#xA;then $mimePart/pfx2:mimePart/pfx2:binaryContent&#xA;else if (exists($mimePart/pfx2:mimePart/pfx2:textContent))&#xA;then $mimePart/pfx2:mimePart/pfx2:textContent&#xA;else $mimePart/pfx2:mimePart/pfx2:fileName"/>
+                        </xsl:attribute>
+                    </pfx:meta>
                     <xsl:choose>
                         <xsl:when test="$mimePart/pfx2:mimePart/pfx2:binaryContent">
                             <pfx:binary-content>
