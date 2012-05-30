@@ -30,8 +30,8 @@
     <pd:group name="for each part">
         <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
         <pd:resourceType>ae.process.group</pd:resourceType>
-        <pd:x>426</pd:x>
-        <pd:y>146</pd:y>
+        <pd:x>312</pd:x>
+        <pd:y>154</pd:y>
         <pd:width>523</pd:width>
         <pd:height>158</pd:height>
         <pd:collapsedWidth>57</pd:collapsedWidth>
@@ -81,8 +81,8 @@
         <pd:activity name="ParseHeaders">
             <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
             <pd:resourceType>ae.process.subprocess</pd:resourceType>
-            <pd:x>680</pd:x>
-            <pd:y>225</pd:y>
+            <pd:x>565</pd:x>
+            <pd:y>233</pd:y>
             <config>
                 <processName>/REST/Private/Process/REST Interface/Components/ParseHeaders.process</processName>
             </config>
@@ -99,8 +99,8 @@
         <pd:activity name="data aggregator">
             <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
             <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-            <pd:x>830</pd:x>
-            <pd:y>221</pd:y>
+            <pd:x>715</pd:x>
+            <pd:y>229</pd:y>
             <config>
                 <element ref="pfx:part"/>
             </config>
@@ -132,17 +132,17 @@
                             </xsl:if>
                         </pfx:meta>
                     </xsl:for-each>
-                    <pfx:content>
+                    <pfx:text-content>
                         <xsl:value-of select="$split-header-and-content/root/content"/>
-                    </pfx:content>
+                    </pfx:text-content>
                 </pfx:part>
             </pd:inputBindings>
         </pd:activity>
         <pd:activity name="split header and content">
             <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
             <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-            <pd:x>541</pd:x>
-            <pd:y>230</pd:y>
+            <pd:x>426</pd:x>
+            <pd:y>238</pd:y>
             <config>
                 <element>
                     <xsd:element name="root">

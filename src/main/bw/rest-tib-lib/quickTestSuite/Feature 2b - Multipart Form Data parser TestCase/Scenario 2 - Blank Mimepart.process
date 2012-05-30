@@ -1,82 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://windyroad.org/rest-tib-lib.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://windyroad.org/rest-tib-lib.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:pfx="http://windyroad.org/wr-http.xsd">
     <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
-    <pd:name>quickTestSuite/Feature 2 - Multipart Form Data parser TestCase/Scenario 3 - Single Parameter with value.process</pd:name>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/REST/Private/Schemas/HttpConnection.xsd"/>
+    <pd:name>quickTestSuite/Feature 2b - Multipart Form Data parser TestCase/Scenario 2 - Blank Mimepart.process</pd:name>
     <pd:description>@Timeout(60000)</pd:description>
     <pd:startName>Start</pd:startName>
-    <pd:startX>150</pd:startX>
-    <pd:startY>63</pd:startY>
+    <pd:startX>103</pd:startX>
+    <pd:startY>64</pd:startY>
     <pd:returnBindings/>
     <pd:endName>End</pd:endName>
-    <pd:endX>605</pd:endX>
-    <pd:endY>68</pd:endY>
+    <pd:endX>692</pd:endX>
+    <pd:endY>64</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1301865816031</pd:targetNamespace>
     <pd:activity name="AssertEqual">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:description>Then the returned set has an entry with the name "somefield" and the value:
-"""value"""</pd:description>
-        <pd:x>478</pd:x>
-        <pd:y>65</pd:y>
+        <pd:description>Then and empty set of name value pairs in returns</pd:description>
+        <pd:x>565</pd:x>
+        <pd:y>64</pd:y>
         <config>
             <processName>/BWUnit/Public/Asserts/AssertEqual.process</processName>
         </config>
         <pd:inputBindings>
             <ns:equal-input>
                 <ns:expected>
-                    <ns1:post>
-                        <ns1:part>
-                            <ns1:meta>
-                                <xsl:attribute name="name">Content-Disposition</xsl:attribute>
-                                <xsl:attribute name="value">form-data</xsl:attribute>
-                            </ns1:meta>
-                            <ns1:meta>
-                                <xsl:attribute name="name">Content-Type</xsl:attribute>
-                                <xsl:attribute name="value">text/plain</xsl:attribute>
-                            </ns1:meta>
-                            <ns1:meta>
-                                <xsl:attribute name="name">name</xsl:attribute>
-                                <xsl:attribute name="value">somefield</xsl:attribute>
-                            </ns1:meta>
-                            <ns1:text-content>value</ns1:text-content>
-                        </ns1:part>
-                    </ns1:post>
+                    <ns1:post/>
                 </ns:expected>
                 <ns:actual>
-                    <xsl:copy-of select="$parsePost/ns1:post"/>
+                    <xsl:copy-of select="$parseHttpReceiverMultipart/ns1:post"/>
                 </ns:actual>
             </ns:equal-input>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="parsePost">
-        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-        <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:description>When the content type "multipart/form-data; boundary=----WebKitFormBoundaryBqB4t3RT1FgEAv7v" is parsed with the following post data:
-"""------WebKitFormBoundaryBqB4t3RT1FgEAv7v
-Content-Disposition: form-data; name="somefield"
-Content-Type: text/plain
-
-value
-
-------WebKitFormBoundaryBqB4t3RT1FgEAv7v--"""</pd:description>
-        <pd:x>315</pd:x>
-        <pd:y>66</pd:y>
+    <pd:activity name="Build request">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>243</pd:x>
+        <pd:y>64</pd:y>
         <config>
-            <processName>/REST/Private/Process/REST Interface/Components/parseMultipart.process</processName>
+            <element ref="pfx:request"/>
         </config>
         <pd:inputBindings>
-            <input>
-                <post>------WebKitFormBoundaryBqB4t3RT1FgEAv7v
-Content-Disposition: form-data; name="somefield"
-Content-Type: text/plain
-
-value
-
-------WebKitFormBoundaryBqB4t3RT1FgEAv7v--</post>
-                <contentType>multipart/form-data; boundary=----WebKitFormBoundaryBqB4t3RT1FgEAv7v</contentType>
-            </input>
+            <pfx:request>
+                <pfx:Method>POST</pfx:Method>
+                <pfx:RequestURI>/submitform</pfx:RequestURI>
+                <pfx:HTTPVersion>HTTP/1.1</pfx:HTTPVersion>
+                <pfx:Command>/submitform</pfx:Command>
+                <pfx:Header>POST /submitform HTTP/1.1host: localhost:8123
+user-agent: Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:12.0) Gecko/20100101 Firefox/12.0
+accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+accept-language: en-us,en;q=0.5
+accept-encoding: gzip, deflate
+connection: keep-alive
+content-type: multipart/form-data; boundary=---------------------------45656575711558917141555030951
+content-length: 512</pfx:Header>
+                <pfx:Protocol>HTTP</pfx:Protocol>
+                <pfx:Port>8123</pfx:Port>
+                <pfx:Headers>
+                    <pfx:Accept>text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</pfx:Accept>
+                    <pfx:Accept-Encoding>gzip, deflate</pfx:Accept-Encoding>
+                    <pfx:Content-Type>multipart/form-data; boundary=---------------------------45656575711558917141555030951</pfx:Content-Type>
+                    <pfx:Content-Length>512</pfx:Content-Length>
+                    <pfx:Connection>keep-alive</pfx:Connection>
+                    <pfx:host>localhost:8123</pfx:host>
+                </pfx:Headers>
+                <pfx:mimeEnvelopeElement/>
+                <pfx:Context>
+                    <pfx:RemoteAddress>127.0.0.1</pfx:RemoteAddress>
+                </pfx:Context>
+            </pfx:request>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="parseHttpReceiverMultipart">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:description>When an emtpy query string is parsed</pd:description>
+        <pd:x>402</pd:x>
+        <pd:y>64</pd:y>
+        <config>
+            <processName>/REST/Private/Process/REST Interface/Components/parseHttpReceiverMultipart.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:copy-of select="$Build-request/pfx:request/pfx:mimeEnvelopeElement"/>
+            </root>
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>
@@ -88,14 +97,21 @@ value
     </pd:transition>
     <pd:transition>
         <pd:from>Start</pd:from>
-        <pd:to>parsePost</pd:to>
+        <pd:to>Build request</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>parsePost</pd:from>
+        <pd:from>parseHttpReceiverMultipart</pd:from>
         <pd:to>AssertEqual</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Build request</pd:from>
+        <pd:to>parseHttpReceiverMultipart</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>

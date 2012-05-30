@@ -47,7 +47,7 @@
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="text-content" type="xs:string"/>
-	<xs:element name="binary-content" type="xs:string"/>
+	<xs:element name="binary-content" type="xs:base64Binary"/>
 	<xs:element name="post">
 		<xs:complexType>
 			<xs:sequence>
@@ -131,8 +131,13 @@
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="rest:meta" minOccurs="0" maxOccurs="unbounded"/>
-				<xs:element name="content" type="xs:string"/>
+				<xs:choice>
+					<xs:element ref="rest:binary-content"/>
+					<xs:element ref="rest:text-content"/>
+					<xs:element ref="rest:file-name"/>
+				</xs:choice>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
+	<xs:element name="file-name" type="xs:string"/>
 </xs:schema>

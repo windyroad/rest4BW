@@ -84,7 +84,7 @@ if-modified-sinceUnexpected : 2012-05-28T21Unexpected :33Unexpected :03.914+10Un
             <inputOutputVersion>5.3.0</inputOutputVersion>
             <newMimeSupport>true</newMimeSupport>
             <serverhost>127.0.0.1</serverhost>
-            <serverport>8080</serverport>
+            <serverport>8123</serverport>
             <useSsl>false</useSsl>
             <ns0:ssl xmlns:ns0="http://www.tibco.com/xmlns/aemeta/services/2002"/>
             <acceptRedirects>true</acceptRedirects>
