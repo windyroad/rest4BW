@@ -8,11 +8,12 @@ lib/*~
 
 # Ignore downloaded dependencies
 lib/*
-!lib/placeholder.txt
 
 # Ignore generated files/folders
 build
 src/main/bw/.designtimelibs
 src/main/bw/rest-tib-lib/.designtimelibs
 
+# Don't ignore this projlib file
+!Examples/server-client/lib/rest-tib-lib.projlib
 

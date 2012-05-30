@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.tibco.com/schemas/server-client/server/shared variables/Schema.xsd"
+	 targetNamespace="http://www.tibco.com/schemas/server-client/server/shared variables/Schema.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:element name="user">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="etag" type="xs:string"/>
+				<xs:element name="firstname" type="xs:string"/>
+				<xs:element name="coffee" type="xs:string" minOccurs="0"/>
+				<xs:element name="amount" type="xs:string" minOccurs="0"/>
+				<xs:element name="status" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

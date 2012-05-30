@@ -1,0 +1,19 @@
+<html>
+<head>
+<style>legend{font-weight:bold;}fieldset{background:lightgray;}</style></head>
+<body onload="document.f.refresh.focus();">
+
+<fieldset><legend>Administration</legend>
+ <FORM name="f" action="admin"
+       enctype="multipart/form-data"
+       method="get">
+   <p/>
+   <b>Number of users:<b/> {numberOfUsers}
+   <p/>
+   <INPUT type="submit" value="Refresh status" name="refresh">
+   <INPUT type="button" value="Go back to start" onclick="window.location.href = 'start';" />
+ </FORM>
+</fieldset>
+<p/>
+</body>
+</html>
