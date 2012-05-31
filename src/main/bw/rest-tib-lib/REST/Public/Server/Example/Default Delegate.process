@@ -9,18 +9,15 @@
     <pd:startX>121</pd:startX>
     <pd:startY>82</pd:startY>
     <pd:returnBindings>
-        <xsl:copy-of select="$Not-Implemented/pfx:error"/>
+        <pfx:response/>
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
-    <pd:endType>
-        <xsd:choice>
-            <xsd:element ref="pfx:response"/>
-            <xsd:element ref="pfx:error"/>
-        </xsd:choice>
-    </pd:endType>
+    <pd:endType ref="pfx:response"/>
     <pd:endX>505</pd:endX>
     <pd:endY>82</pd:endY>
-    <pd:errorSchemas/>
+    <pd:errorSchemas>
+        <Error ref="pfx:error"/>
+    </pd:errorSchemas>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1338181537186</pd:targetNamespace>
     <pd:activity name="501 Not Implemented">
