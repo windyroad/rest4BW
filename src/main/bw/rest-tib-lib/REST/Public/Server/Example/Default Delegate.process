@@ -20,9 +20,7 @@
     </pd:endType>
     <pd:endX>505</pd:endX>
     <pd:endY>82</pd:endY>
-    <pd:errorSchemas>
-        <HTTP-Error ref="pfx:error"/>
-    </pd:errorSchemas>
+    <pd:errorSchemas/>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1338181537186</pd:targetNamespace>
     <pd:activity name="501 Not Implemented">
@@ -31,7 +29,7 @@
         <pd:x>319</pd:x>
         <pd:y>89</pd:y>
         <config>
-            <processName>/REST/Public/Server/StatusCodes/501 Not Implemented.process</processName>
+            <processName>/REST/Public/Server/StatusCodes/5xx Server Error/501 Not Implemented.process</processName>
         </config>
         <pd:inputBindings>
             <root>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://windyroad.org/wr-http.xsd">
     <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/REST/Private/Schemas/HttpConnection.xsd"/>
-    <pd:name>REST/Private/Testing/getMultipartPostRequest.process</pd:name>
+    <pd:name>REST/Private/Testing/buildMultipartPostRequest.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startX>150</pd:startX>
     <pd:startY>64</pd:startY>

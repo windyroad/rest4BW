@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:ns2="http://windyroad.org/bwunit-abstract" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://windyroad.org/rest-tib-lib.xsd" xmlns:pfx="http://windyroad.org/bwunit-0.0.0.xsd">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://windyroad.org/bwunit-abstract" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://windyroad.org/rest-tib-lib.xsd" xmlns:pfx="http://windyroad.org/bwunit-0.0.0.xsd">
     <xsd:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
-    <pd:name>REST/Public/Server/StatusCodes/501 Not Implemented.process</pd:name>
+    <pd:name>REST/Public/Server/StatusCodes/5xx Server Error/501 Not Implemented.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType>
         <xsd:element name="root">
@@ -33,7 +33,7 @@
         <pd:x>325</pd:x>
         <pd:y>65</pd:y>
         <config>
-            <processName>/REST/Private/Process/StatusCodes/AbsHTTPErrorBuilder.process</processName>
+            <processName>/REST/Private/Process/StatusCodes/absHTTPErrorBuilder.process</processName>
         </config>
         <pd:inputBindings>
             <root>
@@ -47,11 +47,6 @@
                     <additionalInfo>
                         <xsl:value-of select="$Start/root/errorMessage"/>
                     </additionalInfo>
-                </xsl:if>
-                <xsl:if test="$Start/root/generateError">
-                    <generateError>
-                        <xsl:value-of select="$Start/root/generateError"/>
-                    </generateError>
                 </xsl:if>
             </root>
         </pd:inputBindings>

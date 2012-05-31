@@ -81,7 +81,7 @@ This is the end of the file.</ns1:text-content>
         <pd:x>247</pd:x>
         <pd:y>65</pd:y>
         <config>
-            <processName>/REST/Private/Testing/getMultipartPostRequest.process</processName>
+            <processName>/REST/Private/Testing/buildMultipartPostRequest.process</processName>
         </config>
         <pd:inputBindings/>
     </pd:activity>
@@ -91,7 +91,7 @@ This is the end of the file.</ns1:text-content>
         <pd:x>407</pd:x>
         <pd:y>65</pd:y>
         <config>
-            <processName>/REST/Private/Process/REST Interface/Parse HTTP request.process</processName>
+            <processName>/REST/Private/Process/REST Interface/parseHTTPRequest.process</processName>
         </config>
         <pd:inputBindings>
             <xsl:copy-of select="$getMultipartPostRequest/pfx:request"/>
