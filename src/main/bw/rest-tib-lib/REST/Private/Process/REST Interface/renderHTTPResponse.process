@@ -2,7 +2,7 @@
 <pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="http://windyroad.org/wr-http.xsd" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd">
     <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/REST/Private/Schemas/HttpConnection.xsd"/>
     <xsd:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
-    <pd:name>REST/Private/Process/REST Interface/Render HTTP response.process</pd:name>
+    <pd:name>REST/Private/Process/REST Interface/renderHTTPResponse.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType>
         <xsd:choice>
@@ -86,6 +86,11 @@
                         <pfx2:Location>
                             <xsl:value-of select="$Start/pfx:response/pfx:headers/@content-location"/>
                         </pfx2:Location>
+                    </xsl:if>
+                    <xsl:if test="$Start/pfx:response/pfx:headers/@etag">
+                        <pfx2:ETag>
+                            <xsl:value-of select="$Start/pfx:response/pfx:headers/@etag"/>
+                        </pfx2:ETag>
                     </xsl:if>
                 </pfx2:Headers>
             </pfx2:response>

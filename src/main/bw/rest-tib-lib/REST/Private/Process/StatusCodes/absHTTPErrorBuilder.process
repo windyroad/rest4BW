@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:ns2="http://windyroad.org/bwunit-abstract" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://windyroad.org/rest-tib-lib.xsd" xmlns:pfx="http://windyroad.org/bwunit-0.0.0.xsd">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://windyroad.org/bwunit-abstract" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://windyroad.org/rest-tib-lib.xsd" xmlns:pfx="http://windyroad.org/bwunit-0.0.0.xsd">
     <xsd:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
-    <pd:name>REST/Private/Process/StatusCodes/AbsHTTPErrorBuilder.process</pd:name>
+    <pd:name>REST/Private/Process/StatusCodes/absHTTPErrorBuilder.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType>
         <xsd:element name="root">
@@ -11,7 +11,6 @@
                     <xsd:element name="code" type="xsd:int"/>
                     <xsd:element name="additionalInfo" type="xsd:string" minOccurs="0"/>
                     <xsd:element name="max-age-delta-seconds" type="xsd:long" minOccurs="0"/>
-                    <xsd:element name="generateError" type="xsd:boolean" minOccurs="0"/>
                 </xsd:sequence>
             </xsd:complexType>
         </xsd:element>
@@ -28,8 +27,8 @@
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
     <pd:endType ref="pfx2:error"/>
-    <pd:endX>722</pd:endX>
-    <pd:endY>182</pd:endY>
+    <pd:endX>478</pd:endX>
+    <pd:endY>243</pd:endY>
     <pd:errorSchemas>
         <Error ref="pfx2:error"/>
     </pd:errorSchemas>
@@ -41,7 +40,7 @@
         <pd:x>478</pd:x>
         <pd:y>116</pd:y>
         <config>
-            <processName>/REST/Private/Builders/Build default REST Headers.process</processName>
+            <processName>/REST/Private/Builders/buildDefaultRESTHeaders.process</processName>
         </config>
         <pd:inputBindings>
             <root>
@@ -85,8 +84,8 @@
     <pd:activity name="Generate Error">
         <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
         <pd:resourceType>ae.activities.throw</pd:resourceType>
-        <pd:x>723</pd:x>
-        <pd:y>66</pd:y>
+        <pd:x>717</pd:x>
+        <pd:y>109</pd:y>
         <config>
             <faultName>Error</faultName>
         </config>
@@ -134,10 +133,10 @@
     <pd:transition>
         <pd:from>Build default REST Headers</pd:from>
         <pd:to>Generate Error</pd:to>
-        <pd:xpathDescription>generate error</pd:xpathDescription>
+        <pd:xpathDescription>always</pd:xpathDescription>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>xpath</pd:conditionType>
-        <pd:xpath>$Start/root/generateError = "true"</pd:xpath>
+        <pd:xpath>true()</pd:xpath>
     </pd:transition>
 </pd:ProcessDefinition>

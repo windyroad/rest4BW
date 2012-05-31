@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://windyroad.org/bwunit-abstract" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://windyroad.org/rest-tib-lib.xsd" xmlns:pfx="http://windyroad.org/bwunit-0.0.0.xsd">
+<pd:ProcessDefinition xmlns:ns2="http://windyroad.org/bwunit-abstract" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://windyroad.org/rest-tib-lib.xsd" xmlns:pfx="http://windyroad.org/bwunit-0.0.0.xsd">
     <xsd:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
-    <pd:name>REST/Public/Server/StatusCodes/200 OK.process</pd:name>
+    <pd:name>REST/Public/Server/StatusCodes/3xx Redirection/301 Moved Permanently.process</pd:name>
     <pd:startName>Start</pd:startName>
-    <pd:startType ref="pfx2:response"/>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="location" type="xsd:string"/>
+                    <xsd:choice minOccurs="0">
+                        <xsd:element name="text-content" type="xsd:string"/>
+                        <xsd:element name="binary-content" type="xsd:string"/>
+                    </xsd:choice>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
     <pd:startX>73</pd:startX>
     <pd:startY>70</pd:startY>
     <pd:returnBindings>
@@ -29,16 +41,16 @@
         <pd:inputBindings>
             <pfx2:response>
                 <xsl:choose>
-                    <xsl:when test="exists($Start/pfx2:response/pfx2:text-content)">
+                    <xsl:when test="$Start/root/text-content">
                         <pfx2:text-content>
-                            <xsl:value-of select="$Start/pfx2:response/pfx2:text-content"/>
+                            <xsl:value-of select="$Start/root/text-content"/>
                         </pfx2:text-content>
                     </xsl:when>
-                    <xsl:when test="exists($Start/pfx2:response/pfx2:binary-content)">
+                    <xsl:otherwise>
                         <pfx2:binary-content>
-                            <xsl:value-of select="$Start/pfx2:response/pfx2:binary-content"/>
+                            <xsl:value-of select="$Start/root/binary-content"/>
                         </pfx2:binary-content>
-                    </xsl:when>
+                    </xsl:otherwise>
                 </xsl:choose>
                 <pfx2:headers>
                     <xsl:if test="$Build-default-REST-Headers/pfx2:headers/@status">
@@ -46,31 +58,14 @@
                             <xsl:value-of select="$Build-default-REST-Headers/pfx2:headers/@status"/>
                         </xsl:attribute>
                     </xsl:if>
-                    <xsl:if test="$Start/pfx2:response/pfx2:headers/@allow">
-                        <xsl:attribute name="allow">
-                            <xsl:value-of select="$Start/pfx2:response/pfx2:headers/@allow"/>
-                        </xsl:attribute>
-                    </xsl:if>
-                    <xsl:if test="$Start/pfx2:response/pfx2:headers/@content-type">
-                        <xsl:attribute name="content-type">
-                            <xsl:value-of select="$Start/pfx2:response/pfx2:headers/@content-type"/>
-                        </xsl:attribute>
-                    </xsl:if>
                     <xsl:if test="$Build-default-REST-Headers/pfx2:headers/@cache-control">
                         <xsl:attribute name="cache-control">
                             <xsl:value-of select="$Build-default-REST-Headers/pfx2:headers/@cache-control"/>
                         </xsl:attribute>
                     </xsl:if>
-                    <xsl:if test="$Start/pfx2:response/pfx2:headers/@last-modified">
-                        <xsl:attribute name="last-modified">
-                            <xsl:value-of select="$Start/pfx2:response/pfx2:headers/@last-modified"/>
-                        </xsl:attribute>
-                    </xsl:if>
-                    <xsl:if test="$Start/pfx2:response/pfx2:headers/@etag">
-                        <xsl:attribute name="etag">
-                            <xsl:value-of select="$Start/pfx2:response/pfx2:headers/@etag"/>
-                        </xsl:attribute>
-                    </xsl:if>
+                    <xsl:attribute name="content-location">
+                        <xsl:value-of select="$Start/root/location"/>
+                    </xsl:attribute>
                     <xsl:copy-of select="$Build-default-REST-Headers/pfx2:headers/pfx2:header"/>
                 </pfx2:headers>
             </pfx2:response>
@@ -82,12 +77,12 @@
         <pd:x>259</pd:x>
         <pd:y>80</pd:y>
         <config>
-            <processName>/REST/Private/Builders/Build default REST Headers.process</processName>
+            <processName>/REST/Private/Builders/buildDefaultRESTHeaders.process</processName>
         </config>
         <pd:inputBindings>
             <root>
                 <statusLine>
-                    <xsl:value-of select="'200 OK'"/>
+                    <xsl:value-of select="'300 Moved Permanently'"/>
                 </statusLine>
             </root>
         </pd:inputBindings>

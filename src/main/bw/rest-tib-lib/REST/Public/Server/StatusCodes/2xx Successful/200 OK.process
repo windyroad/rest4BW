@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:ns2="http://windyroad.org/bwunit-abstract" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://windyroad.org/rest-tib-lib.xsd" xmlns:pfx="http://windyroad.org/bwunit-0.0.0.xsd">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://windyroad.org/bwunit-abstract" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://windyroad.org/rest-tib-lib.xsd" xmlns:pfx="http://windyroad.org/bwunit-0.0.0.xsd">
     <xsd:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
-    <pd:name>REST/Private/Process/StatusCodes/AbsHTTPStatusCodeBuilder.process</pd:name>
+    <pd:name>REST/Public/Server/StatusCodes/2xx Successful/200 OK.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType ref="pfx2:response"/>
     <pd:startX>73</pd:startX>
@@ -71,6 +71,7 @@
                             <xsl:value-of select="$Start/pfx2:response/pfx2:headers/@etag"/>
                         </xsl:attribute>
                     </xsl:if>
+                    <xsl:copy-of select="$Build-default-REST-Headers/pfx2:headers/pfx2:header"/>
                 </pfx2:headers>
             </pfx2:response>
         </pd:inputBindings>
@@ -81,7 +82,7 @@
         <pd:x>259</pd:x>
         <pd:y>80</pd:y>
         <config>
-            <processName>/REST/Private/Builders/Build default REST Headers.process</processName>
+            <processName>/REST/Private/Builders/buildDefaultRESTHeaders.process</processName>
         </config>
         <pd:inputBindings>
             <root>

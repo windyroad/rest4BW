@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://windyroad.org/rest-tib-lib.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:pfx="http://windyroad.org/wr-http.xsd">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://windyroad.org/rest-tib-lib.xsd" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:pfx="http://windyroad.org/wr-http.xsd">
     <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
     <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/REST/Private/Schemas/HttpConnection.xsd"/>
     <pd:name>quickTestSuite/Feature 2 - Multipart Form Data parser TestCase/Scenario 1 - Multiple Mimeparts with values.process</pd:name>
@@ -69,7 +69,7 @@ This is the end of the file.</ns1:text-content>
         <pd:x>402</pd:x>
         <pd:y>64</pd:y>
         <config>
-            <processName>/REST/Private/Process/REST Interface/Components/parseHttpReceiverMultipart.process</processName>
+            <processName>/REST/Private/Common/http/parseHttpReceiverMultipart.process</processName>
         </config>
         <pd:inputBindings>
             <root>
@@ -83,7 +83,7 @@ This is the end of the file.</ns1:text-content>
         <pd:x>247</pd:x>
         <pd:y>65</pd:y>
         <config>
-            <processName>/REST/Private/Testing/getMultipartPostRequest.process</processName>
+            <processName>/REST/Private/Testing/buildMultipartPostRequest.process</processName>
         </config>
         <pd:inputBindings/>
     </pd:activity>
