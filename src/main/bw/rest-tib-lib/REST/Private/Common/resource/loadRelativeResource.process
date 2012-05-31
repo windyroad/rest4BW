@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <pd:name>REST/Private/Common/resource/loadRelativeResource.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="path" type="xsd:string"/>
+                    <xsd:choice minOccurs="0">
+                        <xsd:element name="encoding" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="readAsBinary" type="xsd:boolean" minOccurs="0"/>
+                    </xsd:choice>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>76</pd:startX>
+    <pd:startY>60</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <xsl:choose>
+                <xsl:when test="$Read-File/ns2:ReadActivityOutputTextClass">
+                    <text-content>
+                        <xsl:value-of select="$Read-File/ns2:ReadActivityOutputTextClass/fileContent/textContent"/>
+                    </text-content>
+                </xsl:when>
+                <xsl:otherwise>
+                    <binary-content>
+                        <xsl:value-of select="$Read-File-As-Binary/ns2:ReadActivityOutputBinaryClass/fileContent/binaryContent"/>
+                    </binary-content>
+                </xsl:otherwise>
+            </xsl:choose>
+            <absolutePath>
+                <xsl:value-of select="$getAbsolutePath/absolutePath"/>
+            </absolutePath>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:choice>
+                        <xsd:element name="text-content" type="xsd:string"/>
+                        <xsd:element name="binary-content" type="xsd:base64Binary"/>
+                    </xsd:choice>
+                    <xsd:element name="absolutePath" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>593</pd:endX>
+    <pd:endY>61</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1338427952261</pd:targetNamespace>
+    <pd:activity name="getAbsolutePath">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>220</pd:x>
+        <pd:y>60</pd:y>
+        <config>
+            <processName>/REST/Private/Common/resource/getAbsolutePath.process</processName>
+        </config>
+        <pd:inputBindings>
+            <relativePath>
+                <xsl:value-of select="$Start/root/path"/>
+            </relativePath>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Read File">
+        <pd:type>com.tibco.plugin.file.FileReadActivity</pd:type>
+        <pd:resourceType>ae.activities.FileReadActivity</pd:resourceType>
+        <pd:x>452</pd:x>
+        <pd:y>61</pd:y>
+        <config>
+            <encoding>text</encoding>
+        </config>
+        <pd:inputBindings>
+            <ns:ReadActivityInputClass>
+                <fileName>
+                    <xsl:value-of select="$getAbsolutePath/absolutePath"/>
+                </fileName>
+                <xsl:if test="$Start/root/encoding">
+                    <encoding>
+                        <xsl:value-of select="$Start/root/encoding"/>
+                    </encoding>
+                </xsl:if>
+            </ns:ReadActivityInputClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Read File As Binary">
+        <pd:type>com.tibco.plugin.file.FileReadActivity</pd:type>
+        <pd:resourceType>ae.activities.FileReadActivity</pd:resourceType>
+        <pd:x>451</pd:x>
+        <pd:y>155</pd:y>
+        <config>
+            <encoding>binary</encoding>
+        </config>
+        <pd:inputBindings>
+            <ns2:ReadActivityInputClass>
+                <fileName>
+                    <xsl:value-of select="$getAbsolutePath/absolutePath"/>
+                </fileName>
+            </ns2:ReadActivityInputClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>getAbsolutePath</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>getAbsolutePath</pd:from>
+        <pd:to>Read File</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Read File</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>getAbsolutePath</pd:from>
+        <pd:to>Read File As Binary</pd:to>
+        <pd:xpathDescription>binary?</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/root/readAsBinary = 'true'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Read File As Binary</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>
