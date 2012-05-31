@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://windyroad.org/bwunit-abstract" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://windyroad.org/rest-tib-lib.xsd" xmlns:pfx="http://windyroad.org/bwunit-0.0.0.xsd">
+    <xsd:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
+    <pd:name>REST/Public/Server/StatusCodes/301 Moved Permanently.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="location" type="xsd:string"/>
+                    <xsd:choice minOccurs="0">
+                        <xsd:element name="text-content" type="xsd:string"/>
+                        <xsd:element name="binary-content" type="xsd:string"/>
+                    </xsd:choice>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>73</pd:startX>
+    <pd:startY>70</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$Map-Data/pfx2:response"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx2:response"/>
+    <pd:endX>685</pd:endX>
+    <pd:endY>69</pd:endY>
+    <pd:errorSchemas>
+        <Error/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1301599510965</pd:targetNamespace>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>459</pd:x>
+        <pd:y>71</pd:y>
+        <config>
+            <element ref="pfx2:response"/>
+        </config>
+        <pd:inputBindings>
+            <pfx2:response>
+                <xsl:choose>
+                    <xsl:when test="$Start/root/text-content">
+                        <pfx2:text-content>
+                            <xsl:value-of select="$Start/root/text-content"/>
+                        </pfx2:text-content>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <pfx2:binary-content>
+                            <xsl:value-of select="$Start/root/binary-content"/>
+                        </pfx2:binary-content>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <pfx2:headers>
+                    <xsl:if test="$Build-default-REST-Headers/pfx2:headers/@status">
+                        <xsl:attribute name="status">
+                            <xsl:value-of select="$Build-default-REST-Headers/pfx2:headers/@status"/>
+                        </xsl:attribute>
+                    </xsl:if>
+                    <xsl:if test="$Build-default-REST-Headers/pfx2:headers/@cache-control">
+                        <xsl:attribute name="cache-control">
+                            <xsl:value-of select="$Build-default-REST-Headers/pfx2:headers/@cache-control"/>
+                        </xsl:attribute>
+                    </xsl:if>
+                    <xsl:attribute name="content-location">
+                        <xsl:value-of select="$Start/root/location"/>
+                    </xsl:attribute>
+                    <xsl:copy-of select="$Build-default-REST-Headers/pfx2:headers/pfx2:header"/>
+                </pfx2:headers>
+            </pfx2:response>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Build default REST Headers">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>259</pd:x>
+        <pd:y>80</pd:y>
+        <config>
+            <processName>/REST/Private/Builders/buildDefaultRESTHeaders.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <statusLine>
+                    <xsl:value-of select="'300 Moved Permanently'"/>
+                </statusLine>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Build default REST Headers</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Build default REST Headers</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>
