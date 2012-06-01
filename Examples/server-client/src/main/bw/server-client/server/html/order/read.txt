@@ -7,7 +7,7 @@
 <h3>Order for: {firstname}</h3><p/>
 <fieldset><legend>Coffee Order Status</legend>
 <h3>{status}... (Ready in approx 2 mins)</h3>
- <FORM name="f" action="status"
+ <FORM name="f" action="{rest.read}"
        enctype="multipart/form-data"
        method="get">
    <b>Firstname:</b> {firstname}<br/>
@@ -16,7 +16,7 @@
    <INPUT type="hidden" name="etag" value="{etag}">
    <p/>
    <INPUT type="submit" value="Refresh status" name="refresh">
-   <INPUT type="button" value="Go back to start" onclick="window.location.href = 'start';" />
+   <INPUT type="button" value="Go back to start" onclick="window.location.href = '{rest.entry}';" />
  </FORM>
 </fieldset>
 <p/>

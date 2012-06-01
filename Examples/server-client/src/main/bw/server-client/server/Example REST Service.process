@@ -15,7 +15,7 @@
             <defaultEncoding>UTF8</defaultEncoding>
             <inputOutputVersion>5.3.0</inputOutputVersion>
             <newMimeSupport>true</newMimeSupport>
-            <sharedChannel>/REST/Public/Server/Example/Example HTTP Connection.sharedhttp</sharedChannel>
+            <sharedChannel>/REST/Example/server/Example HTTP Connection.sharedhttp</sharedChannel>
             <parsePostData>false</parsePostData>
             <Headers>
                 <xsd:element name="root">
@@ -51,7 +51,7 @@
         <pd:x>302</pd:x>
         <pd:y>79</pd:y>
         <config>
-            <processName>/REST/Public/Server/REST Interface.process</processName>
+            <processName>/REST/REST Interface.process</processName>
         </config>
         <pd:inputBindings>
             <root>
@@ -393,11 +393,11 @@
  When implementing, change the 'dynamicDelegatorProcessOverride' variable to the Delegate implementation.
  By default, it uses 'Default Delegate.process'. 
 
- In addition, the HTTP connection should be changed.</pd:description>
+ In addition, the HTTP Connection should be changed.</pd:description>
         <pd:x>416</pd:x>
-        <pd:y>193</pd:y>
+        <pd:y>191</pd:y>
         <pd:width>719</pd:width>
-        <pd:height>98</pd:height>
+        <pd:height>94</pd:height>
         <pd:fontColor>-16777216</pd:fontColor>
         <pd:color>-6697729</pd:color>
         <pd:type>solid</pd:type>
