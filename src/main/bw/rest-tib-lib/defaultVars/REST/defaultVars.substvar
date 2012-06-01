@@ -3,11 +3,11 @@
 	<globalVariables>
 		<globalVariable>
 			<name>exception-shielding</name>
-			<value>true</value>
+			<value>false</value>
 			<deploymentSettable>true</deploymentSettable>
-			<serviceSettable>false</serviceSettable>
+			<serviceSettable>true</serviceSettable>
 			<type>Boolean</type>
-			<modTime>1338442665054</modTime>
+			<modTime>1338508730836</modTime>
 		</globalVariable>
 	</globalVariables>
 </repository>

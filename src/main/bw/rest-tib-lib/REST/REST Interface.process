@@ -2,7 +2,7 @@
 <pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://www.tibco.com/pe/EngineTypes" xmlns:pfx3="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx2="http://windyroad.org/wr-http.xsd" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd">
     <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/REST/Private/Schemas/HttpConnection.xsd"/>
     <xsd:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
-    <pd:name>REST/Public/Server/REST Interface.process</pd:name>
+    <pd:name>REST/REST Interface.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType>
         <xsd:element name="root">
@@ -86,7 +86,7 @@
             <pd:y>87</pd:y>
             <config>
                 <processNameXPath>$Start/root/dynamicDelegatorProcessOverride</processNameXPath>
-                <processName>/REST/Public/Server/Example/Default Delegate.process</processName>
+                <processName>/REST/Example/server/Default Delegate.process</processName>
             </config>
             <pd:inputBindings>
                 <xsl:copy-of select="$Parse-HTTP-request/pfx:request"/>
@@ -123,7 +123,7 @@
         <pd:x>479</pd:x>
         <pd:y>312</pd:y>
         <config>
-            <processName>/REST/Public/Server/StatusCodes/5xx Server Error/500 Internal Server Error.process</processName>
+            <processName>/REST/StatusCodes/5xx Server Error/500 Internal Server Error.process</processName>
         </config>
         <pd:inputBindings>
             <root>
