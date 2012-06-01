@@ -120,8 +120,8 @@
     <pd:activity name="Internal Server Error">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>479</pd:x>
-        <pd:y>312</pd:y>
+        <pd:x>476</pd:x>
+        <pd:y>315</pd:y>
         <config>
             <processName>/REST/StatusCodes/5xx Server Error/500 Internal Server Error.process</processName>
         </config>
