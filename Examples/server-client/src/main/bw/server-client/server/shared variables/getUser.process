@@ -34,7 +34,7 @@
         <pd:x>496</pd:x>
         <pd:y>193</pd:y>
         <config>
-            <processName>/REST/Public/Server/StatusCodes/404 Not Found.process</processName>
+            <processName>/REST/StatusCodes/4xx Client Error/404 Not Found.process</processName>
         </config>
         <pd:inputBindings>
             <path>

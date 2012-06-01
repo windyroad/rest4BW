@@ -6,7 +6,7 @@
 <h3 style="float:right;">Status: {status}</h3>
 <h3>Order for: {firstname}</h3><p/>
 <fieldset><legend>Coffee Order Form</legend>
- <FORM name="f" action="status"
+ <FORM name="f" action="{rest.read}"
        enctype="multipart/form-data"
        method="post">
    <P>
@@ -25,7 +25,7 @@ How many coffee's do you want?
    <INPUT type="hidden" name="etag" value="{etag}" />
    <INPUT type="submit" value="Submit" /> 
    <INPUT type="reset" /> 
-   <INPUT type="button" value="Go back to start" onclick="window.location.href = 'start';" />
+   <INPUT type="button" value="Go back to start" onclick="window.location.href = '{rest.entry}';" />
  </FORM>
 </fieldset>
 <p/>
