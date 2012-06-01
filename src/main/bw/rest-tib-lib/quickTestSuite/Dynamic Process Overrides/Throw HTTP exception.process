@@ -30,7 +30,7 @@
         <pd:x>337</pd:x>
         <pd:y>72</pd:y>
         <config>
-            <processName>/REST/Public/Server/StatusCodes/4xx Client Error/405 Method Not Allowed.process</processName>
+            <processName>/REST/StatusCodes/4xx Client Error/405 Method Not Allowed.process</processName>
         </config>
         <pd:inputBindings>
             <allow>

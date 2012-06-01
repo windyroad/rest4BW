@@ -2,7 +2,7 @@
 <pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd">
     <xsd:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
     <xsd:import namespace="http://windyroad.org/rest-delegate.xsd"/>
-    <pd:name>REST/Public/Server/Example/Default Delegate.process</pd:name>
+    <pd:name>REST/Example/server/Default Delegate.process</pd:name>
     <pd:description/>
     <pd:startName>Start</pd:startName>
     <pd:startType ref="pfx:request"/>
@@ -26,7 +26,7 @@
         <pd:x>319</pd:x>
         <pd:y>89</pd:y>
         <config>
-            <processName>/REST/Public/Server/StatusCodes/5xx Server Error/501 Not Implemented.process</processName>
+            <processName>/REST/StatusCodes/5xx Server Error/501 Not Implemented.process</processName>
         </config>
         <pd:inputBindings>
             <root>

@@ -7,8 +7,9 @@
         <xsd:element name="root">
             <xsd:complexType>
                 <xsd:sequence>
+                    <xsd:element name="code" type="xsd:int"/>
+                    <xsd:element name="message" type="xsd:string"/>
                     <xsd:element name="max-age-delta-seconds" type="xsd:long" minOccurs="0"/>
-                    <xsd:element name="statusLine" type="xsd:string" minOccurs="0"/>
                 </xsd:sequence>
             </xsd:complexType>
         </xsd:element>
@@ -36,7 +37,7 @@
         <pd:inputBindings>
             <pfx:headers>
                 <xsl:attribute name="status">
-                    <xsl:value-of select="concat('HTTP/1.x ',$Start/root/statusLine)"/>
+                    <xsl:value-of select="concat('HTTP/1.x ',$Start/root/code,' ',$Start/root/message)"/>
                 </xsl:attribute>
                 <xsl:choose>
                     <xsl:when test="exists($Start/root/max-age-delta-seconds)">
