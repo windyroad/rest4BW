@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:ns2="http://windyroad.org/wr-http.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://xmlns.tibco.com/bw/plugin-api/messages/context" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://xmlns.tibco.com/encodings/mime" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd">
-    <pd:name>REST/Example/server/Example REST Service.process</pd:name>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://windyroad.org/wr-http.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://xmlns.tibco.com/bw/plugin-api/messages/context" xmlns:ns="http://xmlns.tibco.com/encodings/mime" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd">
+    <pd:name>REST/Example/server/REST Service.process</pd:name>
     <pd:startName>HTTP Receiver</pd:startName>
     <pd:startX>0</pd:startX>
     <pd:startY>0</pd:startY>
@@ -15,7 +15,7 @@
             <defaultEncoding>UTF8</defaultEncoding>
             <inputOutputVersion>5.3.0</inputOutputVersion>
             <newMimeSupport>true</newMimeSupport>
-            <sharedChannel>/REST/Example/server/Example HTTP Connection.sharedhttp</sharedChannel>
+            <sharedChannel>/REST/Example/server/HTTP Connection.sharedhttp</sharedChannel>
             <parsePostData>false</parsePostData>
             <Headers>
                 <xsd:element name="root">
