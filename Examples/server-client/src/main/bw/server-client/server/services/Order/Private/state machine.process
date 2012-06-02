@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/coffee-shop" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <pd:name>server/services/Order/Private/state machine.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="firstname" type="xsd:string"/>
+                    <xsd:element name="transition-action-name" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>113</pd:startX>
+    <pd:startY>84</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>797</pd:endX>
+    <pd:endY>84</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1338659136797</pd:targetNamespace>
+    <pd:activity name="get">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>235</pd:x>
+        <pd:y>84</pd:y>
+        <config>
+            <processName>/server/persistence/get.process</processName>
+        </config>
+        <pd:inputBindings>
+            <firstname>
+                <xsl:value-of select="$Start/root/firstname"/>
+            </firstname>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="is a valid transition?">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>368</pd:x>
+        <pd:y>89</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Null-1">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>548</pd:x>
+        <pd:y>84</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="save">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>679</pd:x>
+        <pd:y>84</pd:y>
+        <config>
+            <processName>/server/persistence/save.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:coffee-order>
+                <ns:firstname>
+                    <xsl:value-of select="$get/ns:coffee-order/ns:firstname"/>
+                </ns:firstname>
+                <ns:coffee>
+                    <xsl:value-of select="$get/ns:coffee-order/ns:coffee"/>
+                </ns:coffee>
+                <ns:sugar>
+                    <xsl:value-of select="$get/ns:coffee-order/ns:sugar"/>
+                </ns:sugar>
+                <ns:state>
+                    <xsl:value-of select="$valid-state-transitions/root/param[transition-action-name=$Start/root/transition-action-name and from-state=$get/ns:coffee-order/ns:state]/to-state[1]"/>
+                </ns:state>
+            </ns:coffee-order>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="valid state transitions">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>238</pd:x>
+        <pd:y>213</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="param" maxOccurs="unbounded">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="transition-action-name" type="xsd:string"/>
+                                        <xsd:element name="from-state" type="xsd:string"/>
+                                        <xsd:element name="to-state" type="xsd:string"/>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <param>
+                    <transition-action-name>cancel</transition-action-name>
+                    <from-state>created</from-state>
+                    <to-state>cancelled</to-state>
+                </param>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="406 Not Acceptable">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>552</pd:x>
+        <pd:y>201</pd:y>
+        <config>
+            <processName>/REST/StatusCodes/4xx Client Error/406 Not Acceptable.process</processName>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>get</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>valid state transitions</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>valid state transitions</pd:from>
+        <pd:to>is a valid transition?</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>get</pd:from>
+        <pd:to>is a valid transition?</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>is a valid transition?</pd:from>
+        <pd:to>Null-1</pd:to>
+        <pd:xpathDescription>true?</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>exists($valid-state-transitions/root/param[transition-action-name=$Start/root/transition-action-name and from-state=$get/ns:coffee-order/ns:state])</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>is a valid transition?</pd:from>
+        <pd:to>406 Not Acceptable</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null-1</pd:from>
+        <pd:to>save</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>save</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

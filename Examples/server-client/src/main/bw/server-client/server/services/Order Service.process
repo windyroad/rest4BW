@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx3="http://www.tibco.com/schemas/server-client/server/shared variables/Schema.xsd" xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd">
+    <xsd:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
+    <xsd:import namespace="http://windyroad.org/rest-delegate.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/server-client/server/shared variables/Schema.xsd" schemaLocation="/server/shared variables/Schema.xsd"/>
+    <pd:name>server/services/Order Service.process</pd:name>
+    <pd:description/>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx:request"/>
+                    <xsd:element name="firstname" type="xsd:string" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>79</pd:startX>
+    <pd:startY>254</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$de-multiplex-response/root/*"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:choice>
+            <xsd:element ref="pfx:response"/>
+            <xsd:element ref="pfx:error"/>
+        </xsd:choice>
+    </pd:endType>
+    <pd:endX>873</pd:endX>
+    <pd:endY>251</pd:endY>
+    <pd:errorSchemas>
+        <HTTP-Error ref="pfx:error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1338181537186</pd:targetNamespace>
+    <pd:activity name="405 Method Not Allowed">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>371</pd:x>
+        <pd:y>469</pd:y>
+        <config>
+            <processName>/REST/StatusCodes/4xx Client Error/405 Method Not Allowed.process</processName>
+        </config>
+        <pd:inputBindings>
+            <allow>
+                <xsl:value-of select="'POST,PUT,GET,DELETE,OPTIONS'"/>
+            </allow>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="501 Not Implemented">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>491</pd:x>
+        <pd:y>381</pd:y>
+        <config>
+            <processName>/REST/StatusCodes/5xx Server Error/501 Not Implemented.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <errorMessage>
+                    <xsl:value-of select="concat('Service not implemented yet - method=',$Start/root/pfx:request/pfx:method,', command=',$Start/root/pfx:request/pfx:command)"/>
+                </errorMessage>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="cancel">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>491</pd:x>
+        <pd:y>222</pd:y>
+        <config>
+            <processName>/server/services/Order/cancel.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:copy-of select="$Start/root/pfx:request"/>
+                <firstname>
+                    <xsl:value-of select="$Start/root/firstname"/>
+                </firstname>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="de-multiplex response">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>765</pd:x>
+        <pd:y>258</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:choice>
+                            <xsd:element ref="pfx:response"/>
+                            <xsd:element ref="pfx:error"/>
+                        </xsd:choice>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:copy-of select="$cancel/*"/>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="DELETE">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>371</pd:x>
+        <pd:y>222</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="GET">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>371</pd:x>
+        <pd:y>302</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Null">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>204</pd:x>
+        <pd:y>253</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Null-1">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>655</pd:x>
+        <pd:y>251</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="OPTIONS">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>371</pd:x>
+        <pd:y>374</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="POST">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>371</pd:x>
+        <pd:y>57</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="PUT">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>371</pd:x>
+        <pd:y>141</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>POST</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/root/pfx:request/pfx:method='POST'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>PUT</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/root/pfx:request/pfx:method='PUT'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>GET</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/root/pfx:request/pfx:method='GET'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>DELETE</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/root/pfx:request/pfx:method='DELETE'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>OPTIONS</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/root/pfx:request/pfx:method='OPTIONS'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>405 Method Not Allowed</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null-1</pd:from>
+        <pd:to>de-multiplex response</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>de-multiplex response</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>DELETE</pd:from>
+        <pd:to>cancel</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>cancel</pd:from>
+        <pd:to>Null-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>POST</pd:from>
+        <pd:to>501 Not Implemented</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>PUT</pd:from>
+        <pd:to>501 Not Implemented</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GET</pd:from>
+        <pd:to>501 Not Implemented</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>OPTIONS</pd:from>
+        <pd:to>501 Not Implemented</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

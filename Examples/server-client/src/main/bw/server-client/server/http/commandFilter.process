@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-    <pd:name>server/commandFilter.process</pd:name>
+    <pd:name>server/http/commandFilter.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType>
         <xsd:element name="root">
