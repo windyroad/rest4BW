@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<BWSharedResource xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://www.tibco.com/schemas/server-client/server/shared variables/Schema.xsd">
-    <import namespace="http://www.tibco.com/schemas/server-client/server/shared variables/Schema.xsd" schemaLocation="/server/shared variables/Schema.xsd"/>
+<BWSharedResource xmlns:cfshp="http://windyroad.org/coffee-shop" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <import namespace="http://windyroad.org/coffee-shop" schemaLocation="/server/model/CoffeeShop.xsd"/>
     <name>sudo-database</name>
     <resourceType>ae.shared.sharedVariable</resourceType>
     <config xmlns:xsd="http://www.w3.org/2001/XMLSchema">
@@ -12,7 +12,7 @@
             <xsd:element name="root">
                 <xsd:complexType>
                     <xsd:sequence>
-                        <xsd:element ref="pfx:user" minOccurs="0" maxOccurs="unbounded"/>
+                        <xsd:element ref="cfshp:coffee-order" minOccurs="0" maxOccurs="unbounded"/>
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>

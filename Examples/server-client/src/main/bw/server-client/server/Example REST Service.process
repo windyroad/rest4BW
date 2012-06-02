@@ -15,7 +15,7 @@
             <defaultEncoding>UTF8</defaultEncoding>
             <inputOutputVersion>5.3.0</inputOutputVersion>
             <newMimeSupport>true</newMimeSupport>
-            <sharedChannel>/REST/Example/server/Example HTTP Connection.sharedhttp</sharedChannel>
+            <sharedChannel>/server/HTTP Connection.sharedhttp</sharedChannel>
             <parsePostData>false</parsePostData>
             <Headers>
                 <xsd:element name="root">
@@ -218,7 +218,7 @@
                     </ns2:request>
                 </xsl:for-each>
                 <dynamicDelegatorProcessOverride>
-                    <xsl:value-of select="'/server/Default Delegate.process'"/>
+                    <xsl:value-of select="'/server/REST Service.process'"/>
                 </dynamicDelegatorProcessOverride>
             </root>
         </pd:inputBindings>
