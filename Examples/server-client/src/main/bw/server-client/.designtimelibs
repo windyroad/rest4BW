@@ -1,5 +1,5 @@
 #Design time libraries
 #Format: #=File Alias=Description
-#Sun Jun 03 04:24:30 EST 2012
-1=bwunit.projlib\=
+#NOTE: This is a generated file. Changes made here will be overwritten
 0=REST/rest.projlib\=
+1=bwunit.projlib\=

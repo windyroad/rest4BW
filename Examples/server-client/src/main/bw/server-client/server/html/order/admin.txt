@@ -14,6 +14,7 @@
    <INPUT type="button" value="Go back to start" onclick="window.location.href = '{rest.entry}';" />
  </FORM>
 </fieldset>
+
 <p/>
 </body>
 </html>
