@@ -18,7 +18,7 @@
     <pd:startY>61</pd:startY>
     <pd:returnBindings/>
     <pd:endName>End</pd:endName>
-    <pd:endX>715</pd:endX>
+    <pd:endX>719</pd:endX>
     <pd:endY>61</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
@@ -26,7 +26,7 @@
     <pd:activity name="Given an order in state (start state)">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>232</pd:x>
+        <pd:x>236</pd:x>
         <pd:y>75</pd:y>
         <config>
             <processName>/test/uatTestSuite/steps/Given an order in state (start state).process</processName>
@@ -40,7 +40,7 @@
     <pd:activity name="Then the order is in state (end state)">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>540</pd:x>
+        <pd:x>544</pd:x>
         <pd:y>75</pd:y>
         <config>
             <processName>/test/uatTestSuite/steps/Then the order is in state (end state).process</processName>
@@ -59,7 +59,7 @@
     <pd:activity name="When a staff member performs (transition action) on the order">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>386</pd:x>
+        <pd:x>390</pd:x>
         <pd:y>89</pd:y>
         <config>
             <processName>/test/uatTestSuite/steps/When a staff member performs (transition action) on the order.process</processName>
