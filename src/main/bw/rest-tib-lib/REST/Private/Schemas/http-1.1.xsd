@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns:http="http://windyroad.org/http-1.1.xsd"
+	 targetNamespace="http://windyroad.org/http-1.1.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:annotation>
+		<xs:documentation>
+    HTTP 1.1
+    For further information, see: http://www.w3.org/Protocols/rfc2616/rfc2616.html
+    		</xs:documentation>
+	</xs:annotation>
+
+	<!-- Protocol Parameters -->
+	<xs:element name="_anyURI" type="xs:anyURI"/>
+	<xs:element name="_delta-seconds">
+		<xs:simpleType>
+			<xs:restriction base="xs:long">
+				<xs:fractionDigits value="0"/>
+				<xs:minInclusive value="0"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:complexType name="_delta-seconds">
+		<xs:simpleContent>
+			<xs:extension base="xs:long"/>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="_http-date">
+		<xs:simpleContent>
+			<xs:extension base="xs:dateTime"/>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:element name="_method">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="HEAD"/>
+				<xs:enumeration value="GET"/>
+				<xs:enumeration value="PUT"/>
+				<xs:enumeration value="POST"/>
+				<xs:enumeration value="DELETE"/>
+				<xs:enumeration value="OPTIONS"/>
+				<xs:enumeration value="TRACE"/>
+				<xs:enumeration value="CONNECT"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="_parameter">
+		<xs:complexType>
+			<xs:attribute name="key" type="xs:string"/>
+			<xs:attribute name="value" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="_type" type="xs:string"/>
+	<xs:element name="_subtype" type="xs:string"/>
+	<xs:element name="_iana_mime_media_type">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="application"/>
+				<xs:enumeration value="audio"/>
+				<xs:enumeration value="example"/>
+				<xs:enumeration value="image"/>
+				<xs:enumeration value="message"/>
+				<xs:enumeration value="model"/>
+				<xs:enumeration value="multipart"/>
+				<xs:enumeration value="text"/>
+				<xs:enumeration value="video"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+
+	<!-- Header Field Definitions -->
+	<xs:element name="Allow">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="http:_method" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Cache-Control">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="cache-response-directive">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="public"/>
+							<xs:enumeration value="private"/>
+							<xs:enumeration value="no-cache"/>
+							<xs:enumeration value="no-store"/>
+							<xs:enumeration value="no-transform"/>
+							<xs:enumeration value="must-revalidate"/>
+							<xs:enumeration value="proxy-revalidate"/>
+							<xs:enumeration value="max-age"/>
+							<xs:enumeration value="s-maxage"/>
+							<xs:enumeration value="cache-extension"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:choice minOccurs="0">
+					<xs:element name="field-name" type="xs:string"/>
+					<xs:element ref="http:_delta-seconds"/>
+				</xs:choice>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Content-Type">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="http:_type"/>
+				<xs:element ref="http:_subtype"/>
+				<xs:element ref="http:_parameter" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ETag" type="xs:string"/>
+	<xs:element name="Expires" type="http:_http-date"/>
+	<xs:element name="Last-Modified" type="http:_http-date"/>
+	<xs:element name="Content-Location">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="http:_anyURI"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- Custom -->
+	<xs:element name="StatusLine">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="_statusCode" type="xs:int"/>
+				<xs:element name="_statusMessage" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Set-Cookie">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Comment" type="xs:string" minOccurs="0"/>
+				<xs:element name="Domain" type="xs:string" minOccurs="0"/>
+				<xs:element name="Max-Age" type="http:_delta-seconds" minOccurs="0"/>
+				<xs:element name="Path" type="xs:string" minOccurs="0"/>
+				<xs:element name="Secure" minOccurs="0">
+					<xs:complexType/>
+				</xs:element>
+				<xs:element name="Version" type="xs:string" minOccurs="0"/>
+				<xs:element ref="http:_parameter" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="WWW-Authenticate" type="xs:string"/>
+</xs:schema>

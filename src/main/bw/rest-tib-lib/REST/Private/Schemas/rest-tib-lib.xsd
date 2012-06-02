@@ -141,4 +141,5 @@
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="file-name" type="xs:string"/>
+	<xs:element name="location" type="xs:string"/>
 </xs:schema>
