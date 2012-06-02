@@ -13,8 +13,8 @@
 	</xs:annotation>
 
 	<!-- Protocol Parameters -->
-	<xs:element name="_anyURI" type="xs:anyURI"/>
-	<xs:element name="_delta-seconds">
+	<xs:element name="anyURI" type="xs:anyURI"/>
+	<xs:element name="delta-seconds">
 		<xs:simpleType>
 			<xs:restriction base="xs:long">
 				<xs:fractionDigits value="0"/>
@@ -22,17 +22,17 @@
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
-	<xs:complexType name="_delta-seconds">
+	<xs:complexType name="delta-seconds">
 		<xs:simpleContent>
 			<xs:extension base="xs:long"/>
 		</xs:simpleContent>
 	</xs:complexType>
-	<xs:complexType name="_http-date">
+	<xs:complexType name="http-date">
 		<xs:simpleContent>
 			<xs:extension base="xs:dateTime"/>
 		</xs:simpleContent>
 	</xs:complexType>
-	<xs:element name="_method">
+	<xs:element name="method">
 		<xs:simpleType>
 			<xs:restriction base="xs:string">
 				<xs:enumeration value="HEAD"/>
@@ -46,35 +46,20 @@
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
-	<xs:element name="_parameter">
+	<xs:element name="parameter">
 		<xs:complexType>
 			<xs:attribute name="key" type="xs:string"/>
 			<xs:attribute name="value" type="xs:string"/>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="_type" type="xs:string"/>
-	<xs:element name="_subtype" type="xs:string"/>
-	<xs:element name="_iana_mime_media_type">
-		<xs:simpleType>
-			<xs:restriction base="xs:string">
-				<xs:enumeration value="application"/>
-				<xs:enumeration value="audio"/>
-				<xs:enumeration value="example"/>
-				<xs:enumeration value="image"/>
-				<xs:enumeration value="message"/>
-				<xs:enumeration value="model"/>
-				<xs:enumeration value="multipart"/>
-				<xs:enumeration value="text"/>
-				<xs:enumeration value="video"/>
-			</xs:restriction>
-		</xs:simpleType>
-	</xs:element>
+	<xs:element name="type" type="xs:string"/>
+	<xs:element name="subtype" type="xs:string"/>
 
 	<!-- Header Field Definitions -->
 	<xs:element name="Allow">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="http:_method" maxOccurs="unbounded"/>
+				<xs:element ref="http:method" maxOccurs="unbounded"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -99,7 +84,7 @@
 				</xs:element>
 				<xs:choice minOccurs="0">
 					<xs:element name="field-name" type="xs:string"/>
-					<xs:element ref="http:_delta-seconds"/>
+					<xs:element ref="http:delta-seconds"/>
 				</xs:choice>
 			</xs:sequence>
 		</xs:complexType>
@@ -107,29 +92,23 @@
 	<xs:element name="Content-Type">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="http:_type"/>
-				<xs:element ref="http:_subtype"/>
-				<xs:element ref="http:_parameter" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="http:type"/>
+				<xs:element ref="http:subtype"/>
+				<xs:element ref="http:parameter" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="ETag" type="xs:string"/>
-	<xs:element name="Expires" type="http:_http-date"/>
-	<xs:element name="Last-Modified" type="http:_http-date"/>
-	<xs:element name="Content-Location">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="http:_anyURI"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
+	<xs:element name="Expires" type="http:http-date"/>
+	<xs:element name="Last-Modified" type="http:http-date"/>
+	<xs:element name="Content-Location" type="http:anyURI"/>
 
 	<!-- Custom -->
 	<xs:element name="StatusLine">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element name="_statusCode" type="xs:int"/>
-				<xs:element name="_statusMessage" type="xs:string"/>
+				<xs:element name="statusCode" type="xs:int"/>
+				<xs:element name="statusMessage" type="xs:string"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -138,15 +117,20 @@
 			<xs:sequence>
 				<xs:element name="Comment" type="xs:string" minOccurs="0"/>
 				<xs:element name="Domain" type="xs:string" minOccurs="0"/>
-				<xs:element name="Max-Age" type="http:_delta-seconds" minOccurs="0"/>
+				<xs:element name="Max-Age" type="http:delta-seconds" minOccurs="0"/>
 				<xs:element name="Path" type="xs:string" minOccurs="0"/>
 				<xs:element name="Secure" minOccurs="0">
 					<xs:complexType/>
 				</xs:element>
 				<xs:element name="Version" type="xs:string" minOccurs="0"/>
-				<xs:element ref="http:_parameter" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="http:parameter" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="WWW-Authenticate" type="xs:string"/>
+	<xs:complexType name="anyURI">
+		<xs:simpleContent>
+			<xs:extension base="xs:anyURI"/>
+		</xs:simpleContent>
+	</xs:complexType>
 </xs:schema>

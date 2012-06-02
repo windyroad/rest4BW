@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:ns2="http://windyroad.org/bwunit-abstract" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://windyroad.org/rest-tib-lib.xsd" xmlns:pfx="http://windyroad.org/bwunit-0.0.0.xsd">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd">
     <pd:name>REST/StatusCodes/4xx Client Error/403 Forbidden.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startX>74</pd:startX>
     <pd:startY>65</pd:startY>
     <pd:returnBindings>
-        <pfx2:response>
-            <pfx2:text-content>
+        <pfx:response>
+            <pfx:text-content>
                 <xsl:value-of select="$Transform-XML/xmlString"/>
-            </pfx2:text-content>
-        </pfx2:response>
+            </pfx:text-content>
+        </pfx:response>
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
-    <pd:endType/>
     <pd:endX>500</pd:endX>
     <pd:endY>66</pd:endY>
     <pd:errorSchemas/>

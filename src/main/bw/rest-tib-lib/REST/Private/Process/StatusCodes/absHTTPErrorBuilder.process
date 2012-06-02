@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://windyroad.org/bwunit-abstract" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://windyroad.org/rest-tib-lib.xsd" xmlns:pfx="http://windyroad.org/bwunit-0.0.0.xsd">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd">
     <xsd:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
     <pd:name>REST/Private/Process/StatusCodes/absHTTPErrorBuilder.process</pd:name>
     <pd:startName>Start</pd:startName>
@@ -11,7 +11,7 @@
                     <xsd:element name="code" type="xsd:int"/>
                     <xsd:element name="additionalInfo" type="xsd:string" minOccurs="0"/>
                     <xsd:element name="max-age-delta-seconds" type="xsd:long" minOccurs="0"/>
-                    <xsd:element ref="pfx2:headers" minOccurs="0"/>
+                    <xsd:element ref="pfx:headers" minOccurs="0"/>
                 </xsd:sequence>
             </xsd:complexType>
         </xsd:element>
@@ -19,18 +19,19 @@
     <pd:startX>85</pd:startX>
     <pd:startY>106</pd:startY>
     <pd:returnBindings>
-        <pfx2:error>
-            <xsl:copy-of select="$Build-default-REST-Headers/pfx2:headers"/>
-            <pfx2:msg>
+        <pfx:error>
+            <xsl:copy-of select="$Build-default-REST-Headers/pfx:headers"/>
+            <pfx:msg>
                 <xsl:value-of select="$concat-message/root/message"/>
-            </pfx2:msg>
-        </pfx2:error>
+            </pfx:msg>
+        </pfx:error>
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
+    <pd:endType/>
     <pd:endX>436</pd:endX>
     <pd:endY>243</pd:endY>
     <pd:errorSchemas>
-        <Error ref="pfx2:error"/>
+        <Error ref="pfx:error"/>
     </pd:errorSchemas>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1301599510965</pd:targetNamespace>
@@ -101,12 +102,12 @@
                     <xsl:value-of select="$Start/root/code"/>
                 </messageCode>
                 <data>
-                    <pfx2:error>
-                        <xsl:copy-of select="$consolidate-headers/pfx2:headers"/>
-                        <pfx2:msg>
+                    <pfx:error>
+                        <xsl:copy-of select="$consolidate-headers/pfx:headers"/>
+                        <pfx:msg>
                             <xsl:value-of select="$concat-message/root/message"/>
-                        </pfx2:msg>
-                    </pfx2:error>
+                        </pfx:msg>
+                    </pfx:error>
                 </data>
             </ns:ActivityInput>
         </pd:inputBindings>
@@ -118,52 +119,52 @@
         <pd:x>629</pd:x>
         <pd:y>113</pd:y>
         <config>
-            <element ref="pfx2:headers"/>
+            <element ref="pfx:headers"/>
         </config>
         <pd:inputBindings>
-            <pfx2:headers>
-                <xsl:if test="$Build-default-REST-Headers/pfx2:headers/@status">
+            <pfx:headers>
+                <xsl:if test="$Build-default-REST-Headers/pfx:headers/@status">
                     <xsl:attribute name="status">
-                        <xsl:value-of select="$Build-default-REST-Headers/pfx2:headers/@status"/>
+                        <xsl:value-of select="$Build-default-REST-Headers/pfx:headers/@status"/>
                     </xsl:attribute>
                 </xsl:if>
-                <xsl:if test="$Start/root/pfx2:headers/@allow">
+                <xsl:if test="$Start/root/pfx:headers/@allow">
                     <xsl:attribute name="allow">
-                        <xsl:value-of select="$Start/root/pfx2:headers/@allow"/>
+                        <xsl:value-of select="$Start/root/pfx:headers/@allow"/>
                     </xsl:attribute>
                 </xsl:if>
-                <xsl:if test="$Build-default-REST-Headers/pfx2:headers/@content-type">
+                <xsl:if test="$Build-default-REST-Headers/pfx:headers/@content-type">
                     <xsl:attribute name="content-type">
-                        <xsl:value-of select="$Build-default-REST-Headers/pfx2:headers/@content-type"/>
+                        <xsl:value-of select="$Build-default-REST-Headers/pfx:headers/@content-type"/>
                     </xsl:attribute>
                 </xsl:if>
-                <xsl:if test="$Build-default-REST-Headers/pfx2:headers/@cache-control">
+                <xsl:if test="$Build-default-REST-Headers/pfx:headers/@cache-control">
                     <xsl:attribute name="cache-control">
-                        <xsl:value-of select="$Build-default-REST-Headers/pfx2:headers/@cache-control"/>
+                        <xsl:value-of select="$Build-default-REST-Headers/pfx:headers/@cache-control"/>
                     </xsl:attribute>
                 </xsl:if>
-                <xsl:if test="$Build-default-REST-Headers/pfx2:headers/@last-modified">
+                <xsl:if test="$Build-default-REST-Headers/pfx:headers/@last-modified">
                     <xsl:attribute name="last-modified">
-                        <xsl:value-of select="$Build-default-REST-Headers/pfx2:headers/@last-modified"/>
+                        <xsl:value-of select="$Build-default-REST-Headers/pfx:headers/@last-modified"/>
                     </xsl:attribute>
                 </xsl:if>
-                <xsl:if test="$Start/root/pfx2:headers/@etag">
+                <xsl:if test="$Start/root/pfx:headers/@etag">
                     <xsl:attribute name="etag">
-                        <xsl:value-of select="$Start/root/pfx2:headers/@etag"/>
+                        <xsl:value-of select="$Start/root/pfx:headers/@etag"/>
                     </xsl:attribute>
                 </xsl:if>
-                <xsl:if test="$Start/root/pfx2:headers/@expires">
+                <xsl:if test="$Start/root/pfx:headers/@expires">
                     <xsl:attribute name="expires">
-                        <xsl:value-of select="$Start/root/pfx2:headers/@expires"/>
+                        <xsl:value-of select="$Start/root/pfx:headers/@expires"/>
                     </xsl:attribute>
                 </xsl:if>
-                <xsl:if test="$Start/root/pfx2:headers/@content-location">
+                <xsl:if test="$Start/root/pfx:headers/@content-location">
                     <xsl:attribute name="content-location">
-                        <xsl:value-of select="$Start/root/pfx2:headers/@content-location"/>
+                        <xsl:value-of select="$Start/root/pfx:headers/@content-location"/>
                     </xsl:attribute>
                 </xsl:if>
-                <xsl:copy-of select="$Start/root/pfx2:headers/pfx2:header"/>
-            </pfx2:headers>
+                <xsl:copy-of select="$Start/root/pfx:headers/pfx:header"/>
+            </pfx:headers>
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>
