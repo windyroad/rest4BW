@@ -15,8 +15,8 @@ src/main/bw/.designtimelibs
 src/main/bw/rest-tib-lib/.designtimelibs
 
 # Don't ignore this projlib file
-!Examples/server-client/lib/rest-tib-lib.projlib
-!Examples/server-client/lib/BWUnit.projlib
+#!Examples/server-client/lib/rest-tib-lib.projlib
+#!Examples/server-client/lib/BWUnit.projlib
 
 
 

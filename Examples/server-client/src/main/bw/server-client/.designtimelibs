@@ -1,5 +1,5 @@
 #Design time libraries
 #Format: #=File Alias=Description
-#Fri Jun 01 11:44:39 EST 2012
-1=BWUnit.projlib\=
-0=rest-tib-lib.projlib1\=
+#NOTE: This is a generated file. Changes made here will be overwritten
+0=REST/rest.projlib\=
+1=bwunit.projlib\=
