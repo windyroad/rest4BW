@@ -137,12 +137,4 @@
 	</xs:element>
 	<xs:element name="file-name" type="xs:string"/>
 	<xs:element name="location" type="xs:string"/>
-	<xs:element name="response-choice">
-		<xs:complexType>
-			<xs:choice minOccurs="0">
-				<xs:element ref="rest:response"/>
-				<xs:element ref="rest:error"/>
-			</xs:choice>
-		</xs:complexType>
-	</xs:element>
 </xs:schema>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx3="http://windyroad.org/wr-http.xsd" xmlns:pfx2="http://windyroad.org/rest-tib-lib.xsd" xmlns:pfx="http://windyroad.org/coffee-shop">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx3="http://windyroad.org/wr-http.xsd" xmlns:pfx2="http://windyroad.org/rest-tib-lib.xsd" xmlns:pfx="http://windyroad.org/coffee-shop">
     <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/server/model/CoffeeShop.xsd"/>
     <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/REST/Private/Schemas/HttpConnection.xsd"/>
     <pd:name>test/uatTestSuite/actions/coffee-order/start making.process</pd:name>
@@ -52,7 +52,9 @@
                     <pfx3:mimeEnvelopeElement>
                         <pfx3:mimePart>
                             <pfx3:mimeHeaders>
-                                <pfx3:content-disposition>form-data; name="transition-state-action"</pfx3:content-disposition>
+                                <pfx3:content-disposition>
+                                    <xsl:value-of select="concat('form-data; name=&quot;',$_globalVariables/ns1:GlobalVariables/REST-Example/interface/transition-action-key,'&quot;')"/>
+                                </pfx3:content-disposition>
                                 <pfx3:content-type>text/plain</pfx3:content-type>
                             </pfx3:mimeHeaders>
                             <pfx3:textContent>start making</pfx3:textContent>

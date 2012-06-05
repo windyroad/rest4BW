@@ -5,22 +5,22 @@
     <pd:startType>
         <xsd:element name="csv" type="xsd:string"/>
     </pd:startType>
-    <pd:startX>104</pd:startX>
-    <pd:startY>114</pd:startY>
+    <pd:startX>91</pd:startX>
+    <pd:startY>85</pd:startY>
     <pd:returnBindings/>
     <pd:endName>End</pd:endName>
-    <pd:endX>940</pd:endX>
-    <pd:endY>99</pd:endY>
+    <pd:endX>727</pd:endX>
+    <pd:endY>85</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1338665230923</pd:targetNamespace>
     <pd:group name="Group">
         <pd:type>com.tibco.pe.core.CriticalSectionGroup</pd:type>
         <pd:resourceType>ae.process.group</pd:resourceType>
-        <pd:x>232</pd:x>
-        <pd:y>29</pd:y>
-        <pd:width>572</pd:width>
-        <pd:height>167</pd:height>
+        <pd:x>165</pd:x>
+        <pd:y>9</pd:y>
+        <pd:width>505</pd:width>
+        <pd:height>144</pd:height>
         <pd:collapsedWidth>53</pd:collapsedWidth>
         <pd:collapsedHeight>67</pd:collapsedHeight>
         <pd:groupVariables/>
@@ -62,8 +62,8 @@
         <pd:activity name="clear">
             <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
             <pd:resourceType>ae.process.subprocess</pd:resourceType>
-            <pd:x>483</pd:x>
-            <pd:y>106</pd:y>
+            <pd:x>411</pd:x>
+            <pd:y>72</pd:y>
             <config>
                 <processName>/server/persistence/clear.process</processName>
             </config>
@@ -72,8 +72,8 @@
         <pd:activity name="tokenize">
             <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
             <pd:resourceType>ae.process.subprocess</pd:resourceType>
-            <pd:x>330</pd:x>
-            <pd:y>108</pd:y>
+            <pd:x>258</pd:x>
+            <pd:y>72</pd:y>
             <config>
                 <processName>/REST/Private/Common/string/tokenize.process</processName>
             </config>
@@ -91,8 +91,8 @@
         <pd:activity name="validateStateTransition">
             <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
             <pd:resourceType>ae.process.subprocess</pd:resourceType>
-            <pd:x>632</pd:x>
-            <pd:y>107</pd:y>
+            <pd:x>560</pd:x>
+            <pd:y>72</pd:y>
             <config>
                 <processName>/test/uatTestSuite/scenarioOutlines/validateStateTransition.process</processName>
             </config>
@@ -123,15 +123,15 @@
         </pd:activity>
     </pd:group>
     <pd:transition>
-        <pd:from>Group</pd:from>
-        <pd:to>End</pd:to>
+        <pd:from>Start</pd:from>
+        <pd:to>Group</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>Start</pd:from>
-        <pd:to>Group</pd:to>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
