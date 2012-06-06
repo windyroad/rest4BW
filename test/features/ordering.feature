@@ -1,44 +1,56 @@
-Feature: Ordering
-  In order to complete coffee orders, staff members should be able to perform state transitions.
+Feature: Discover the coffee shop's options
+  As a staff member
+  I want a list of actions available for the coffee shop
+  So that I can choose which action to perform
+
+Feature: Discover an order's options
+  As a staff member
+  I want a list of actions for an order
+  So that I can choose which action to perform
+
+Feature: View an order
+  As a staff member
+  I want to view the details of a coffee order
+  So that I know which coffee to make
+
+Feature: Create an order
+  As a staff member
+  I want to create coffee orders
+  So that I can keep track of them
+
+  Scenario: Creating a new valid order is successful
+  Scenario: Creating an invalid order causes an error
 
 
-  Scenario Outline: Valid Order Actions
+Feature: Update an order
+  As a staff member
+  I want to update existing orders
+  Because customers change their mind
+
+  Scenario: Update an order with valid data is successful
+  Scenario: Update an order with invalid data causes an error
+
+
+Feature: Action an order
+  As a staff member
+  I want an easy way to action an order
+  So that I can progress the state of an order
+
+  Scenario Outline: Valid actions progress the state of the order
     Given an order in state "<start state>"
     When a staff member performs "<transition action>" on the order
     Then the order is in state "<end state>"
 
     Examples:
-        | start state | transition action | end state |
-        | created | start making | being made |
-        | being made | finish making | ready |
-        | ready | pickup | picked up |
-        | created | cancel | cancelled |
 
 
-  Scenario Outline: Invalid Order Actions
+  Scenario Outline: Invalid actions cause an error
     Given an order in state "<start state>"
     When a staff member performs "<transition action>" on the order
-    Then the error "<error>" is returned
+    Then a response with status "<http status>" and text-content "<http text-content>" is returned
     And the order is in state "<start state>"
 
     Examples:
-        | start state | transition action | error |
-        | created | finish making | can't finish making an order that is created |
-        | created | pickup | can't pickup an order that is created |
-        | being made | start making | can't start making an order that i being made |
-        | being made | pickup | can't pickup an order that is being made |
-        | being made | cancel | can't cancel an order that is being made |
-        | ready | start making | can't start making an order that is ready |
-        | ready | finish making | can't finish making an order that is ready |
-        | ready | cancel | can't cancel an order that is ready |
-        | picked up | start making | can't start making an order that is picked up |
-        | picked up | finish making | can't finish making an order that is picked up |
-        | picked up | pickup | can't pickup an order that has already been picked up |
-        | picked up | cancel | can't cancel an order that is picked up |
-        | cancelled | start making | can't start making an order that is cancelled |
-        | cancelled | finish making | can't finish making an order that is cancelled |
-        | cancelled | pickup | can't pickup an order that is cancelled |
-        | cancelled | cancel | can't cancel an order that has already been cancelled |
 
 
   Scenario Outline: Queries do not modify state
@@ -53,5 +65,18 @@ Feature: Ordering
         | ready | john |
         | picked up | john |
         | cancelled | john |
+
+
+  Scenario: Options do not modify state
+
+Feature: Querying orders
+  As a staff member
+  I want to be able to search for orders by firstname
+  So that I can respond to customer inquiries
+
+  As a staff member
+  I want to be able to search for the oldest coffee order, in the "created" state
+  So that I know which coffee to make next
+
 
 
