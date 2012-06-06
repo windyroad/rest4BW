@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/coffee-shop">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://windyroad.org/wr-http.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/coffee-shop">
     <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/server/model/CoffeeShop.xsd"/>
-    <pd:name>test/uatTestSuite/scenarioOutlines/validateStateTransition.process</pd:name>
+    <pd:name>test/uatTestSuite/scenarioOutlines/invalidStateTransition.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType>
         <xsd:element name="root">
@@ -9,7 +9,8 @@
                 <xsd:sequence>
                     <xsd:element ref="pfx:coffee-order"/>
                     <xsd:element name="transition-action" type="xsd:string"/>
-                    <xsd:element name="expected-end-state" type="xsd:string"/>
+                    <xsd:element name="expected-http-status" type="xsd:string"/>
+                    <xsd:element name="expected-http-text-content" type="xsd:string"/>
                 </xsd:sequence>
             </xsd:complexType>
         </xsd:element>
@@ -18,7 +19,7 @@
     <pd:startY>88</pd:startY>
     <pd:returnBindings/>
     <pd:endName>End</pd:endName>
-    <pd:endX>744</pd:endX>
+    <pd:endX>831</pd:endX>
     <pd:endY>88</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
@@ -26,7 +27,7 @@
     <pd:activity name="Given an order in state (start state)">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>245</pd:x>
+        <pd:x>219</pd:x>
         <pd:y>102</pd:y>
         <config>
             <processName>/test/uatTestSuite/steps/Given an order in state (start state).process</processName>
@@ -37,10 +38,30 @@
             </root>
         </pd:inputBindings>
     </pd:activity>
+    <pd:activity name="Then a response with status (http status) and text-content (http text-content) is returned">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>672</pd:x>
+        <pd:y>123</pd:y>
+        <config>
+            <processName>/test/uatTestSuite/steps/Then a response with status (http status) and text-content (http text-content) is returned.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:copy-of select="$When-a-staff-member-performs-transition-action-on-the-order/ns1:response"/>
+                <expected-status>
+                    <xsl:value-of select="$Start/root/expected-http-status"/>
+                </expected-status>
+                <expected-text-content>
+                    <xsl:value-of select="$Start/root/expected-http-text-content"/>
+                </expected-text-content>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
     <pd:activity name="Then the order is in state (end state)">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>553</pd:x>
+        <pd:x>520</pd:x>
         <pd:y>102</pd:y>
         <config>
             <processName>/test/uatTestSuite/steps/Then the order is in state (end state).process</processName>
@@ -51,7 +72,7 @@
                     <xsl:value-of select="$Start/root/pfx:coffee-order/pfx:firstname"/>
                 </firstname>
                 <expected-state>
-                    <xsl:value-of select="$Start/root/expected-end-state"/>
+                    <xsl:value-of select="$Start/root/pfx:coffee-order/pfx:state"/>
                 </expected-state>
             </root>
         </pd:inputBindings>
@@ -59,7 +80,7 @@
     <pd:activity name="When a staff member performs (transition action) on the order">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>399</pd:x>
+        <pd:x>357</pd:x>
         <pd:y>116</pd:y>
         <config>
             <processName>/test/uatTestSuite/steps/When a staff member performs (transition action) on the order.process</processName>
@@ -96,6 +117,13 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Then the order is in state (end state)</pd:from>
+        <pd:to>Then a response with status (http status) and text-content (http text-content) is returned</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Then a response with status (http status) and text-content (http text-content) is returned</pd:from>
         <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>

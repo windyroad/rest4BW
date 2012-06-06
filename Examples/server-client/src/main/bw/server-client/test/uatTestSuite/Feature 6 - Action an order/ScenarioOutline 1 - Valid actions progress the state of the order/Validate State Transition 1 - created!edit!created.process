@@ -3,15 +3,15 @@
     <xsd:import namespace="http://windyroad.org/bwunit-0.0.0.xsd" schemaLocation="/BWUnit/Public/Schemas/BWUnit.xsd"/>
     <wsdl:import namespace="http://windyroad.org/bwunit-concrete" location="/BWUnit/Public/WSDLs/BWUnit-concrete.wsdl"/>
     <wsdl:import namespace="http://windyroad.org/bwunit-abstract/installLicense2Impl"/>
-    <pd:name>test/uatTestSuite/OrderingTestCase/Validate State Transition 1 - created!edit!created.process</pd:name>
+    <pd:name>test/uatTestSuite/Feature 6 - Action an order/ScenarioOutline 1 - Valid actions progress the state of the order/Validate State Transition 1 - created!edit!created.process</pd:name>
     <pd:description>@Timeout(60000)</pd:description>
     <pd:startName>Start</pd:startName>
     <pd:startX>118</pd:startX>
     <pd:startY>83</pd:startY>
     <pd:returnBindings/>
     <pd:endName>End</pd:endName>
-    <pd:endX>425</pd:endX>
-    <pd:endY>83</pd:endY>
+    <pd:endX>445</pd:endX>
+    <pd:endY>84</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables>
         <license-key ref="ns1:license-key"/>
