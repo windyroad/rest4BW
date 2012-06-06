@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/coffee-shop">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="http://windyroad.org/wr-http.xsd" xmlns:pfx="http://windyroad.org/coffee-shop">
     <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/server/model/CoffeeShop.xsd"/>
+    <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/REST/Private/Schemas/HttpConnection.xsd"/>
     <pd:name>test/uatTestSuite/steps/When a staff member performs (transition action) on the order.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType>
@@ -15,8 +16,11 @@
     </pd:startType>
     <pd:startX>154</pd:startX>
     <pd:startY>59</pd:startY>
-    <pd:returnBindings/>
+    <pd:returnBindings>
+        <xsl:copy-of select="$dynamically-invoke-action-process/*"/>
+    </pd:returnBindings>
     <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx2:response"/>
     <pd:endX>560</pd:endX>
     <pd:endY>59</pd:endY>
     <pd:errorSchemas/>
@@ -28,8 +32,8 @@
         <pd:x>350</pd:x>
         <pd:y>66</pd:y>
         <config>
-            <processName>/test/uatTestSuite/actions/coffee-order/not implemented.process</processName>
-            <processNameXPath>concat('/test/uatTestSuite/actions/coffee-order/',$Start/root/transition-action,'.process')</processNameXPath>
+            <processName>/test/uatTestSuite/actions/coffee-order-interfaces/not implemented.process</processName>
+            <processNameXPath>concat('/test/uatTestSuite/actions/coffee-order-interfaces/',$Start/root/transition-action,'.process')</processNameXPath>
         </config>
         <pd:inputBindings>
             <root>

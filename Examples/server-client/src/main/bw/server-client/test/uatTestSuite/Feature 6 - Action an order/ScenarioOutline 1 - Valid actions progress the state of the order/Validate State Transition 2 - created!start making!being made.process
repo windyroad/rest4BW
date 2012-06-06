@@ -3,7 +3,7 @@
     <xsd:import namespace="http://windyroad.org/bwunit-0.0.0.xsd" schemaLocation="/BWUnit/Public/Schemas/BWUnit.xsd"/>
     <wsdl:import namespace="http://windyroad.org/bwunit-concrete" location="/BWUnit/Public/WSDLs/BWUnit-concrete.wsdl"/>
     <wsdl:import namespace="http://windyroad.org/bwunit-abstract/installLicense2Impl"/>
-    <pd:name>test/uatTestSuite/OrderingTestCase/Validate State Transition 5 - created!cancel!cancelled.process</pd:name>
+    <pd:name>test/uatTestSuite/Feature 6 - Progress an order/ScenarioOutline 1 - Valid actions progress the state of the order/Validate State Transition 2 - created!start making!being made.process</pd:name>
     <pd:description>@Timeout(60000)</pd:description>
     <pd:startName>Start</pd:startName>
     <pd:startX>118</pd:startX>
@@ -26,7 +26,7 @@
             <processName>/test/uatTestSuite/fixtures/validateStateTransitionFixture.process</processName>
         </config>
         <pd:inputBindings>
-            <csv>created|cancel|cancelled</csv>
+            <csv>created|start making|being made</csv>
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>
