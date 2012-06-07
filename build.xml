@@ -470,25 +470,16 @@ To Releases Version: ${releases.new.revision}</echo>
 
 	<target name="run-quick-tests" description="Run Quick tests" depends="-load-ant-contrib,-load-antunit,build">
 		<bwubuild:run-bwunit-tests phase="quick" />
-    <bwubuild:run-antunit-tests phase="quick" />
-		<!--subant target="run-quick-tests">
-			<fileset dir="Examples" includes="*/build.xml" />
-		</subant-->
 	</target>
 
 	<target name="report-quick-tests"
 	        description="Run Quick tests and create a JUnit compatible report"
 	        depends="-load-ant-contrib,-load-antunit,build">
 		<bwubuild:report-bwunit-tests phase="quick" />
-		<!--bwubuild:report-antunit-tests phase="quick" /-->
-		<!--subant target="report-quick-tests">
-			<fileset dir="Examples" includes="*/build.xml" />
-		</subant-->
 	</target>
 
 	<target name="run-uat-tests" description="Run UATs" depends="-load-ant-contrib,-load-antunit,build">
 		<bwubuild:run-bwunit-tests phase="uat" />
-		<bwubuild:run-antunit-tests phase="uat" />
 		<subant target="run-uat-tests">
 			<fileset dir="Examples" includes="*/build.xml" />
 		</subant>
@@ -498,7 +489,6 @@ To Releases Version: ${releases.new.revision}</echo>
 	        description="Run UATs and create a JUnit compatible report"
 	        depends="-load-ant-contrib,-load-antunit,build">
 		<bwubuild:report-bwunit-tests phase="uat" />
-		<bwubuild:report-antunit-tests phase="uat" />
 		<subant target="report-uat-tests">
 			<fileset dir="Examples" includes="*/build.xml" />
 		</subant>
