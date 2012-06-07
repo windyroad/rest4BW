@@ -30,20 +30,21 @@
 	<property name="ivy.jar.dir" location="${user.home}/.ivy2/jars" />
 	<property name="ivy.jar.file" location="${ivy.jar.dir}/ivy-${ivy.install.version}.jar" />
 
-	<property name="bwunit.home" location="lib/bwunit" />
+  <!-- For compatibility with the build server, we reference the parent bwunit home... :( -->
+	<property name="bwunit.home" location="../../lib/bwunit" />
+	<import file="${bwunit.home}/util/bwunit.xml" optional="true" />
 	<property name="server-client.projlib" location="build/server-client.projlib" />
-	<import file="lib/bwunit/util/bwunit.xml" optional="true" />
-
-	<target name="-load-ant-contrib" depends="retrieve" unless="ant-contrib.loaded">
-		<tibant:load-ant-contrib />
-		<property name="ant-contrib.loaded" value="true" />
-	</target>
 
 	<property name="REST/rest.projlib" location="lib/rest-tib-lib/rest-tib-lib.projlib" />
 	<propertyset id="rest.aliases">
 		<propertyset refid="bwunit.aliases" />
 		<propertyref name="REST/rest.projlib" />
 	</propertyset>
+
+	<target name="-load-ant-contrib" depends="retrieve" unless="ant-contrib.loaded">
+		<tibant:load-ant-contrib />
+		<property name="ant-contrib.loaded" value="true" />
+	</target>
 
 	<target name="projlib" depends="-load-ant-contrib">
 		<property name="server-client.projlib" location="build/server-client.projlib" />
@@ -472,17 +473,6 @@ To Releases Version: ${releases.new.revision}</echo>
 		</sequential>
 	</macrodef>
 
-	<target name="run-quick-tests" description="Run Quick tests" depends="-load-ant-contrib,-load-antunit,build">
-<!--				
-    <bwubuild:run-bwunit-tests phase="quick" />
-    <bwubuild:run-antunit-tests phase="quick" />
-
-		<subant target="run-quick-tests">
-			<fileset dir="Examples" includes="*/build.xml" />
-		</subant>
--->	
-	</target>
-
 	<target name="validate-projlib"
 	        description="Validate the compiled projlib">
 		<tibant:designer dir="src/main/bw" project="server-client"
@@ -492,34 +482,22 @@ To Releases Version: ${releases.new.revision}</echo>
 			/>
 	</target>
 
+	<target name="run-quick-tests" description="Run Quick tests" depends="-load-ant-contrib,-load-antunit,build">
+	</target>
+
 	<target name="report-quick-tests"
 	        description="Run Quick tests and create a JUnit compatible report"
 	        depends="-load-ant-contrib,-load-antunit,build">
-<!--
-		<bwubuild:report-bwunit-tests phase="quick" />
-		<bwubuild:report-antunit-tests phase="quick" />
-		<subant target="report-quick-tests">
-			<fileset dir="Examples" includes="*/build.xml" />
-		</subant>
--->
 	</target>
 
 	<target name="run-uat-tests" description="Run UATs" depends="-load-ant-contrib,-load-antunit,build">
 		<bwubuild:run-bwunit-tests phase="uat" />
-		<bwubuild:run-antunit-tests phase="uat" />
-		<!--subant target="run-uat-tests">
-			<fileset dir="Examples" includes="*/build.xml" />
-		</subant-->
 	</target>
 
 	<target name="report-uat-tests"
 	        description="Run UATs and create a JUnit compatible report"
 	        depends="-load-ant-contrib,-load-antunit,build">
 		<bwubuild:report-bwunit-tests phase="uat" />
-		<bwubuild:report-antunit-tests phase="uat" />
-		<!--subant target="report-uat-tests">
-			<fileset dir="Examples" includes="*/build.xml" />
-		</subant-->
 	</target>
 
 	<target name="run-dist-tests" description="Run Dist Tests" depends="-load-ant-contrib,-load-antunit,build">
