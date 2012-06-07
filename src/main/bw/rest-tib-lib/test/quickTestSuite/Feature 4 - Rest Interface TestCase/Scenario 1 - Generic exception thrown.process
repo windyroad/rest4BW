@@ -1,38 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:ns2="http://windyroad.org/wr-http.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://windyroad.org/rest-tib-lib.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd">
     <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
-    <pd:name>quickTestSuite/Feature 4 - Rest Interface TestCase/Scenario 4 - Missing delegate interface.process</pd:name>
+    <pd:name>test/quickTestSuite/Feature 4 - Rest Interface TestCase/Scenario 1 - Generic exception thrown.process</pd:name>
     <pd:description>@Timeout(60000)</pd:description>
     <pd:startName>Start</pd:startName>
     <pd:startX>150</pd:startX>
     <pd:startY>63</pd:startY>
     <pd:returnBindings/>
     <pd:endName>End</pd:endName>
-    <pd:endX>605</pd:endX>
-    <pd:endY>68</pd:endY>
+    <pd:endX>715</pd:endX>
+    <pd:endY>65</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1301865816031</pd:targetNamespace>
-    <pd:activity name="AssertEqual">
-        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-        <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:description>Then and empty set of name value pairs in returns</pd:description>
-        <pd:x>478</pd:x>
-        <pd:y>65</pd:y>
-        <config>
-            <processName>/BWUnit/Public/Asserts/AssertEqual.process</processName>
-        </config>
-        <pd:inputBindings>
-            <ns:equal-input>
-                <ns:expected>
-                    <ns2:StatusLine>HTTP/1.x 500 Internal Server Error</ns2:StatusLine>
-                </ns:expected>
-                <ns:actual>
-                    <xsl:copy-of select="$REST-Interface/ns2:response/ns2:Headers/ns2:StatusLine"/>
-                </ns:actual>
-            </ns:equal-input>
-        </pd:inputBindings>
-    </pd:activity>
     <pd:activity name="REST Interface">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
@@ -54,18 +34,31 @@
                     </ns2:Context>
                 </ns2:request>
                 <dynamicDelegatorProcessOverride>
-                    <xsl:value-of select="'not a real process.process'"/>
+                    <xsl:value-of select="'/test/quickTestSuite/Dynamic Process Overrides/Throw exception.process'"/>
                 </dynamicDelegatorProcessOverride>
             </root>
         </pd:inputBindings>
     </pd:activity>
-    <pd:transition>
-        <pd:from>AssertEqual</pd:from>
-        <pd:to>End</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
+    <pd:activity name="assertStatusAndContent">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>525</pd:x>
+        <pd:y>65</pd:y>
+        <config>
+            <processName>/test/quickTestSuite/util/assertStatusAndContent.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <expected-status>
+                    <xsl:value-of select="'HTTP/1.x 500 Internal Server Error'"/>
+                </expected-status>
+                <expected-content>
+                    <xsl:value-of select="'some message'"/>
+                </expected-content>
+                <xsl:copy-of select="$REST-Interface/ns2:response"/>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
     <pd:transition>
         <pd:from>Start</pd:from>
         <pd:to>REST Interface</pd:to>
@@ -75,7 +68,14 @@
     </pd:transition>
     <pd:transition>
         <pd:from>REST Interface</pd:from>
-        <pd:to>AssertEqual</pd:to>
+        <pd:to>assertStatusAndContent</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>assertStatusAndContent</pd:from>
+        <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
