@@ -6,24 +6,7 @@
     <pd:startX>94</pd:startX>
     <pd:startY>68</pd:startY>
     <pd:returnBindings>
-        <root>
-            <xsl:for-each select="$GetVariable/root/pfx:coffee-order">
-                <pfx:coffee-order>
-                    <pfx:firstname>
-                        <xsl:value-of select="pfx:firstname"/>
-                    </pfx:firstname>
-                    <pfx:coffee>
-                        <xsl:value-of select="pfx:coffee"/>
-                    </pfx:coffee>
-                    <pfx:sugar>
-                        <xsl:value-of select="pfx:sugar"/>
-                    </pfx:sugar>
-                    <pfx:state>
-                        <xsl:value-of select="pfx:state"/>
-                    </pfx:state>
-                </pfx:coffee-order>
-            </xsl:for-each>
-        </root>
+        <xsl:copy-of select="$GetVariable/*"/>
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
     <pd:endType>
@@ -35,8 +18,8 @@
             </xsd:complexType>
         </xsd:element>
     </pd:endType>
-    <pd:endX>481</pd:endX>
-    <pd:endY>68</pd:endY>
+    <pd:endX>482</pd:endX>
+    <pd:endY>71</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1338360464424</pd:targetNamespace>

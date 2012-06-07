@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/coffee-shop" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/coffee-shop" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     <pd:name>test/uatTestSuite/fixtures/validateStateTransitionFixture.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType>
@@ -14,124 +14,85 @@
     <pd:errorSchemas/>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1338665230923</pd:targetNamespace>
-    <pd:group name="Group">
-        <pd:type>com.tibco.pe.core.CriticalSectionGroup</pd:type>
-        <pd:resourceType>ae.process.group</pd:resourceType>
-        <pd:x>165</pd:x>
-        <pd:y>9</pd:y>
-        <pd:width>505</pd:width>
-        <pd:height>144</pd:height>
-        <pd:collapsedWidth>53</pd:collapsedWidth>
-        <pd:collapsedHeight>67</pd:collapsedHeight>
-        <pd:groupVariables/>
+    <pd:activity name="buildOrder">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>457</pd:x>
+        <pd:y>85</pd:y>
         <config>
-            <pd:groupType>criticalSection</pd:groupType>
-            <pd:serializable>false</pd:serializable>
-            <pd:scope>single</pd:scope>
+            <processName>/test/uatTestSuite/util/buildOrder.process</processName>
         </config>
-        <pd:inputBindings/>
-        <pd:expanded>true</pd:expanded>
-        <pd:transition>
-            <pd:from>start</pd:from>
-            <pd:to>tokenize</pd:to>
-            <pd:lineType>Default</pd:lineType>
-            <pd:lineColor>-16777216</pd:lineColor>
-            <pd:conditionType>always</pd:conditionType>
-        </pd:transition>
-        <pd:transition>
-            <pd:from>validateStateTransition</pd:from>
-            <pd:to>end</pd:to>
-            <pd:lineType>Default</pd:lineType>
-            <pd:lineColor>-16777216</pd:lineColor>
-            <pd:conditionType>always</pd:conditionType>
-        </pd:transition>
-        <pd:transition>
-            <pd:from>clear</pd:from>
-            <pd:to>validateStateTransition</pd:to>
-            <pd:lineType>Default</pd:lineType>
-            <pd:lineColor>-16777216</pd:lineColor>
-            <pd:conditionType>always</pd:conditionType>
-        </pd:transition>
-        <pd:transition>
-            <pd:from>tokenize</pd:from>
-            <pd:to>clear</pd:to>
-            <pd:lineType>Default</pd:lineType>
-            <pd:lineColor>-16777216</pd:lineColor>
-            <pd:conditionType>always</pd:conditionType>
-        </pd:transition>
-        <pd:activity name="clear">
-            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-            <pd:resourceType>ae.process.subprocess</pd:resourceType>
-            <pd:x>411</pd:x>
-            <pd:y>72</pd:y>
-            <config>
-                <processName>/server/persistence/clear.process</processName>
-            </config>
-            <pd:inputBindings/>
-        </pd:activity>
-        <pd:activity name="tokenize">
-            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-            <pd:resourceType>ae.process.subprocess</pd:resourceType>
-            <pd:x>258</pd:x>
-            <pd:y>72</pd:y>
-            <config>
-                <processName>/REST/Private/Common/string/tokenize.process</processName>
-            </config>
-            <pd:inputBindings>
-                <tokenize>
-                    <string>
-                        <xsl:value-of select="$Start/csv"/>
-                    </string>
-                    <pattern>
-                        <xsl:value-of select="'\|'"/>
-                    </pattern>
-                </tokenize>
-            </pd:inputBindings>
-        </pd:activity>
-        <pd:activity name="validateStateTransition">
-            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-            <pd:resourceType>ae.process.subprocess</pd:resourceType>
-            <pd:x>560</pd:x>
-            <pd:y>72</pd:y>
-            <config>
-                <processName>/test/uatTestSuite/scenarioOutlines/validateStateTransition.process</processName>
-            </config>
-            <pd:inputBindings>
-                <root>
-                    <ns:coffee-order>
-                        <ns:firstname>
-                            <xsl:value-of select="'George'"/>
-                        </ns:firstname>
-                        <ns:coffee>
-                            <xsl:value-of select="'Short Black'"/>
-                        </ns:coffee>
-                        <ns:sugar>
-                            <xsl:value-of select="'5'"/>
-                        </ns:sugar>
-                        <ns:state>
-                            <xsl:value-of select="$tokenize/root/output[1]"/>
-                        </ns:state>
-                    </ns:coffee-order>
-                    <transition-action>
-                        <xsl:value-of select="$tokenize/root/output[2]"/>
-                    </transition-action>
-                    <expected-end-state>
-                        <xsl:value-of select="$tokenize/root/output[3]"/>
-                    </expected-end-state>
-                </root>
-            </pd:inputBindings>
-        </pd:activity>
-    </pd:group>
+        <pd:inputBindings>
+            <root>
+                <initial-state>
+                    <xsl:value-of select="$tokenize/root/output[1]"/>
+                </initial-state>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="tokenize">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>222</pd:x>
+        <pd:y>85</pd:y>
+        <config>
+            <processName>/REST/Private/Common/string/tokenize.process</processName>
+        </config>
+        <pd:inputBindings>
+            <tokenize>
+                <string>
+                    <xsl:value-of select="$Start/csv"/>
+                </string>
+                <pattern>
+                    <xsl:value-of select="'\|'"/>
+                </pattern>
+            </tokenize>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="validateStateTransition">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>601</pd:x>
+        <pd:y>85</pd:y>
+        <config>
+            <processName>/test/uatTestSuite/scenarioOutlines/validateStateTransition.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:copy-of select="$buildOrder/ns:coffee-order"/>
+                <transition-action>
+                    <xsl:value-of select="$tokenize/root/output[2]"/>
+                </transition-action>
+                <expected-end-state>
+                    <xsl:value-of select="$tokenize/root/output[3]"/>
+                </expected-end-state>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
     <pd:transition>
-        <pd:from>Start</pd:from>
-        <pd:to>Group</pd:to>
+        <pd:from>tokenize</pd:from>
+        <pd:to>buildOrder</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>Group</pd:from>
+        <pd:from>Start</pd:from>
+        <pd:to>tokenize</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>validateStateTransition</pd:from>
         <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>buildOrder</pd:from>
+        <pd:to>validateStateTransition</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
