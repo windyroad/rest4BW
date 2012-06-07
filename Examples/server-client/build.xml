@@ -45,7 +45,7 @@
 		<property name="ant-contrib.loaded" value="true" />
 	</target>
 
-	<target name="projlib" depends="-load-ant-contrib,clean">
+	<target name="projlib" depends="-load-ant-contrib">
 		<property name="server-client.projlib" location="build/server-client.projlib" />
 		<tibant:build-library lib="/Build/server-client"
 		                      dir="src/main/bw"
