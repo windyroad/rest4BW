@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://windyroad.org/coffee-shop" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/wr-http.xsd">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://windyroad.org/coffee-shop" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/wr-http.xsd">
     <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/server/model/CoffeeShop.xsd"/>
     <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/REST/Private/Schemas/HttpConnection.xsd"/>
-    <pd:name>test/uatTestSuite/steps/Then a response with status (http status) and text-content (http text-content) is returned.process</pd:name>
+    <pd:name>test/uatTestSuite/steps/Then the response status is (http status).process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType>
         <xsd:element name="root">
@@ -10,7 +10,6 @@
                 <xsd:sequence>
                     <xsd:element ref="pfx:response"/>
                     <xsd:element name="expected-status" type="xsd:string"/>
-                    <xsd:element name="expected-text-content" type="xsd:string" minOccurs="0"/>
                 </xsd:sequence>
             </xsd:complexType>
         </xsd:element>
@@ -20,7 +19,7 @@
     <pd:returnBindings/>
     <pd:endName>End</pd:endName>
     <pd:endX>502</pd:endX>
-    <pd:endY>143</pd:endY>
+    <pd:endY>144</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1338635071359</pd:targetNamespace>
@@ -28,7 +27,7 @@
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
         <pd:x>321</pd:x>
-        <pd:y>68</pd:y>
+        <pd:y>144</pd:y>
         <config>
             <processName>/BWUnit/Public/Asserts/AssertEqual.process</processName>
         </config>
@@ -48,30 +47,6 @@
             </ns:equal-input>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="Assert text-content">
-        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-        <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>322</pd:x>
-        <pd:y>242</pd:y>
-        <config>
-            <processName>/BWUnit/Public/Asserts/AssertEqual.process</processName>
-        </config>
-        <pd:inputBindings>
-            <ns:equal-input>
-                <ns:msg>
-                    <xsl:value-of select="concat('expected=&quot;',$Start/root/expected-text-content,'&quot;, actual=&quot;',$Start/root/pfx:response/pfx:asciiContent,'&quot;')"/>
-                </ns:msg>
-                <ns:expected>
-                    <pfx:asciiContent>
-                        <xsl:value-of select="$Start/root/expected-text-content"/>
-                    </pfx:asciiContent>
-                </ns:expected>
-                <ns:actual>
-                    <xsl:copy-of select="$Start/root/pfx:response/pfx:asciiContent"/>
-                </ns:actual>
-            </ns:equal-input>
-        </pd:inputBindings>
-    </pd:activity>
     <pd:transition>
         <pd:from>Start</pd:from>
         <pd:to>Assert Status</pd:to>
@@ -85,21 +60,5 @@
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Assert text-content</pd:from>
-        <pd:to>End</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Assert Status</pd:from>
-        <pd:to>Assert text-content</pd:to>
-        <pd:xpathDescription>check content</pd:xpathDescription>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>xpath</pd:conditionType>
-        <pd:xpath>$Start/root/expected-text-content</pd:xpath>
     </pd:transition>
 </pd:ProcessDefinition>

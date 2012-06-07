@@ -3,7 +3,7 @@
     <xsd:import namespace="http://windyroad.org/bwunit-0.0.0.xsd" schemaLocation="/BWUnit/Public/Schemas/BWUnit.xsd"/>
     <wsdl:import namespace="http://windyroad.org/bwunit-concrete" location="/BWUnit/Public/WSDLs/BWUnit-concrete.wsdl"/>
     <wsdl:import namespace="http://windyroad.org/bwunit-abstract/installLicense2Impl"/>
-    <pd:name>test/uatTestSuite/Feature 6 - Action an order/Scenario 2 - Invalid actions cause an error.process</pd:name>
+    <pd:name>test/uatTestSuite/Feature 6 - Action an order TestSuite/ScenarioOutline 2 - Invalid actions cause an error TestCase/Scenario 2 - Invalid actions cause an error.process</pd:name>
     <pd:description>@Timeout(60000)</pd:description>
     <pd:startName>Start</pd:startName>
     <pd:startX>118</pd:startX>

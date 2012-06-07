@@ -40,7 +40,7 @@
 	</target>
 
 
-	<target name="projlib" depends="-load-ant-contrib">
+	<target name="projlib" depends="-load-ant-contrib,clean">
 		<property name="rest-tib-lib.projlib" location="build/rest-tib-lib.projlib" />
 		<tibant:build-library lib="/Build/rest-tib-lib"
 		                      dir="src/main/bw"
@@ -159,15 +159,15 @@
 		<delete dir="build" verbose="true" />
 		<delete dir="logs" verbose="true" />
 		<delete verbose="true">
-			<fileset dir="bw" includes="**/.designtimelibs" />
+			<fileset dir="src/main/bw" includes="**/.designtimelibs" />
 		</delete>
 		<delete dir="working" verbose="true" />
 		<subant target="clean">
 			<fileset dir="Examples" includes="**/build.xml" />
 		</subant>
-		<subant target="clean">
+		<!--subant target="clean">
 			<fileset dir="test/resources" includes="build.xml" />
-		</subant>
+		</subant-->
 	</target>
 
 	<target name="clean-lib" description="">
@@ -422,14 +422,13 @@ To Releases Version: ${releases.new.revision}</echo>
 				<propertyref name="BWUnit-SelfTest/license-path" />
 				<propertyref name="BWUnit/StaticPath" />
 			</propertyset>
-			<echo message="run-bwunit-tests - phase: @{phase}" />
 			<for param="testsuite">
-				<dirset dir="src/main/bw" includes="**/@{phase}TestSuite" id="@{phase}.dirs" />
+				<dirset dir="src/main/bw" includes="**/test/@{phase}TestSuite" id="@{phase}.dirs" />
 				<sequential>
-					<dirname property="@{testsuite}.project.path" file="@{testsuite}" />
+					<dirname property="@{testsuite}.project.path" file="@{testsuite}/.." />
 					<basename property="@{testsuite}.project.name" file="${@{testsuite}.project.path}" />
 					<mkdir dir="build/@{phase}/${@{testsuite}.project.name}" />
-					<echo message="Found Test Suite - @{testsuite} ${@{testsuite}.project.path} ${@{testsuite}.project.name}" />
+					<echo message=">>> Found Test Suite - @{testsuite} , ${@{testsuite}.project.path} , ${@{testsuite}.project.name}" />
 					<bwunit:run-tests dir="${@{testsuite}.project.path}/.."
 					                  project="${@{testsuite}.project.name}"
 					                  result-dest-dir="build/@{phase}/${@{testsuite}.project.name}"
@@ -438,7 +437,7 @@ To Releases Version: ${releases.new.revision}</echo>
 					                  license="${bwunit.license}"
 					                  create-dtl-file="true"
 					                  global-variables-refid="bwunit.selftest.gvars"
-					                  scope="@{phase}TestSuite/" />
+					                  scope="test/@{phase}TestSuite/" />
 				</sequential>
 			</for>
 		</sequential>
@@ -460,16 +459,6 @@ To Releases Version: ${releases.new.revision}</echo>
 		</sequential>
 	</macrodef>
 
-	<target name="run-quick-tests" description="Run Quick tests" depends="-load-ant-contrib,-load-antunit,build">
-		<bwubuild:run-bwunit-tests phase="quick" />
-<!--		<bwubuild:run-antunit-tests phase="quick" />
-
-		<subant target="run-quick-tests">
-			<fileset dir="Examples" includes="**/build.xml" />
-		</subant>
--->	
-	</target>
-
 	<target name="validate-projlib"
 	        description="Validate the compiled projlib">
 		<tibant:designer dir="src/main/bw" project="rest-tib-lib"
@@ -479,23 +468,29 @@ To Releases Version: ${releases.new.revision}</echo>
 			/>
 	</target>
 
+	<target name="run-quick-tests" description="Run Quick tests" depends="-load-ant-contrib,-load-antunit,build">
+		<bwubuild:run-bwunit-tests phase="quick" />
+    <bwubuild:run-antunit-tests phase="quick" />
+		<!--subant target="run-quick-tests">
+			<fileset dir="Examples" includes="*/build.xml" />
+		</subant-->
+	</target>
+
 	<target name="report-quick-tests"
 	        description="Run Quick tests and create a JUnit compatible report"
 	        depends="-load-ant-contrib,-load-antunit,build">
 		<bwubuild:report-bwunit-tests phase="quick" />
-<!--
 		<bwubuild:report-antunit-tests phase="quick" />
-		<subant target="report-quick-tests">
-			<fileset dir="Examples" includes="**/build.xml" />
-		</subant>
--->
+		<!--subant target="report-quick-tests">
+			<fileset dir="Examples" includes="*/build.xml" />
+		</subant-->
 	</target>
 
 	<target name="run-uat-tests" description="Run UATs" depends="-load-ant-contrib,-load-antunit,build">
 		<bwubuild:run-bwunit-tests phase="uat" />
 		<bwubuild:run-antunit-tests phase="uat" />
 		<subant target="run-uat-tests">
-			<fileset dir="Examples" includes="**/build.xml" />
+			<fileset dir="Examples" includes="*/build.xml" />
 		</subant>
 	</target>
 
@@ -505,7 +500,7 @@ To Releases Version: ${releases.new.revision}</echo>
 		<bwubuild:report-bwunit-tests phase="uat" />
 		<bwubuild:report-antunit-tests phase="uat" />
 		<subant target="report-uat-tests">
-			<fileset dir="Examples" includes="**/build.xml" />
+			<fileset dir="Examples" includes="*/build.xml" />
 		</subant>
 	</target>
 
