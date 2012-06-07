@@ -40,7 +40,7 @@
 	</target>
 
 
-	<target name="projlib" depends="-load-ant-contrib,clean">
+	<target name="projlib" depends="-load-ant-contrib">
 		<property name="rest-tib-lib.projlib" location="build/rest-tib-lib.projlib" />
 		<tibant:build-library lib="/Build/rest-tib-lib"
 		                      dir="src/main/bw"
