@@ -32,7 +32,7 @@
 
 	<property name="bwunit.home" location="lib/bwunit" />
 	<property name="rest-tib-lib.projlib" location="build/rest-tib-lib.projlib" />
-	<import file="lib/bwunit/util/bwunit.xml" optional="false" />
+	<import file="lib/bwunit/util/bwunit.xml" optional="true" />
 
 	<target name="-load-ant-contrib" depends="retrieve" unless="ant-contrib.loaded">
 		<tibant:load-ant-contrib />
