@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:pfx5="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://windyroad.org/coffee-shop" xmlns:pfx3="http://www.tibco.com/schemas/server-client/server/shared variables/Schema.xsd" xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd">
+    <xsd:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
+    <xsd:import namespace="http://windyroad.org/rest-delegate.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/server-client/server/shared variables/Schema.xsd" schemaLocation="/server/shared variables/Schema.xsd"/>
+    <pd:name>server/services/Order/edit.process</pd:name>
+    <pd:description/>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx:request"/>
+                    <xsd:element name="firstname" type="xsd:string" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>72</pd:startX>
+    <pd:startY>121</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$OK/pfx:response"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx:response"/>
+    <pd:endX>834</pd:endX>
+    <pd:endY>276</pd:endY>
+    <pd:errorSchemas>
+        <HTTP-Error ref="pfx:error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1338181537186</pd:targetNamespace>
+    <pd:activity name="200 OK">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>693</pd:x>
+        <pd:y>278</pd:y>
+        <config>
+            <processName>/REST/StatusCodes/2xx Successful/200 OK.process</processName>
+        </config>
+        <pd:inputBindings>
+            <pfx:response/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Null">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>335</pd:x>
+        <pd:y>276</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Null-1">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>216</pd:x>
+        <pd:y>124</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="403 Forbidden">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>492</pd:x>
+        <pd:y>399</pd:y>
+        <config>
+            <processName>/REST/StatusCodes/4xx Client Error/403 Forbidden.process</processName>
+        </config>
+        <pd:inputBindings>
+            <reason>
+                <pfx:text-content>
+                    <xsl:value-of select="'Invalid input!'"/>
+                </pfx:text-content>
+            </reason>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="update order">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>501</pd:x>
+        <pd:y>278</pd:y>
+        <config>
+            <processName>/server/services/Order/Private/update order.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <firstname>
+                    <xsl:value-of select="$Start/root/pfx:request/pfx:post/pfx:part/pfx:meta[@name='firstname']/@value"/>
+                </firstname>
+                <coffee>
+                    <xsl:value-of select="$Start/root/pfx:request/pfx:post/pfx:part/pfx:meta[@name='coffee']/@value"/>
+                </coffee>
+                <sugar>
+                    <xsl:value-of select="$Start/root/pfx:request/pfx:post/pfx:part/pfx:meta[@name='sugar']/@value"/>
+                </sugar>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>200 OK</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Null-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>update order</pd:to>
+        <pd:xpathDescription>valid input?</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>true()</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>403 Forbidden</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null-1</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:xpathDescription>transition?</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>update order</pd:from>
+        <pd:to>200 OK</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:label>
+        <pd:name>Label</pd:name>
+        <pd:description> TODO: Validate input!</pd:description>
+        <pd:x>177</pd:x>
+        <pd:y>353</pd:y>
+        <pd:width>172</pd:width>
+        <pd:height>31</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-39322</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
+    <pd:label>
+        <pd:name>Label (1)</pd:name>
+        <pd:description> TODO: Update coffee-order model to include created-datetime!</pd:description>
+        <pd:x>209</pd:x>
+        <pd:y>412</pd:y>
+        <pd:width>232</pd:width>
+        <pd:height>58</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-39322</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
+</pd:ProcessDefinition>

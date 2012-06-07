@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx1="http://windyroad.org/bwunit-abstract/installLicense2Impl" xmlns:ns31="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:ns7="http://windyroad.org/wr-http.xsd" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd" xmlns:ns11="http://windyroad.org/bwunit-0.0.0.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns4="http://windyroad.org/bwunit-abstract" xmlns:ns3="http://xmlns.tibco.com/encodings/mime" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://www.tibco.com/pe/DeployedVarsType" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://windyroad.org/coffee-shop" xmlns:pfx3="http://www.tibco.com/schemas/server-client/server/shared variables/Schema.xsd" xmlns:pfx21="http://windyroad.org/bwunit-concrete" xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:pfx6="http://windyroad.org/coffee-shop-interface">
+    <xsd:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
+    <xsd:import namespace="http://windyroad.org/rest-delegate.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/server-client/server/shared variables/Schema.xsd" schemaLocation="/server/shared variables/Schema.xsd"/>
+    <xsd:import namespace="http://windyroad.org/coffee-shop-interface" schemaLocation="/server/interface/Interface.xsd"/>
+    <pd:name>server/services/Order/options.process</pd:name>
+    <pd:description/>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx:request"/>
+                    <xsd:element name="firstname" type="xsd:string" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>81</pd:startX>
+    <pd:startY>223</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$OK/pfx:response"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx:response"/>
+    <pd:endX>762</pd:endX>
+    <pd:endY>217</pd:endY>
+    <pd:errorSchemas>
+        <HTTP-Error ref="pfx:error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1338181537186</pd:targetNamespace>
+    <pd:activity name="200 OK">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>621</pd:x>
+        <pd:y>219</pd:y>
+        <config>
+            <processName>/REST/StatusCodes/2xx Successful/200 OK.process</processName>
+        </config>
+        <pd:inputBindings>
+            <pfx:response>
+                <pfx:text-content>
+                    <xsl:value-of select="$order-options/xmlString"/>
+                </pfx:text-content>
+            </pfx:response>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Null-1">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>235</pd:x>
+        <pd:y>220</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="501 Not Implemented">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>427</pd:x>
+        <pd:y>76</pd:y>
+        <config>
+            <processName>/REST/StatusCodes/5xx Server Error/501 Not Implemented.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="404 Not Found">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>443</pd:x>
+        <pd:y>396</pd:y>
+        <config>
+            <processName>/REST/StatusCodes/4xx Client Error/404 Not Found.process</processName>
+        </config>
+        <pd:inputBindings>
+            <path>
+                <xsl:value-of select="$Start/root/pfx:request/pfx:command"/>
+            </path>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="order options">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>439</pd:x>
+        <pd:y>222</pd:y>
+        <config>
+            <processName>/server/interface/optionsToString.process</processName>
+        </config>
+        <pd:inputBindings>
+            <pfx6:options>
+                <pfx6:link>
+                    <xsl:attribute name="title">Create Order</xsl:attribute>
+                    <xsl:attribute name="rel">create</xsl:attribute>
+                    <xsl:attribute name="type">application/vnd.coffee-shop+xml</xsl:attribute>
+                    <xsl:attribute name="href">/coffee-shop/order</xsl:attribute>
+                    <xsl:attribute name="method">POST</xsl:attribute>
+                    <pfx6:parameter>
+                        <xsl:attribute name="title">Firstname</xsl:attribute>
+                        <xsl:attribute name="name">firstname</xsl:attribute>
+                        <xsl:attribute name="type">text</xsl:attribute>
+                    </pfx6:parameter>
+                    <pfx6:parameter>
+                        <xsl:attribute name="title">Coffee</xsl:attribute>
+                        <xsl:attribute name="name">coffee</xsl:attribute>
+                        <xsl:attribute name="type">text</xsl:attribute>
+                    </pfx6:parameter>
+                    <pfx6:parameter>
+                        <xsl:attribute name="title">Sugar</xsl:attribute>
+                        <xsl:attribute name="name">sugar</xsl:attribute>
+                        <xsl:attribute name="type">text</xsl:attribute>
+                    </pfx6:parameter>
+                </pfx6:link>
+                <pfx6:link>
+                    <xsl:attribute name="title">Query Orders</xsl:attribute>
+                    <xsl:attribute name="rel">query</xsl:attribute>
+                    <xsl:attribute name="type">application/vnd.coffee-shop+xml</xsl:attribute>
+                    <xsl:attribute name="href">/coffee-shop/order</xsl:attribute>
+                    <xsl:attribute name="method">GET</xsl:attribute>
+                </pfx6:link>
+            </pfx6:options>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>200 OK</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Null-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null-1</pd:from>
+        <pd:to>order options</pd:to>
+        <pd:xpathDescription>/coffee-shop/order?</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/root/pfx:request/pfx:command='/coffee-shop/order'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null-1</pd:from>
+        <pd:to>501 Not Implemented</pd:to>
+        <pd:xpathDescription>firstname?</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/root/firstname</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null-1</pd:from>
+        <pd:to>404 Not Found</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>order options</pd:from>
+        <pd:to>200 OK</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:label>
+        <pd:name>Label</pd:name>
+        <pd:description> TODO: Validate input!</pd:description>
+        <pd:x>162</pd:x>
+        <pd:y>388</pd:y>
+        <pd:width>172</pd:width>
+        <pd:height>31</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-39322</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
+    <pd:label>
+        <pd:name>Label (1)</pd:name>
+        <pd:description> TODO: Update coffee-order model to include created-datetime!</pd:description>
+        <pd:x>200</pd:x>
+        <pd:y>451</pd:y>
+        <pd:width>232</pd:width>
+        <pd:height>58</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-39322</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
+</pd:ProcessDefinition>

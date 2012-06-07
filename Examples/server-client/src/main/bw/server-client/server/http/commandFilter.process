@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <pd:name>server/http/commandFilter.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="actualCommand" type="xsd:string"/>
+                    <xsd:element name="redirect" minOccurs="0">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="entry" maxOccurs="unbounded">
+                                    <xsd:complexType>
+                                        <xsd:sequence>
+                                            <xsd:element name="from" type="xsd:string"/>
+                                            <xsd:element name="to" type="xsd:string"/>
+                                        </xsd:sequence>
+                                    </xsd:complexType>
+                                </xsd:element>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="rewrite" minOccurs="0">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="entry" maxOccurs="unbounded">
+                                    <xsd:complexType>
+                                        <xsd:sequence>
+                                            <xsd:element name="from" type="xsd:string"/>
+                                            <xsd:element name="to" type="xsd:string"/>
+                                        </xsd:sequence>
+                                    </xsd:complexType>
+                                </xsd:element>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="validate" minOccurs="0">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="command" type="xsd:string" maxOccurs="unbounded"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>80</pd:startX>
+    <pd:startY>80</pd:startY>
+    <pd:returnBindings>
+        <command>
+            <xsl:value-of select="$rewrite/command"/>
+        </command>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="command" type="xsd:string"/>
+    </pd:endType>
+    <pd:endX>742</pd:endX>
+    <pd:endY>80</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1338431042804</pd:targetNamespace>
+    <pd:activity name="301 Moved Permanently">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>243</pd:x>
+        <pd:y>220</pd:y>
+        <config>
+            <processName>/REST/StatusCodes/3xx Redirection/301 Moved Permanently.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <location>
+                    <xsl:value-of select="$Start/root/redirect/entry[from=../../actualCommand]/to[1]"/>
+                </location>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="404 Not Found">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>587</pd:x>
+        <pd:y>213</pd:y>
+        <config>
+            <processName>/REST/StatusCodes/4xx Client Error/404 Not Found.process</processName>
+        </config>
+        <pd:inputBindings>
+            <path>
+                <xsl:value-of select="$Start/root/actualCommand"/>
+            </path>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="isValid?">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>587</pd:x>
+        <pd:y>80</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="redirect?">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>243</pd:x>
+        <pd:y>80</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="rewrite">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>414</pd:x>
+        <pd:y>80</pd:y>
+        <config>
+            <element>
+                <xsd:element name="command" type="xsd:string"/>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <command>
+                <xsl:value-of select="if (exists($Start/root/rewrite/entry[from=$Start/root/actualCommand]))&#xA;then $Start/root/rewrite/entry[from=$Start/root/actualCommand]/to[1]&#xA;else $Start/root/actualCommand"/>
+            </command>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>isValid?</pd:from>
+        <pd:to>End</pd:to>
+        <pd:xpathDescription>true</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/root/validate/command[.=$rewrite/command] or $Start/root/rewrite/entry/to[.=$rewrite/command]</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>isValid?</pd:from>
+        <pd:to>404 Not Found</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>redirect?</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>rewrite</pd:from>
+        <pd:to>isValid?</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>redirect?</pd:from>
+        <pd:to>301 Moved Permanently</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>redirect?</pd:from>
+        <pd:to>rewrite</pd:to>
+        <pd:xpathDescription>true</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>not(exists($Start/root/redirect/entry/from[.=../../../actualCommand]))</pd:xpath>
+    </pd:transition>
+</pd:ProcessDefinition>

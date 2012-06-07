@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://windyroad.org/wr-http.xsd">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/REST/Private/Schemas/HttpConnection.xsd"/>
+    <pd:name>REST/Private/Testing/buildMultipartPostRequest.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$Build-request/pfx:request"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx:request"/>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1338340404430</pd:targetNamespace>
+    <pd:activity name="Build request">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>289</pd:x>
+        <pd:y>67</pd:y>
+        <config>
+            <element ref="pfx:request"/>
+        </config>
+        <pd:inputBindings>
+            <pfx:request>
+                <pfx:Method>POST</pfx:Method>
+                <pfx:RequestURI>/context/submitform.php?key=value&amp;key2=value2</pfx:RequestURI>
+                <pfx:HTTPVersion>HTTP/1.1</pfx:HTTPVersion>
+                <pfx:Command>/context/submitform.php</pfx:Command>
+                <pfx:QueryString>key=value&amp;key2=value2</pfx:QueryString>
+                <pfx:Header>POST /context/submitform.php?key=value&amp;key2=value2 HTTP/1.1host: localhost:8123
+user-agent: Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:12.0) Gecko/20100101 Firefox/12.0
+accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+accept-language: en-us,en;q=0.5
+accept-encoding: gzip, deflate
+connection: keep-alive
+content-type: multipart/form-data; boundary=---------------------------93630191880710885744733214
+content-length: 500</pfx:Header>
+                <pfx:Protocol>HTTP</pfx:Protocol>
+                <pfx:Port>8123</pfx:Port>
+                <pfx:Headers>
+                    <pfx:Accept>text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</pfx:Accept>
+                    <pfx:Accept-Encoding>gzip, deflate</pfx:Accept-Encoding>
+                    <pfx:Content-Type>multipart/form-data; boundary=---------------------------93630191880710885744733214</pfx:Content-Type>
+                    <pfx:Content-Length>500</pfx:Content-Length>
+                    <pfx:Connection>keep-alive</pfx:Connection>
+                    <pfx:host>localhost:8123</pfx:host>
+                    <pfx:ETag>
+                        <xsl:value-of select="'ETAG9876'"/>
+                    </pfx:ETag>
+                </pfx:Headers>
+                <pfx:mimeEnvelopeElement>
+                    <pfx:mimePart>
+                        <pfx:mimeHeaders>
+                            <pfx:content-disposition>form-data; name="firstname"</pfx:content-disposition>
+                            <pfx:content-type>text/plain</pfx:content-type>
+                            <pfx:content-transfer-encoding>base64</pfx:content-transfer-encoding>
+                        </pfx:mimeHeaders>
+                        <pfx:textContent>John</pfx:textContent>
+                    </pfx:mimePart>
+                    <pfx:mimePart>
+                        <pfx:mimeHeaders>
+                            <pfx:content-disposition>form-data; name="lastname"</pfx:content-disposition>
+                            <pfx:content-type>text/plain</pfx:content-type>
+                            <pfx:content-transfer-encoding>base64</pfx:content-transfer-encoding>
+                        </pfx:mimeHeaders>
+                        <pfx:textContent>Doe</pfx:textContent>
+                    </pfx:mimePart>
+                    <pfx:mimePart>
+                        <pfx:mimeHeaders>
+                            <pfx:content-disposition>form-data; name="uploadedfile"; filename="test.txt"</pfx:content-disposition>
+                            <pfx:content-type>text/plain</pfx:content-type>
+                            <pfx:content-transfer-encoding>base64</pfx:content-transfer-encoding>
+                        </pfx:mimeHeaders>
+                        <pfx:textContent>Some example content.
+
+This is the end of the file.</pfx:textContent>
+                    </pfx:mimePart>
+                </pfx:mimeEnvelopeElement>
+                <pfx:Context>
+                    <pfx:RemoteAddress>127.0.0.1</pfx:RemoteAddress>
+                </pfx:Context>
+            </pfx:request>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Build request</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Build request</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

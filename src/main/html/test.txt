@@ -1,0 +1,4 @@
+Some example content.
+
+This is the end of the file.
+updated.
