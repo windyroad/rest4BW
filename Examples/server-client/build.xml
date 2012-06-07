@@ -32,18 +32,18 @@
 
 	<property name="bwunit.home" location="lib/bwunit" />
 	<property name="server-client.projlib" location="build/server-client.projlib" />
-	<import file="lib/bwunit/util/bwunit.xml" optional="true" />
+	<import file="lib/bwunit/util/bwunit.xml" optional="false" />
+
+	<target name="-load-ant-contrib" depends="retrieve" unless="ant-contrib.loaded">
+		<tibant:load-ant-contrib />
+		<property name="ant-contrib.loaded" value="true" />
+	</target>
 
 	<property name="REST/rest.projlib" location="lib/rest-tib-lib/rest-tib-lib.projlib" />
 	<propertyset id="rest.aliases">
 		<propertyset refid="bwunit.aliases" />
 		<propertyref name="REST/rest.projlib" />
 	</propertyset>
-
-	<target name="-load-ant-contrib" depends="retrieve" unless="ant-contrib.loaded">
-		<tibant:load-ant-contrib />
-		<property name="ant-contrib.loaded" value="true" />
-	</target>
 
 	<target name="projlib" depends="-load-ant-contrib">
 		<property name="server-client.projlib" location="build/server-client.projlib" />
