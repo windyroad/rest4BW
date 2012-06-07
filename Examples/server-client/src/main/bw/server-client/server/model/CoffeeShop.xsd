@@ -12,6 +12,7 @@
 				<xs:element name="coffee" type="xs:string"/>
 				<xs:element name="sugar" type="xs:string"/>
 				<xs:element name="state" type="xs:string"/>
+				<xs:element name="created-datetime" type="xs:dateTime"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>

@@ -21,8 +21,8 @@
     <pd:activity name="404 Not Found">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>496</pd:x>
-        <pd:y>193</pd:y>
+        <pd:x>495</pd:x>
+        <pd:y>208</pd:y>
         <config>
             <processName>/REST/StatusCodes/4xx Client Error/404 Not Found.process</processName>
         </config>

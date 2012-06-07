@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd">
+<pd:ProcessDefinition xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd">
     <xsd:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
     <pd:name>server/services/Order Service.process</pd:name>
     <pd:description/>
@@ -45,8 +45,8 @@
     <pd:activity name="501 Not Implemented">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>543</pd:x>
-        <pd:y>388</pd:y>
+        <pd:x>548</pd:x>
+        <pd:y>314</pd:y>
         <config>
             <processName>/REST/StatusCodes/5xx Server Error/501 Not Implemented.process</processName>
         </config>
@@ -98,6 +98,9 @@
                 <xsl:when test="$edit/*">
                     <xsl:copy-of select="$edit/*"/>
                 </xsl:when>
+                <xsl:when test="$options/*">
+                    <xsl:copy-of select="$options/*"/>
+                </xsl:when>
                 <xsl:otherwise>
                     <xsl:copy-of select="$cancel/*"/>
                 </xsl:otherwise>
@@ -136,7 +139,7 @@
         <config/>
         <pd:inputBindings/>
     </pd:activity>
-    <pd:activity name="OPTIONS">
+    <pd:activity name="OPTIONS_">
         <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
         <pd:resourceType>ae.activities.null</pd:resourceType>
         <pd:x>423</pd:x>
@@ -170,6 +173,18 @@
         </config>
         <pd:inputBindings>
             <xsl:copy-of select="$Start/root"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="options">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>548</pd:x>
+        <pd:y>396</pd:y>
+        <config>
+            <processName>/server/services/Order/options.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Start/*"/>
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>
@@ -206,7 +221,7 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Null</pd:from>
-        <pd:to>OPTIONS</pd:to>
+        <pd:to>OPTIONS_</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>xpath</pd:conditionType>
@@ -262,13 +277,6 @@
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>OPTIONS</pd:from>
-        <pd:to>501 Not Implemented</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
         <pd:from>action</pd:from>
         <pd:to>Null-1</pd:to>
         <pd:lineType>Default</pd:lineType>
@@ -292,6 +300,20 @@
     <pd:transition>
         <pd:from>de-multiplex response</pd:from>
         <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>OPTIONS_</pd:from>
+        <pd:to>options</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>options</pd:from>
+        <pd:to>Null-1</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
