@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://windyroad.org/coffee-shop" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="http://windyroad.org/coffee-shop-interface" xmlns:pfx="http://windyroad.org/wr-http.xsd">
+    <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/server/model/CoffeeShop.xsd"/>
+    <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/REST/Private/Schemas/HttpConnection.xsd"/>
+    <xsd:import namespace="http://windyroad.org/coffee-shop-interface" schemaLocation="/server/interface/Interface.xsd"/>
+    <pd:name>test/uatTestSuite/steps/Then the response is a list containing an order for (firstname).process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx:response"/>
+                    <xsd:element name="expected-order-firstname" type="xsd:string" maxOccurs="unbounded"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>52</pd:startX>
+    <pd:startY>142</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>1012</pd:endX>
+    <pd:endY>147</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1338635071359</pd:targetNamespace>
+    <pd:activity name="Then the response has content (http text-content)">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>885</pd:x>
+        <pd:y>159</pd:y>
+        <config>
+            <processName>/test/uatTestSuite/steps/Then the response has content (http text-content).process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:copy-of select="$Start/root/pfx:response"/>
+                <expected-text-content>
+                    <xsl:value-of select="$toString/xmlString"/>
+                </expected-text-content>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="all order options">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>171</pd:x>
+        <pd:y>143</pd:y>
+        <config>
+            <processName>/server/services/Order/Private/all order options.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="getAll">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>366</pd:x>
+        <pd:y>144</pd:y>
+        <config>
+            <processName>/server/persistence/getAll.process</processName>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="toString">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>725</pd:x>
+        <pd:y>146</pd:y>
+        <config>
+            <processName>/server/interface/coffeeOrderListToString.process</processName>
+        </config>
+        <pd:inputBindings>
+            <pfx2:coffee-order-list>
+                <xsl:copy-of select="$output/AccumulatedOutput/pfx2:hypermedia-coffee-order"/>
+            </pfx2:coffee-order-list>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>451</pd:x>
+        <pd:y>69</pd:y>
+        <pd:width>192</pd:width>
+        <pd:height>138</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$getAll/root/ns1:coffee-order[ns1:firstname=$Start/root/expected-order-firstname]</pd:over>
+            <pd:iterationElementSlot>params</pd:iterationElementSlot>
+            <pd:indexSlot>index</pd:indexSlot>
+            <pd:outSlot>output</pd:outSlot>
+            <pd:activityOutputName>build coffee-orders</pd:activityOutputName>
+            <pd:accumulateOutput>true</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>build coffee-orders</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>build coffee-orders</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="build coffee-orders">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>546</pd:x>
+            <pd:y>140</pd:y>
+            <config>
+                <element ref="pfx2:hypermedia-coffee-order"/>
+            </config>
+            <pd:inputBindings>
+                <pfx2:hypermedia-coffee-order>
+                    <pfx2:link>
+                        <xsl:if test="$view-link/root/pfx2:link/@title">
+                            <xsl:attribute name="title">
+                                <xsl:value-of select="$view-link/root/pfx2:link/@title"/>
+                            </xsl:attribute>
+                        </xsl:if>
+                        <xsl:if test="$view-link/root/pfx2:link/@rel">
+                            <xsl:attribute name="rel">
+                                <xsl:value-of select="$view-link/root/pfx2:link/@rel"/>
+                            </xsl:attribute>
+                        </xsl:if>
+                        <xsl:if test="$view-link/root/pfx2:link/@type">
+                            <xsl:attribute name="type">
+                                <xsl:value-of select="$view-link/root/pfx2:link/@type"/>
+                            </xsl:attribute>
+                        </xsl:if>
+                        <xsl:attribute name="href">
+                            <xsl:value-of select="concat($view-link/root/pfx2:link/@href, '/', $params/ns1:coffee-order/ns1:firstname)"/>
+                        </xsl:attribute>
+                        <xsl:if test="$view-link/root/pfx2:link/@method">
+                            <xsl:attribute name="method">
+                                <xsl:value-of select="$view-link/root/pfx2:link/@method"/>
+                            </xsl:attribute>
+                        </xsl:if>
+                        <xsl:copy-of select="$view-link/root/pfx2:link/pfx2:parameter"/>
+                    </pfx2:link>
+                    <xsl:copy-of select="$params/ns1:coffee-order"/>
+                </pfx2:hypermedia-coffee-order>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="view link">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>265</pd:x>
+        <pd:y>258</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx2:link"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:copy-of select="$all-order-options/root/pfx2:options/pfx2:link[@rel='view']"/>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>all order options</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Then the response has content (http text-content)</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>all order options</pd:from>
+        <pd:to>view link</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>toString</pd:from>
+        <pd:to>Then the response has content (http text-content)</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>getAll</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>toString</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>view link</pd:from>
+        <pd:to>getAll</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>
