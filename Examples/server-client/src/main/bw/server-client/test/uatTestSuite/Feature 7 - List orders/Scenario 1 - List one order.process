@@ -131,7 +131,7 @@
             </root>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="Then the response has content (http text-content)">
+    <pd:activity name="Then the response contains an order for (firstname)">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
         <pd:x>917</pd:x>
@@ -141,7 +141,7 @@
         </config>
         <pd:inputBindings>
             <root>
-                <xsl:copy-of select="$When-a-staff-member-lists-the-resources/ns7:response"/>
+                <xsl:copy-of select="$When-a-staff-member-lists-the-orders/ns7:response"/>
                 <expected-text-content>
                     <xsl:value-of select="$coffeeOrderListToString/xmlString"/>
                 </expected-text-content>
@@ -158,14 +158,14 @@
         </config>
         <pd:inputBindings>
             <root>
-                <xsl:copy-of select="$When-a-staff-member-lists-the-resources/ns7:response"/>
+                <xsl:copy-of select="$When-a-staff-member-lists-the-orders/ns7:response"/>
                 <expected-status>
                     <xsl:value-of select="$input-data/root/expected-status"/>
                 </expected-status>
             </root>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="When a staff member lists the resources">
+    <pd:activity name="When a staff member lists the orders">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
         <pd:x>498</pd:x>
@@ -204,13 +204,13 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Given an order in state (start state)</pd:from>
-        <pd:to>When a staff member lists the resources</pd:to>
+        <pd:to>When a staff member lists the orders</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>When a staff member lists the resources</pd:from>
+        <pd:from>When a staff member lists the orders</pd:from>
         <pd:to>Then the response status is (http status)</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
@@ -225,7 +225,7 @@
     </pd:transition>
     <pd:transition>
         <pd:from>coffeeOrderListToString</pd:from>
-        <pd:to>Then the response has content (http text-content)</pd:to>
+        <pd:to>Then the response contains an order for (firstname)</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
@@ -238,7 +238,7 @@
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>Then the response has content (http text-content)</pd:from>
+        <pd:from>Then the response contains an order for (firstname)</pd:from>
         <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
