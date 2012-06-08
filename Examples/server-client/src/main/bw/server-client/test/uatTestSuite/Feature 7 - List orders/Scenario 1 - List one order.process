@@ -12,29 +12,13 @@
     <pd:startY>83</pd:startY>
     <pd:returnBindings/>
     <pd:endName>End</pd:endName>
-    <pd:endX>1126</pd:endX>
-    <pd:endY>238</pd:endY>
+    <pd:endX>1076</pd:endX>
+    <pd:endY>244</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables>
         <license-key ref="ns1:license-key"/>
     </pd:processVariables>
     <pd:targetNamespace>http://xmlns.example.com/1255637097360</pd:targetNamespace>
-    <pd:activity name="all order options">
-        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-        <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>713</pd:x>
-        <pd:y>83</pd:y>
-        <config>
-            <processName>/server/services/Order/Private/all order options.process</processName>
-        </config>
-        <pd:inputBindings>
-            <root>
-                <firstname>
-                    <xsl:value-of select="$Given-an-order-in-state-start-state/root/ns6:coffee-order/ns6:firstname"/>
-                </firstname>
-            </root>
-        </pd:inputBindings>
-    </pd:activity>
     <pd:activity name="buildOrder">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
@@ -49,23 +33,6 @@
                     <xsl:value-of select="'created'"/>
                 </initial-state>
             </root>
-        </pd:inputBindings>
-    </pd:activity>
-    <pd:activity name="coffeeOrderListToString">
-        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-        <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>860</pd:x>
-        <pd:y>83</pd:y>
-        <config>
-            <processName>/server/interface/coffeeOrderListToString.process</processName>
-        </config>
-        <pd:inputBindings>
-            <pfx3:coffee-order-list>
-                <pfx3:hypermedia-coffee-order>
-                    <xsl:copy-of select="$all-order-options/root/pfx3:options/pfx3:link[@rel='view'][1]"/>
-                    <xsl:copy-of select="$Given-an-order-in-state-start-state/root/ns6:coffee-order"/>
-                </pfx3:hypermedia-coffee-order>
-            </pfx3:coffee-order-list>
         </pd:inputBindings>
     </pd:activity>
     <pd:activity name="Given a coffee ordering system at (url)">
@@ -131,23 +98,6 @@
             </root>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="Then the response contains an order for (firstname)">
-        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-        <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>917</pd:x>
-        <pd:y>252</pd:y>
-        <config>
-            <processName>/test/uatTestSuite/steps/Then the response has content (http text-content).process</processName>
-        </config>
-        <pd:inputBindings>
-            <root>
-                <xsl:copy-of select="$When-a-staff-member-lists-the-orders/ns7:response"/>
-                <expected-text-content>
-                    <xsl:value-of select="$coffeeOrderListToString/xmlString"/>
-                </expected-text-content>
-            </root>
-        </pd:inputBindings>
-    </pd:activity>
     <pd:activity name="Then the response status is (http status)">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
@@ -178,6 +128,23 @@
                 <url>
                     <xsl:value-of select="$input-data/root/url"/>
                 </url>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Then the response is a list containing an order for (firstname)">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>862</pd:x>
+        <pd:y>270</pd:y>
+        <config>
+            <processName>/test/uatTestSuite/steps/Then the response is a list containing an order for (firstname).process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:copy-of select="$When-a-staff-member-lists-the-orders/ns7:response"/>
+                <expected-order-firstname>
+                    <xsl:value-of select="$Given-an-order-in-state-start-state/root/ns6:coffee-order/ns6:firstname"/>
+                </expected-order-firstname>
             </root>
         </pd:inputBindings>
     </pd:activity>
@@ -217,36 +184,22 @@
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>Then the response status is (http status)</pd:from>
-        <pd:to>all order options</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>coffeeOrderListToString</pd:from>
-        <pd:to>Then the response contains an order for (firstname)</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>all order options</pd:from>
-        <pd:to>coffeeOrderListToString</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Then the response contains an order for (firstname)</pd:from>
-        <pd:to>End</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
         <pd:from>buildOrder</pd:from>
         <pd:to>input data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Then the response status is (http status)</pd:from>
+        <pd:to>Then the response is a list containing an order for (firstname)</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Then the response is a list containing an order for (firstname)</pd:from>
+        <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
