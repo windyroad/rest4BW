@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://windyroad.org/coffee-shop" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="http://windyroad.org/coffee-shop-interface" xmlns:pfx="http://windyroad.org/wr-http.xsd">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://windyroad.org/coffee-shop" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="http://windyroad.org/coffee-shop-interface" xmlns:pfx="http://windyroad.org/wr-http.xsd">
     <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/server/model/CoffeeShop.xsd"/>
     <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/REST/Private/Schemas/HttpConnection.xsd"/>
     <xsd:import namespace="http://windyroad.org/coffee-shop-interface" schemaLocation="/server/interface/Interface.xsd"/>
@@ -44,8 +44,8 @@
     <pd:activity name="all order options">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>171</pd:x>
-        <pd:y>143</pd:y>
+        <pd:x>144</pd:x>
+        <pd:y>70</pd:y>
         <config>
             <processName>/server/services/Order/Private/all order options.process</processName>
         </config>
@@ -56,8 +56,8 @@
     <pd:activity name="getAll">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>366</pd:x>
-        <pd:y>144</pd:y>
+        <pd:x>270</pd:x>
+        <pd:y>70</pd:y>
         <config>
             <processName>/server/persistence/getAll.process</processName>
         </config>
@@ -91,7 +91,7 @@
         <config>
             <pd:groupType>inputLoop</pd:groupType>
             <pd:serializable>false</pd:serializable>
-            <pd:over>$getAll/root/ns1:coffee-order[ns1:firstname=$Start/root/expected-order-firstname]</pd:over>
+            <pd:over>$getAll/root/ns1:coffee-order</pd:over>
             <pd:iterationElementSlot>params</pd:iterationElementSlot>
             <pd:indexSlot>index</pd:indexSlot>
             <pd:outSlot>output</pd:outSlot>
@@ -158,8 +158,8 @@
     <pd:activity name="view link">
         <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
         <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-        <pd:x>265</pd:x>
-        <pd:y>258</pd:y>
+        <pd:x>168</pd:x>
+        <pd:y>184</pd:y>
         <config>
             <element>
                 <xsd:element name="root">
@@ -175,6 +175,22 @@
             <root>
                 <xsl:copy-of select="$all-order-options/root/pfx2:options/pfx2:link[@rel='view']"/>
             </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assert Firstname Exists">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>356</pd:x>
+        <pd:y>187</pd:y>
+        <config>
+            <processName>/BWUnit/Public/Asserts/AssertTrue.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:true-input>
+                <ns:value>
+                    <xsl:value-of select="exists($getAll/root/ns1:coffee-order[ns1:firstname=$Start/root/expected-order-firstname])"/>
+                </ns:value>
+            </ns:true-input>
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>
@@ -206,13 +222,6 @@
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>getAll</pd:from>
-        <pd:to>Group</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
         <pd:from>Group</pd:from>
         <pd:to>toString</pd:to>
         <pd:lineType>Default</pd:lineType>
@@ -222,6 +231,20 @@
     <pd:transition>
         <pd:from>view link</pd:from>
         <pd:to>getAll</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>getAll</pd:from>
+        <pd:to>Assert Firstname Exists</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assert Firstname Exists</pd:from>
+        <pd:to>Group</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
