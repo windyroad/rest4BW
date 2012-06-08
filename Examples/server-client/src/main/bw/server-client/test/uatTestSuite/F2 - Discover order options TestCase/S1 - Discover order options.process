@@ -5,7 +5,7 @@
     <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/server/model/CoffeeShop.xsd"/>
     <wsdl:import namespace="http://windyroad.org/bwunit-concrete" location="/BWUnit/Public/WSDLs/BWUnit-concrete.wsdl"/>
     <wsdl:import namespace="http://windyroad.org/bwunit-abstract/installLicense2Impl"/>
-    <pd:name>test/uatTestSuite/Feature 2 - Discover an order's options TestCase/Scenario 1 - Discover order options.process</pd:name>
+    <pd:name>test/uatTestSuite/F2 - Discover order options TestCase/S1 - Discover order options.process</pd:name>
     <pd:description>@Timeout(60000)</pd:description>
     <pd:startName>Start</pd:startName>
     <pd:startX>68</pd:startX>
@@ -90,9 +90,10 @@
         <pd:y>25</pd:y>
         <pd:width>238</pd:width>
         <pd:height>138</pd:height>
-        <pd:collapsedWidth>53</pd:collapsedWidth>
-        <pd:collapsedHeight>67</pd:collapsedHeight>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
         <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
         <config>
             <pd:groupType>inputLoop</pd:groupType>
             <pd:serializable>false</pd:serializable>
