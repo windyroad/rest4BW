@@ -4,7 +4,7 @@
     <xsd:import namespace="http://windyroad.org/coffee-shop-interface" schemaLocation="/server/interface/Interface.xsd"/>
     <wsdl:import namespace="http://windyroad.org/bwunit-concrete" location="/BWUnit/Public/WSDLs/BWUnit-concrete.wsdl"/>
     <wsdl:import namespace="http://windyroad.org/bwunit-abstract/installLicense2Impl"/>
-    <pd:name>test/uatTestSuite/Feature 1 - Discover the coffee shop's options TestCase/Scenario 1 - Discover base options.process</pd:name>
+    <pd:name>test/uatTestSuite/F1 - Discover main options TestCase/S1 - Discover base options.process</pd:name>
     <pd:description>@Timeout(60000)</pd:description>
     <pd:startName>Start</pd:startName>
     <pd:startX>68</pd:startX>
