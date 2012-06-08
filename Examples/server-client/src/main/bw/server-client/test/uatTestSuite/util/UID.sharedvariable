@@ -7,7 +7,7 @@
         <persistent>false</persistent>
         <multi-engine>false</multi-engine>
         <initialValue>byData</initialValue>
-        <initialValueData>&lt;?xml version="1.0" encoding="UTF-8"?&gt; &lt;uniqueId&gt;1&lt;/uniqueId&gt;</initialValueData>
+        <initialValueData>&lt;?xml version="1.0" encoding="UTF-8"?&gt; &lt;uniqueId&gt;0&lt;/uniqueId&gt;</initialValueData>
         <xsdString>
             <xsd:element name="uniqueId" type="xsd:long"/>
         </xsdString>

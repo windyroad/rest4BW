@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://windyroad.org/coffee-shop" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/wr-http.xsd">
+<pd:ProcessDefinition xmlns:ns2="http://windyroad.org/coffee-shop-interface" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://windyroad.org/coffee-shop" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/wr-http.xsd">
     <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/server/model/CoffeeShop.xsd"/>
     <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/REST/Private/Schemas/HttpConnection.xsd"/>
     <pd:name>test/uatTestSuite/steps/Then they are provided with a mechanism for (actioning) orders.process</pd:name>
@@ -8,8 +8,9 @@
         <xsd:element name="root">
             <xsd:complexType>
                 <xsd:sequence>
-                    <xsd:element name="expected-text-content" type="xsd:string"/>
+                    <xsd:element name="firstname" type="xsd:string" minOccurs="0"/>
                     <xsd:element ref="pfx:response"/>
+                    <xsd:element name="expected-link-rel" type="xsd:string" maxOccurs="unbounded"/>
                 </xsd:sequence>
             </xsd:complexType>
         </xsd:element>
@@ -18,7 +19,7 @@
     <pd:startY>114</pd:startY>
     <pd:returnBindings/>
     <pd:endName>End</pd:endName>
-    <pd:endX>579</pd:endX>
+    <pd:endX>783</pd:endX>
     <pd:endY>114</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
@@ -26,7 +27,7 @@
     <pd:activity name="Then the response has content (http text-content)">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>332</pd:x>
+        <pd:x>615</pd:x>
         <pd:y>128</pd:y>
         <config>
             <processName>/test/uatTestSuite/steps/Then the response has content (http text-content).process</processName>
@@ -35,14 +36,44 @@
             <root>
                 <xsl:copy-of select="$Start/root/pfx:response"/>
                 <expected-text-content>
-                    <xsl:value-of select="$Start/root/expected-text-content"/>
+                    <xsl:value-of select="$optionsToString/xmlString"/>
                 </expected-text-content>
             </root>
         </pd:inputBindings>
     </pd:activity>
+    <pd:activity name="all order options">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>264</pd:x>
+        <pd:y>116</pd:y>
+        <config>
+            <processName>/server/services/Order/Private/all order options.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <firstname>
+                    <xsl:value-of select="$Start/root/firstname"/>
+                </firstname>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="optionsToString">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>437</pd:x>
+        <pd:y>116</pd:y>
+        <config>
+            <processName>/server/interface/optionsToString.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns2:options>
+                <xsl:copy-of select="$all-order-options/root/ns2:options/ns2:link[@rel=$Start/root/expected-link-rel]"/>
+            </ns2:options>
+        </pd:inputBindings>
+    </pd:activity>
     <pd:transition>
         <pd:from>Start</pd:from>
-        <pd:to>Then the response has content (http text-content)</pd:to>
+        <pd:to>all order options</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
@@ -50,6 +81,20 @@
     <pd:transition>
         <pd:from>Then the response has content (http text-content)</pd:from>
         <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>all order options</pd:from>
+        <pd:to>optionsToString</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>optionsToString</pd:from>
+        <pd:to>Then the response has content (http text-content)</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>

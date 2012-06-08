@@ -2,9 +2,11 @@
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	 xmlns:csi="http://windyroad.org/coffee-shop-interface"
+	 xmlns:cfshp="http://windyroad.org/coffee-shop"
 	 targetNamespace="http://windyroad.org/coffee-shop-interface"
 	 elementFormDefault="qualified"
 	 attributeFormDefault="unqualified">
+	<xs:import namespace="http://windyroad.org/coffee-shop" schemaLocation="../model/CoffeeShop.xsd"/>
 	<xs:element name="link">
 		<xs:complexType>
 			<xs:sequence>
@@ -35,6 +37,21 @@
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="csi:link" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="hypermedia-coffee-order">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="csi:link"/>
+				<xs:element ref="cfshp:coffee-order"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="coffee-order-list">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="csi:hypermedia-coffee-order" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>

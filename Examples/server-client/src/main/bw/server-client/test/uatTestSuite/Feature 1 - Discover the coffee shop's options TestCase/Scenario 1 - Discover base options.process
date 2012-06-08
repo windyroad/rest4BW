@@ -4,10 +4,9 @@
     <xsd:import namespace="http://windyroad.org/coffee-shop-interface" schemaLocation="/server/interface/Interface.xsd"/>
     <wsdl:import namespace="http://windyroad.org/bwunit-concrete" location="/BWUnit/Public/WSDLs/BWUnit-concrete.wsdl"/>
     <wsdl:import namespace="http://windyroad.org/bwunit-abstract/installLicense2Impl"/>
-    <pd:name>test/uatTestSuite/Feature 1 - Discover the coffee shop's options/Scenario 1 - Discover base functions.process</pd:name>
+    <pd:name>test/uatTestSuite/Feature 1 - Discover the coffee shop's options TestCase/Scenario 1 - Discover base options.process</pd:name>
     <pd:description>@Timeout(60000)</pd:description>
     <pd:startName>Start</pd:startName>
-    <pd:startType/>
     <pd:startX>68</pd:startX>
     <pd:startY>87</pd:startY>
     <pd:returnBindings/>
@@ -38,69 +37,32 @@
     <pd:activity name="input data">
         <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
         <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-        <pd:x>202</pd:x>
-        <pd:y>87</pd:y>
+        <pd:x>200</pd:x>
+        <pd:y>85</pd:y>
         <config>
             <element>
                 <xsd:element name="root">
                     <xsd:complexType>
                         <xsd:sequence>
                             <xsd:element name="url" type="xsd:string"/>
-                            <xsd:element ref="pfx3:options"/>
                             <xsd:element name="expected-status" type="xsd:string"/>
+                            <xsd:element name="expected-link-rel" type="xsd:string" maxOccurs="unbounded"/>
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>
             </element>
         </config>
         <pd:inputBindings>
+            <xsl:variable name="type" select="'application/vnd.coffee-shop+xml'"/>
+            <xsl:variable name="url" select="'/coffee-shop/order'"/>
             <root>
-                <url>/coffee-shop/order</url>
-                <pfx3:options>
-                    <pfx3:link>
-                        <xsl:attribute name="title">Create Order</xsl:attribute>
-                        <xsl:attribute name="rel">create</xsl:attribute>
-                        <xsl:attribute name="type">application/vnd.coffee-shop+xml</xsl:attribute>
-                        <xsl:attribute name="href">/coffee-shop/order</xsl:attribute>
-                        <xsl:attribute name="method">POST</xsl:attribute>
-                        <pfx3:parameter>
-                            <xsl:attribute name="title">Firstname</xsl:attribute>
-                            <xsl:attribute name="name">firstname</xsl:attribute>
-                            <xsl:attribute name="type">text</xsl:attribute>
-                        </pfx3:parameter>
-                        <pfx3:parameter>
-                            <xsl:attribute name="title">Coffee</xsl:attribute>
-                            <xsl:attribute name="name">coffee</xsl:attribute>
-                            <xsl:attribute name="type">text</xsl:attribute>
-                        </pfx3:parameter>
-                        <pfx3:parameter>
-                            <xsl:attribute name="title">Sugar</xsl:attribute>
-                            <xsl:attribute name="name">sugar</xsl:attribute>
-                            <xsl:attribute name="type">text</xsl:attribute>
-                        </pfx3:parameter>
-                    </pfx3:link>
-                    <pfx3:link>
-                        <xsl:attribute name="title">Query Orders</xsl:attribute>
-                        <xsl:attribute name="rel">query</xsl:attribute>
-                        <xsl:attribute name="type">application/vnd.coffee-shop+xml</xsl:attribute>
-                        <xsl:attribute name="href">/coffee-shop/order</xsl:attribute>
-                        <xsl:attribute name="method">GET</xsl:attribute>
-                    </pfx3:link>
-                </pfx3:options>
+                <url>
+                    <xsl:value-of select="$url"/>
+                </url>
                 <expected-status>200 OK</expected-status>
+                <expected-link-rel>create</expected-link-rel>
+                <expected-link-rel>list</expected-link-rel>
             </root>
-        </pd:inputBindings>
-    </pd:activity>
-    <pd:activity name="optionsToString">
-        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-        <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>351</pd:x>
-        <pd:y>87</pd:y>
-        <config>
-            <processName>/server/interface/optionsToString.process</processName>
-        </config>
-        <pd:inputBindings>
-            <xsl:copy-of select="$input-data/root/pfx3:options"/>
         </pd:inputBindings>
     </pd:activity>
     <pd:activity name="Then the response status is (http status)">
@@ -120,20 +82,22 @@
             </root>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="Then they are provided with a mechanism for (creating) orders">
+    <pd:activity name="Then they are provided with a mechanism for (actioning) orders">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>749</pd:x>
+        <pd:x>753</pd:x>
         <pd:y>258</pd:y>
         <config>
             <processName>/test/uatTestSuite/steps/Then they are provided with a mechanism for (actioning) orders.process</processName>
         </config>
         <pd:inputBindings>
             <root>
-                <expected-text-content>
-                    <xsl:value-of select="$optionsToString/xmlString"/>
-                </expected-text-content>
                 <xsl:copy-of select="$When-a-staff-member-checks-the-available-options/ns7:response"/>
+                <xsl:for-each select="$input-data/root/expected-link-rel">
+                    <expected-link-rel>
+                        <xsl:value-of select="."/>
+                    </expected-link-rel>
+                </xsl:for-each>
             </root>
         </pd:inputBindings>
     </pd:activity>
@@ -171,7 +135,7 @@
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>Then they are provided with a mechanism for (creating) orders</pd:from>
+        <pd:from>Then they are provided with a mechanism for (actioning) orders</pd:from>
         <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
@@ -179,13 +143,6 @@
     </pd:transition>
     <pd:transition>
         <pd:from>input data</pd:from>
-        <pd:to>optionsToString</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>optionsToString</pd:from>
         <pd:to>Given a coffee ordering system at (url)</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
@@ -193,7 +150,7 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Then the response status is (http status)</pd:from>
-        <pd:to>Then they are provided with a mechanism for (creating) orders</pd:to>
+        <pd:to>Then they are provided with a mechanism for (actioning) orders</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
