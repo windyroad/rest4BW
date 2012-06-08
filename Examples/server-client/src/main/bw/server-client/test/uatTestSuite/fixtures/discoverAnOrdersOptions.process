@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/coffee-shop" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <pd:name>test/uatTestSuite/fixtures/discoverAnOrdersOptions.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="order-state" type="xsd:string"/>
+                    <xsd:element name="expected-http-status" type="xsd:string"/>
+                    <xsd:element name="expected-list-rel" type="xsd:string" maxOccurs="unbounded"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>91</pd:startX>
+    <pd:startY>85</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>727</pd:endX>
+    <pd:endY>85</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1338665230923</pd:targetNamespace>
+    <pd:activity name="buildOrder">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>312</pd:x>
+        <pd:y>84</pd:y>
+        <config>
+            <processName>/test/uatTestSuite/util/buildOrder.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <initial-state>
+                    <xsl:value-of select="$Start/root/order-state"/>
+                </initial-state>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="discoverAnOrdersOptions">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>500</pd:x>
+        <pd:y>88</pd:y>
+        <config>
+            <processName>/test/uatTestSuite/scenarioOutlines/discoverAnOrdersOptions.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ns:coffee-order>
+                    <ns:firstname>
+                        <xsl:value-of select="$buildOrder/ns:coffee-order/ns:firstname"/>
+                    </ns:firstname>
+                    <ns:coffee>
+                        <xsl:value-of select="$buildOrder/ns:coffee-order/ns:coffee"/>
+                    </ns:coffee>
+                    <ns:sugar>
+                        <xsl:value-of select="$buildOrder/ns:coffee-order/ns:sugar"/>
+                    </ns:sugar>
+                    <ns:state>
+                        <xsl:value-of select="$Start/root/order-state"/>
+                    </ns:state>
+                    <ns:created-datetime>
+                        <xsl:value-of select="$buildOrder/ns:coffee-order/ns:created-datetime"/>
+                    </ns:created-datetime>
+                </ns:coffee-order>
+                <url>
+                    <xsl:value-of select="concat('/coffee-shop/order/',$buildOrder/ns:coffee-order/ns:firstname)"/>
+                </url>
+                <xsl:for-each select="$Start/root/expected-list-rel">
+                    <expected-link-rel>
+                        <xsl:value-of select="."/>
+                    </expected-link-rel>
+                </xsl:for-each>
+                <expected-http-status>
+                    <xsl:value-of select="$Start/root/expected-http-status"/>
+                </expected-http-status>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>buildOrder</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>buildOrder</pd:from>
+        <pd:to>discoverAnOrdersOptions</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>discoverAnOrdersOptions</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -42,22 +42,6 @@
             </allow>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="501 Not Implemented">
-        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-        <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>548</pd:x>
-        <pd:y>314</pd:y>
-        <config>
-            <processName>/REST/StatusCodes/5xx Server Error/501 Not Implemented.process</processName>
-        </config>
-        <pd:inputBindings>
-            <root>
-                <errorMessage>
-                    <xsl:value-of select="concat('Service not implemented yet - method=',$Start/root/pfx:request/pfx:method,', command=',$Start/root/pfx:request/pfx:command)"/>
-                </errorMessage>
-            </root>
-        </pd:inputBindings>
-    </pd:activity>
     <pd:activity name="action">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
@@ -101,6 +85,9 @@
                 <xsl:when test="$options/*">
                     <xsl:copy-of select="$options/*"/>
                 </xsl:when>
+                <xsl:when test="$get/*">
+                    <xsl:copy-of select="$get/*"/>
+                </xsl:when>
                 <xsl:otherwise>
                     <xsl:copy-of select="$cancel/*"/>
                 </xsl:otherwise>
@@ -115,7 +102,19 @@
         <config/>
         <pd:inputBindings/>
     </pd:activity>
-    <pd:activity name="GET">
+    <pd:activity name="edit">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>539</pd:x>
+        <pd:y>148</pd:y>
+        <config>
+            <processName>/server/services/Order/edit.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Start/root"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="GET_">
         <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
         <pd:resourceType>ae.activities.null</pd:resourceType>
         <pd:x>423</pd:x>
@@ -138,6 +137,18 @@
         <pd:y>258</pd:y>
         <config/>
         <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="options">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>548</pd:x>
+        <pd:y>381</pd:y>
+        <config>
+            <processName>/server/services/Order/options.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Start/*"/>
+        </pd:inputBindings>
     </pd:activity>
     <pd:activity name="OPTIONS_">
         <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
@@ -163,28 +174,16 @@
         <config/>
         <pd:inputBindings/>
     </pd:activity>
-    <pd:activity name="edit">
+    <pd:activity name="get">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>539</pd:x>
-        <pd:y>148</pd:y>
+        <pd:x>540</pd:x>
+        <pd:y>308</pd:y>
         <config>
-            <processName>/server/services/Order/edit.process</processName>
+            <processName>/server/services/Order/get.process</processName>
         </config>
         <pd:inputBindings>
             <xsl:copy-of select="$Start/root"/>
-        </pd:inputBindings>
-    </pd:activity>
-    <pd:activity name="options">
-        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-        <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>548</pd:x>
-        <pd:y>396</pd:y>
-        <config>
-            <processName>/server/services/Order/options.process</processName>
-        </config>
-        <pd:inputBindings>
-            <xsl:copy-of select="$Start/*"/>
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>
@@ -205,7 +204,7 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Null</pd:from>
-        <pd:to>GET</pd:to>
+        <pd:to>GET_</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>xpath</pd:conditionType>
@@ -270,13 +269,6 @@
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>GET</pd:from>
-        <pd:to>501 Not Implemented</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
         <pd:from>action</pd:from>
         <pd:to>Null-1</pd:to>
         <pd:lineType>Default</pd:lineType>
@@ -313,6 +305,20 @@
     </pd:transition>
     <pd:transition>
         <pd:from>options</pd:from>
+        <pd:to>Null-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GET_</pd:from>
+        <pd:to>get</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>get</pd:from>
         <pd:to>Null-1</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>

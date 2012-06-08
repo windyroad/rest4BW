@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://windyroad.org/wr-http.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/coffee-shop">
+    <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/server/model/CoffeeShop.xsd"/>
+    <pd:name>test/uatTestSuite/scenarioOutlines/discoverAnOrdersOptions.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx:coffee-order"/>
+                    <xsd:element name="url" type="xsd:string"/>
+                    <xsd:element name="expected-link-rel" type="xsd:string" maxOccurs="unbounded"/>
+                    <xsd:element name="expected-http-status" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>61</pd:startX>
+    <pd:startY>80</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>896</pd:endX>
+    <pd:endY>230</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1338634729121</pd:targetNamespace>
+    <pd:activity name="Given a coffee ordering system at (url)">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>356</pd:x>
+        <pd:y>94</pd:y>
+        <config>
+            <processName>/test/uatTestSuite/steps/Given a coffee ordering system at (url).process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <url>
+                    <xsl:value-of select="$Start/root/url"/>
+                </url>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Given an order in state (start state)">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>207</pd:x>
+        <pd:y>94</pd:y>
+        <config>
+            <processName>/test/uatTestSuite/steps/Given an order in state (start state).process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:copy-of select="$Start/root/pfx:coffee-order"/>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Then the order is in state (end state)">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>735</pd:x>
+        <pd:y>244</pd:y>
+        <config>
+            <processName>/test/uatTestSuite/steps/Then the order is in state (end state).process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <firstname>
+                    <xsl:value-of select="$Start/root/pfx:coffee-order/pfx:firstname"/>
+                </firstname>
+                <expected-state>
+                    <xsl:value-of select="$Start/root/pfx:coffee-order/pfx:state"/>
+                </expected-state>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Then the response status is (http status)">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>356</pd:x>
+        <pd:y>244</pd:y>
+        <config>
+            <processName>/test/uatTestSuite/steps/Then the response status is (http status).process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:copy-of select="$When-a-staff-member-checks-the-available-options/ns1:response"/>
+                <expected-status>
+                    <xsl:value-of select="$Start/root/expected-http-status"/>
+                </expected-status>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Then they are provided with a mechanism for (actioning) orders">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>540</pd:x>
+        <pd:y>251</pd:y>
+        <config>
+            <processName>/test/uatTestSuite/steps/Then they are provided with a mechanism for (actioning) orders.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <firstname>
+                    <xsl:value-of select="$Start/root/pfx:coffee-order/pfx:firstname"/>
+                </firstname>
+                <xsl:copy-of select="$When-a-staff-member-checks-the-available-options/ns1:response"/>
+                <xsl:for-each select="$Start/root/expected-link-rel">
+                    <expected-link-rel>
+                        <xsl:value-of select="."/>
+                    </expected-link-rel>
+                </xsl:for-each>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="When a staff member checks the available options">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>540</pd:x>
+        <pd:y>94</pd:y>
+        <config>
+            <processName>/test/uatTestSuite/steps/When a staff member checks the available options.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <url>
+                    <xsl:value-of select="$Given-a-coffee-ordering-system-at-url/root/url"/>
+                </url>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Given an order in state (start state)</pd:from>
+        <pd:to>Given a coffee ordering system at (url)</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Given an order in state (start state)</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Then the order is in state (end state)</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Given a coffee ordering system at (url)</pd:from>
+        <pd:to>When a staff member checks the available options</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Then the response status is (http status)</pd:from>
+        <pd:to>Then they are provided with a mechanism for (actioning) orders</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Then they are provided with a mechanism for (actioning) orders</pd:from>
+        <pd:to>Then the order is in state (end state)</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>When a staff member checks the available options</pd:from>
+        <pd:to>Then the response status is (http status)</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>
