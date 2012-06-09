@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project default="build"
-         name="rest-tib-lib-build"
+<project default="pre-commit"
+         name="rest-tib-lib"
          xmlns="antlib:org.apache.tools.ant"
          xmlns:bwubuild="org.windyroad.bwunit.build"
          xmlns:bwunit="org.windyroad.bwunit"
          xmlns:tibant="org.windyroad.tibant"
          xmlns:ivy="antlib:org.apache.ivy.ant"
-         xmlns:au="antlib:org.apache.ant.antunit"
          xmlns:curl="org.windyroad.curl"
          xmlns:assembla="org.windyroad.assembla"
          xmlns:milestone="org.windyroad.assembla.milestone"
@@ -41,50 +40,20 @@
 
 
 	<target name="projlib" depends="-load-ant-contrib">
-		<property name="rest-tib-lib.projlib" location="build/rest-tib-lib.projlib" />
 		<tibant:build-library lib="/Build/rest-tib-lib"
 		                      dir="src/main/bw"
 		                      project="rest-tib-lib"
 		                      aliases-refid="bwunit.aliases"
 		                      out="${rest-tib-lib.projlib}"
 		                      validate="true"
-		                      validate-max-warnings="100"
+		                      validate-max-warnings="0"
 		                      validate-expected-errors="0"
 		                      create-dtl-file="true" />
-	</target>
-
-	<target name="dist" depends="build" description="creates a zip distribution of the current build">
-		<zip destfile="build/rest-tib-lib.zip">
-			<!--
-			<zipfileset dir="build" includes="BWUnit*User*Guide.html" prefix="" />
-			<zipfileset dir="Examples"
-			            includes="**"
-			            excludes="*/build/**,*/config/Tom*,*/config/ci*,*/src/bw/Build/**,lib/TIBant*.zip,Simple/src/bw/Simple/Support/**"
-			            prefix="Examples" />
-			<zipfileset dir="util" includes="**" prefix="util" />
-			<zipfileset dir="lib" includes="tibant/**" prefix="lib" />
-			<zipfileset dir="gi" includes="**/*" excludes="bwunit.html" prefix="UI" />
-			<zipfileset dir="gi" includes="bwunit.html" prefix="" />
-			<zipfileset dir="${tibco.home.gi}" prefix="UI/gi">
-				<include name="JSX/**" />
-				<include name="jsx3.gui.window.html" />
-				<include name="jsx3.gui.window.xhtml" />
-				<include name="logger.xml" />
-				<include name="shell.html" />
-				<include name="shell.xhtml" />
-			</zipfileset>
-			<zipfileset dir="build" includes="BWUnit.jar" />
-			<zipfileset dir="." includes="copyright.html" />
-			-->
-			<zipfileset dir="build" includes="rest-tib-lib.projlib" />
-		</zip>
 	</target>
 
 	<target name="init">
 		<mkdir dir="build" />
 	</target>
-
-	<target name="determine-version" depends="-determine-version" />
 
 	<target name="-determine-version" depends="-load-ivy,-load-ant-contrib">
 		<if>
@@ -123,36 +92,12 @@
 		<echo>Currently Published Version: ${current.publish.revision}</echo>
 	</target>
 
-
 	<target name="check-version" depends="-determine-version" description="" />
 
-	<target name="designer" depends="-load-ant-contrib" description="Launch BWUnit in TIBCO Designer">
-		<tibant:designer dir="src/main/bw" project="rest-tib-lib" aliases-refid="bwunit.aliases" create-dtl-file="true" />
-	</target>
-
-	<target name="designer-test-example"
-	        depends="projlib,-load-ant-contrib"
-	        description="Launch Test Example Project in TIBCO Designer">
-		<bwunit:designer dir="test/resources" project="TestProject" create-dtl-file="true" />
-	</target>
-
-	<target name="bw-start-test-example"
-	        depends="projlib,-load-ant-contrib"
-	        description="Run the Test Example Project locally">
-		<property name="BWUnit/StaticPath" location="src/newui" />
-		<propertyset id="test-example.gvars">
-			<propertyref name="BWUnit/StaticPath" />
-			<propertyref name="BWUnit/HTTP-service-port" />
-		</propertyset>
-		<bwunit:bw-start dir="test/resources"
-		                 project="TestProject"
-		                 create-dtl-file="true"
-		                 global-variables-refid="test-example.gvars"
-		                 spawn="true" />
-	</target>
-
-	<target name="bw-stop" depends="-load-ant-contrib" description="Stop a locally running BW project">
-		<bwunit:bw-stop />
+	<target name="designer" depends="-load-ant-contrib" description="Launch ${ant.project.name} in TIBCO Designer">
+		<bwunit:designer dir="src/main/bw"
+		                 project="rest-tib-lib"
+		                 create-dtl-file="true" />
 	</target>
 
 	<target name="clean" description="">
@@ -165,9 +110,6 @@
 		<subant target="clean">
 			<fileset dir="Examples" includes="**/build.xml" />
 		</subant>
-		<!--subant target="clean">
-			<fileset dir="test/resources" includes="build.xml" />
-		</subant-->
 	</target>
 
 	<target name="clean-lib" description="">
@@ -177,8 +119,6 @@
 	<target name="clean-all" depends="clean,clean-lib" description="" />
 
 	<target name="build" depends="projlib" description="Build binaries" />
-
-
 
 	<target name="-download-ivy" unless="ivy.downloaded">
 		<mkdir dir="${ivy.jar.dir}" />
@@ -217,7 +157,7 @@
 				</not>
 				<uptodate property="bwunit-uptodate">
 					<srcfiles dir="lib/bwunit" includes="**" />
-					<mapper type="merge" to="${bwunit.BWUnit-bin}" />
+					<mapper type="merge" to="${bwunit.BWUnit}" />
 				</uptodate>
 			</or>
 		</condition>
@@ -294,10 +234,10 @@
 
 	<target name="doc" description="builds user guide" depends="retrieve,-determine-version">
 		<mkdir dir="build" />
-		<bwubuild:gen-doc in="util/bwunit.xml" out="build/BWUnit-User-Guide.html" version="${releases.new.revision}" />
+		<bwubuild:gen-doc in="util/bwunit.xml" out="build/${ant.project.name}-User-Guide.html" version="${releases.new.revision}" />
 	</target>
 
-	<target name="publish" depends="dist,-determine-version" description="">
+	<target name="publish" depends="build,-determine-version" description="">
 		<echo message="Ivy Resolver - ${ivy.resolver}" />
 		<fail message="Cannot publish directly to releases">
 			<condition>
@@ -311,7 +251,8 @@
 		             pubrevision="${publish.revision}"
 		             status="integration"
 		             overwrite="true"
-		             update="true" />
+		             update="true" 
+			         conf="default"/>
 		<echo level="info" message="...published" />
 		<echo file="build/pubrevision.properties">version=${publish.revision}</echo>
 	</target>
@@ -323,7 +264,7 @@ To Releases Version: ${releases.new.revision}</echo>
 		              module="${ivy.module}"
 		              revision="${snapshots.revision}"
 		              inline="true"
-		              transitive="false" />
+		              transitive="false" conf="default" />
 		<ivy:publish artifactspattern="lib/[artifact]-${snapshots.revision}.[ext]"
 		             resolver="releases"
 		             pubrevision="${releases.new.revision}"
@@ -331,7 +272,7 @@ To Releases Version: ${releases.new.revision}</echo>
 		             overwrite="false"
 		             update="true"
 		             forcedeliver="true"
-		             delivertarget="-publish-recurse" />
+		             delivertarget="-publish-recurse" conf="default"/>
 		<echo file="build/pubrevision.properties">version=${releases.new.revision}</echo>
 	</target>
 
@@ -341,72 +282,6 @@ To Releases Version: ${releases.new.revision}</echo>
 		<fail>Not implemented</fail>
 	</target>
 
-	<target name="-load-antunit" depends="retrieve" unless="antunit.loaded">
-		<taskdef uri="antlib:org.apache.ant.antunit" resource="org/apache/ant/antunit/antlib.xml">
-			<classpath>
-				<pathelement location="${ant-antunit.ant-antunit}" />
-			</classpath>
-		</taskdef>
-		<property name="antunit.loaded" value="true" />
-	</target>
-
-	<macrodef name="run-antunit-tests"
-	          uri="org.windyroad.bwunit.build"
-	          description="runs the antunit tests and by default fails the build on the first error">
-		<attribute name="phase" />
-		<attribute name="failonerror" default="true" />
-		<sequential>
-			<mkdir dir="build/@{phase}" />
-			<for param="antunit">
-				<fileset dir="build/@{phase}" includes="*.xml" />
-				<sequential>
-					<au:antunit failonerror="@{failonerror}">
-						<propertyset>
-							<propertyref name="config.filename" />
-						</propertyset>
-						<path>
-							<pathelement location="@{antunit}" />
-						</path>
-						<au:plainlistener logLevel="info" />
-						<au:xmllistener todir="build" loglevel="info" />
-					</au:antunit>
-				</sequential>
-			</for>
-		</sequential>
-	</macrodef>
-
-	<macrodef name="report-antunit-tests"
-	          uri="org.windyroad.bwunit.build"
-	          description="runs the antunit tests and reports on all tests passed and failed.">
-		<attribute name="phase" />
-		<sequential>
-			<bwubuild:run-antunit-tests phase="@{phase}" failonerror="false" />
-			<!-- after running all the tests, convert them to junit results so hudson can understand them -->
-			<for param="antunit">
-				<fileset dir="test/@{phase}" includes="*.xml" />
-				<sequential>
-					<basename file="@{antunit}" property="@{antunit}.basename" />
-					<propertyregex property="@{antunit}.basename.norm"
-					               input="${@{antunit}.basename}"
-					               regexp="\."
-					               replace="_"
-					               casesensitive="false"
-					               defaultValue="${@{antunit}.basename}" />
-					<tempfile property="@{antunit}.fixed" destdir="build" deleteonexit="true" />
-					<tibant:xslt in="build/TEST-test.@{phase}.${@{antunit}.basename.norm}.xml"
-					             out="${@{antunit}.fixed}"
-					             style="util/xslt/fix-antunit-output.xslt" />
-					<copy file="${@{antunit}.fixed}"
-					      tofile="build/@{phase}/${@{antunit}.basename.norm}.xml"
-					      overwrite="true" />
-					<schemavalidate noNamespaceFile="src/schemas/JUnit.xsd"
-					                file="build/@{phase}/${@{antunit}.basename.norm}.xml">
-					</schemavalidate>
-				</sequential>
-			</for>
-		</sequential>
-	</macrodef>
-
 	<macrodef name="run-bwunit-tests"
 	          uri="org.windyroad.bwunit.build"
 	          description="runs the bwunit tests and by default fails the build on the first error">
@@ -414,14 +289,6 @@ To Releases Version: ${releases.new.revision}</echo>
 		<attribute name="failonerror" default="true" />
 		<sequential>
 			<loadfile property="bwunit.license" srcfile="${bwunit.license.file}" />
-			<property name="BWUnit-SelfTest/license-info" value="${bwunit.license.info.file}" />
-			<property name="BWUnit-SelfTest/license-path" value="${bwunit.license.file}" />
-			<property name="BWUnit/StaticPath" value="${basedir}/build" />
-			<propertyset id="bwunit.selftest.gvars">
-				<propertyref name="BWUnit-SelfTest/license-info" />
-				<propertyref name="BWUnit-SelfTest/license-path" />
-				<propertyref name="BWUnit/StaticPath" />
-			</propertyset>
 			<for param="testsuite">
 				<dirset dir="src/main/bw" includes="**/test/@{phase}TestSuite" id="@{phase}.dirs" />
 				<sequential>
@@ -436,7 +303,6 @@ To Releases Version: ${releases.new.revision}</echo>
 					                  failonerror="@{failonerror}"
 					                  license="${bwunit.license}"
 					                  create-dtl-file="true"
-					                  global-variables-refid="bwunit.selftest.gvars"
 					                  scope="test/@{phase}TestSuite/" />
 				</sequential>
 			</for>
@@ -459,26 +325,21 @@ To Releases Version: ${releases.new.revision}</echo>
 		</sequential>
 	</macrodef>
 
-	<target name="validate-projlib"
-	        description="Validate the compiled projlib">
-		<tibant:designer dir="src/main/bw" project="rest-tib-lib"
-			expected-errors="0"
-			max-warnings="0"
-						
-			/>
+	<target name="validate-projlib" description="Validate the compiled projlib">
+		<tibant:designer dir="src/main/bw" project="rest-tib-lib" expected-errors="0" max-warnings="0" />
 	</target>
 
-	<target name="run-quick-tests" description="Run Quick tests" depends="-load-ant-contrib,-load-antunit,build">
+	<target name="run-quick-tests" description="Run Quick tests" depends="-load-ant-contrib,build">
 		<bwubuild:run-bwunit-tests phase="quick" />
 	</target>
 
 	<target name="report-quick-tests"
 	        description="Run Quick tests and create a JUnit compatible report"
-	        depends="-load-ant-contrib,-load-antunit,build">
+	        depends="-load-ant-contrib,build">
 		<bwubuild:report-bwunit-tests phase="quick" />
 	</target>
 
-	<target name="run-uat-tests" description="Run UATs" depends="-load-ant-contrib,-load-antunit,build">
+	<target name="run-uat-tests" description="Run UATs" depends="-load-ant-contrib,build">
 		<bwubuild:run-bwunit-tests phase="uat" />
 		<subant target="run-uat-tests">
 			<fileset dir="Examples" includes="*/build.xml" />
@@ -487,23 +348,11 @@ To Releases Version: ${releases.new.revision}</echo>
 
 	<target name="report-uat-tests"
 	        description="Run UATs and create a JUnit compatible report"
-	        depends="-load-ant-contrib,-load-antunit,build">
+	        depends="-load-ant-contrib,build">
 		<bwubuild:report-bwunit-tests phase="uat" />
 		<subant target="report-uat-tests">
 			<fileset dir="Examples" includes="*/build.xml" />
 		</subant>
-	</target>
-
-	<target name="run-dist-tests" description="Run Dist Tests" depends="-load-ant-contrib,-load-antunit,build">
-		<bwubuild:run-bwunit-tests phase="dist" />
-		<bwubuild:run-antunit-tests phase="dist" />
-	</target>
-
-	<target name="report-dist-tests"
-	        description="Run Dist test and create a JUnit compatible report"
-	        depends="-load-ant-contrib,-load-antunit,build">
-		<bwubuild:report-bwunit-tests phase="dist" />
-		<bwubuild:report-antunit-tests phase="dist" />
 	</target>
 
 	<target name="pre-commit" description="Run pre-commit tests" depends="run-quick-tests" />
@@ -538,7 +387,7 @@ To Releases Version: ${releases.new.revision}</echo>
 				<arg value='POST' />
 				<arg value='-H' />
 				<arg value='Accept: application/xml' />
-				<arg value='https://www.assembla.com/spaces/bwunit/milestones' />
+				<arg value='https://www.assembla.com/spaces/rest-tib-lib/milestones' />
 				<arg value='-F' />
 				<arg value='milestone[title]=v@{version}' />
 				<arg value='-o' />
@@ -593,7 +442,7 @@ To Releases Version: ${releases.new.revision}</echo>
 			<tstamp>
 				<format property="milestone[due_date]" pattern="yyyy/MM/dd" />
 			</tstamp>
-			<echo file="build/release-notes-@{version}.txt">[[url:https://www.assembla.com/spaces/bwunit/tickets/custom_report/28347|Closed Defects and Implemented Features]]
+			<echo file="build/release-notes-@{version}.txt">[[url:https://www.assembla.com/spaces/rest-tib-lib/tickets/custom_report/28347|Closed Defects and Implemented Features]]
 Source Code Revision ${mercurial.revision}</echo>
 			<loadfile property="milestone.@{version}.releasenotes" srcfile="build/release-notes-@{version}.txt" />
 			<exec executable="curl" dir="." failonerror="true">
@@ -604,7 +453,7 @@ Source Code Revision ${mercurial.revision}</echo>
 				<arg value='PUT' />
 				<arg value='-H' />
 				<arg value='Accept: application/xml' />
-				<arg value='http://www.assembla.com/spaces/bwunit/milestones/${milestone.@{version}.id}' />
+				<arg value='http://www.assembla.com/spaces/rest-tib-lib/milestones/${milestone.@{version}.id}' />
 				<arg value='-F' />
 				<arg value='milestone[is_completed]=1' />
 				<arg value='-F' />
@@ -630,7 +479,7 @@ Source Code Revision ${mercurial.revision}</echo>
                 <arg value='DELETE' />
                 <arg value='-H' />
                 <arg value='Accept: application/xml' />
-                <arg value='http://www.assembla.com/spaces/bwunit/milestones/@{id}' />
+                <arg value='http://www.assembla.com/spaces/rest-tib-lib/milestones/@{id}' />
                 <arg value='-o' />
                 <arg value='build/delete-milestone-@{id}.xml' />
             </exec>
@@ -667,7 +516,7 @@ Source Code Revision ${mercurial.revision}</echo>
                         <arg value='document[attachable_type]=Milestone' />
                         <arg value='-F' />
                         <arg value='document[file]=@${upload.basename}' />
-                        <arg value='https://www.assembla.com/spaces/bwunit/documents' />
+                        <arg value='https://www.assembla.com/spaces/rest-tib-lib/documents' />
                     </exec>
                     <var name="upload.basename" unset="true" />
                 </sequential>
@@ -680,7 +529,7 @@ Source Code Revision ${mercurial.revision}</echo>
         <sequential>
             <echo file="build/post.xml">&lt;?xml version="1.0"?&gt;
 &lt;entry xmlns="http://www.w3.org/2005/Atom" xmlns:app="http://www.w3.org/2007/app"&gt;
-    &lt;title&gt;BWUnit™ v@{version} Released&lt;/title&gt;
+    &lt;title&gt;${ant.project.name}™ v@{version} Released&lt;/title&gt;
     &lt;id /&gt;
     &lt;updated /&gt;
     &lt;author /&gt;
@@ -689,7 +538,7 @@ Source Code Revision ${mercurial.revision}</echo>
     &lt;/app:control&gt;
     &lt;content type="xhtml" xml:lang="en"&gt;
         &lt;p xmlns="http://www.w3.org/1999/xhtml"&gt;
-            &lt;a href="https://windyroad.assembla.com/spaces/bwunit/milestones/${milestone.@{version}.id}"&gt;BWUnit v@{version}&lt;/a&gt; has been released. For details, please see the &lt;a href="https://windyroad.assembla.com/spaces/bwunit/tickets/custom_report/28347"&gt;Closed Defects and Implemented Features List&lt;/a&gt;.&lt;/p&gt;
+            &lt;a href="https://windyroad.assembla.com/spaces/rest-tib-lib/milestones/${milestone.@{version}.id}"&gt;${ant.project.name} v@{version}&lt;/a&gt; has been released. For details, please see the &lt;a href="https://windyroad.assembla.com/spaces/rest-tib-lib/tickets/custom_report/28347"&gt;Closed Defects and Implemented Features List&lt;/a&gt;.&lt;/p&gt;
     &lt;/content&gt;
     &lt;category scheme="http://windyroad.org" term="News" /&gt;
     &lt;category scheme="http://windyroad.org" term="Software Releases" /&gt;
@@ -722,7 +571,7 @@ Source Code Revision ${mercurial.revision}</echo>
                 <arg value='GET' />
                 <arg value='-H' />
                 <arg value='Accept: application/xml' />
-                <arg value='https://www.assembla.com/spaces/bwunit/tickets/custom_report/167263' />
+                <arg value='https://www.assembla.com/spaces/rest-tib-lib/tickets/custom_report/167263' />
                 <arg value='-o' />
                 <arg value='build/tickets.xml' />
             </exec>
@@ -750,7 +599,7 @@ Source Code Revision ${mercurial.revision}</echo>
                         <arg value='PUT' />
                         <arg value='-H' />
                         <arg value='Accept: application/xml' />
-                        <arg value='http://www.assembla.com/spaces/bwunit/tickets/${ticket.@{ticket-file}.number}' />
+                        <arg value='http://www.assembla.com/spaces/rest-tib-lib/tickets/${ticket.@{ticket-file}.number}' />
                         <arg value='-F' />
                         <arg value='ticket[milestone_id]=${milestone.@{version}.id}' />
                         <arg value='-o' />
@@ -794,19 +643,18 @@ Source Code Revision ${mercurial.revision}</echo>
 
         <taskdef name="scp" classname="org.apache.tools.ant.taskdefs.optional.ssh.Scp">
             <classpath>
-                <fileset dir="lib">
-                        <include name="*.jar" />
+                <fileset dir=".">
+                        <include name="lib/*.jar" />
                 </fileset>
             </classpath>
         </taskdef>
 
         <!-- yay. here we finally do the scp -->
-        <scp localFile="build/upload/BWUnit-User-Guide-v${release.version}.html"
-             remoteTofile="${wr.site.username}@s25627.gridserver.com:${wr.site.path}/static/BWUnit-User-Guide.html"
+        <scp localFile="build/upload/${ant.project.name}-User-Guide-v${release.version}.html"
+             remoteTofile="${wr.site.username}@s25627.gridserver.com:${wr.site.path}/static/${ant.project.name}-User-Guide.html"
              password="${wr.site.password}"
              trust="true"
-             failonerror="false" />
-        <!-- once we know this is working, will set failonerror back to true -->
+             failonerror="true" />
     </target>
     
     <target name="close-assembla-milestone" depends="-load-ant-contrib">
@@ -826,155 +674,5 @@ Source Code Revision ${mercurial.revision}</echo>
 		<delete dir="${user.home}/.ivy2/local" verbose="true" />
 	</target>
 
-	<pathconvert property="jruby.home" dirsep="/">
-		<path>
-			<pathelement location="${basedir}/lib/.jruby" />
-		</path>
-	</pathconvert>
 
-	<pathconvert property="feature.home" dirsep="/">
-		<path>
-			<pathelement location="test/features" />
-		</path>
-	</pathconvert>
-
-	<target name="cucumber" depends="-install-gems,projlib" description="Run Cucumber">
-		<mkdir dir="target/junit-report" />
-		<taskdef name="cucumber" classname="cuke4duke.ant.CucumberTask" classpathref="compile.classpath" />
-		<cucumber args="--verbose 
-          'LIC=${bwunit.license.file}'
-          --format pretty --format junit
-          --out build/junit-report test/features"
-		          objectFactory="pico">
-		</cucumber>
-	</target>
-
-	   <target name="cucumber-current"
-	           depends="-install-gems,projlib"
-	           description="Run Cucumber for scenarios tagged @current">
-	        <mkdir dir="target/junit-report" />
-	        <taskdef name="cucumber" classname="cuke4duke.ant.CucumberTask" classpathref="compile.classpath" />
-	        <cucumber args="--verbose 
-	          'LIC=${bwunit.license.file}'
-	          --format pretty --format junit 
-	        	-t @current
-	          --out build/junit-report test/features"
-	                  objectFactory="pico"
-	                  failonerror="true">
-	        </cucumber>
-	    </target>
-
-	<macrodef uri="org.windyroad.bwunit.build" name="gem">
-		<attribute name="gem" />
-		<attribute name="version" default="'>= 0'" />
-		<attribute name="args" default="" />
-					<sequential>
-						<mkdir dir="${jruby.home}/gems" />
-						<if>
-							<resourcecount when="equal" count="0">
-								<dirset dir="${jruby.home}/gems" includes="@{gem}-@{version}*" />
-							</resourcecount>
-							<then>
-								<echo>installing @{gem} @{version}</echo>
-								<gem args="install @{gem} --version @{version} @{args}" />
-							</then>
-						</if>
-					</sequential>
-				</macrodef>
-
-				<target name="-install-gems" depends="-define-paths,-load-ant-contrib">
-					<taskdef name="gem" classname="cuke4duke.ant.GemTask" classpathref="compile.classpath" />
-					<bwubuild:gem gem="cuke4duke" version="0.4.4" />
-					<bwubuild:gem gem="nokogiri" version="1.5.0" />
-					<bwubuild:gem gem="rspec" version="2.7.0" />
-					<bwubuild:gem gem="rest-client" version="1.6.7" />
-					<bwubuild:gem gem="jruby-openssl" version="0.7.4" />
-				</target>
-
-				<target name="-define-paths" depends="retrieve">
-					<path id="jruby.classpath">
-						<fileset dir="${ant.library.dir}">
-							<include name="**/*.jar" />
-						</fileset>
-						<fileset dir="lib">
-							<include name="**/*.jar" />
-						</fileset>
-						<fileset dir="C:/tibco/jre/1.5.0/lib">
-							<include name="**/*.jar" />
-						</fileset>
-						<fileset dir="C:/tibco/bw/5.8/hotfix/lib">
-							<include name="**/*.jar" />
-						</fileset>
-						<fileset dir="C:/tibco/bw/5.8/lib">
-							<include name="**/*.jar" />
-						</fileset>
-						<fileset dir="C:/tibco/bw/5.8/lib/palettes">
-							<include name="**/*.jar" />
-						</fileset>
-						<fileset dir="C:/tibco/bw/5.8/../plugins/lib">
-							<include name="**/*.jar" />
-						</fileset>
-						<fileset dir="C:/tibco/bw/5.8/../plugins/lib/palettes">
-							<include name="**/*.jar" />
-						</fileset>
-						<fileset dir="C:/tibco/tra/5.6/hotfix/lib">
-							<include name="**/*.jar" />
-						</fileset>
-						<fileset dir="C:/tibco/tra/5.6/lib">
-							<include name="**/*.jar" />
-						</fileset>
-						<!--fileset dir="C:/tibco/tra/5.6/hotfix/lib/palettes">
-                            <include name="**/*.jar" />
-                        </fileset-->
-						<fileset dir="C:/tibco/tra/5.6/lib/palettes">
-							<include name="**/*.jar" />
-						</fileset>
-						<fileset dir="C:/tibco/tra/5.6/lib/repository_mappers">
-							<include name="**/*.jar" />
-						</fileset>
-						<!--fileset dir="C:/tibco/tra/5.6/hotfix/icjava/6.2/lib">
-                            <include name="**/*.jar" />
-                        </fileset-->
-						<!--fileset dir="C:/tibco/tra/5.6/icjava/6.2/lib">
-                            <include name="**/*.jar" />
-                        </fileset-->
-						<fileset dir="C:/tibco/tibrv/8.1/lib">
-							<include name="**/*.jar" />
-						</fileset>
-						<fileset dir="C:/tibco/tpcl/5.6/lib/httpclient_3.0">
-							<include name="**/*.jar" />
-						</fileset>
-						<fileset dir="C:/tibco/tpcl/5.6/lib">
-							<include name="**/*.jar" />
-						</fileset>
-						<fileset dir="C:/tibco/tpcl/5.6/jdbc">
-							<include name="**/*.jar" />
-						</fileset>
-						<fileset dir="C:/tibco/tpcl/5.6/tomcat/5.5/bin">
-							<include name="**/*.jar" />
-						</fileset>
-						<fileset dir="C:/tibco/tpcl/5.6/tomcat/5.5/common/lib">
-							<include name="**/*.jar" />
-						</fileset>
-						<fileset dir="C:/tibco/tpcl/5.6/tomcat/5.5/server/lib">
-							<include name="**/*.jar" />
-						</fileset>
-						<fileset dir="C:/tibco/tpcl/5.6/tomcat/5.5/compatible/lib">
-							<include name="**/*.jar" />
-						</fileset>
-						<fileset dir="C:/tibco/hawk/lib">
-							<include name="**/*.jar" />
-						</fileset>
-						<fileset dir="C:/tibco/tpcl/5.6/lib/entrust">
-							<include name="**/*.jar" />
-						</fileset>
-					</path>
-					<echo>${toString:jruby.classpath}</echo>
-					<path id="compile.classpath">
-						<fileset dir="lib">
-							<include name="**/*.jar" />
-						</fileset>
-					</path>
-				</target>
-
-			</project>
+</project>
