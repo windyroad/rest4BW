@@ -20,3 +20,8 @@ src/main/bw/rest-tib-lib/.designtimelibs
 
 
 
+
+syntax: regexp
+^Examples/server-client/src/main/bw/server-client/server-client/\.designtimelibs$
+syntax: regexp
+^Examples/server-client/src/main/bw/server-client/\.designtimelibs$
