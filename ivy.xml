@@ -5,17 +5,19 @@
         organisation="org.windyroad"
         module="rest-tib-lib"
         status="release"/>
+    <configurations defaultconf="default" defaultconfmapping="default->default;test->default;dist->default">
+        <conf name="default"/>
+        <conf name="test"/>
+        <conf name="dist"/>
+    </configurations>
 	<publications>
-		<artifact name="rest-tib-lib" type="zip"/>
+		<artifact name="rest-tib-lib" type="projlib" conf="default"/>
 <!--
 		<artifact name="rest-tib-lib-lib-User-Guide" type="html" />
 -->
 	</publications>
 	<dependencies>
-        <dependency org="org.apache.ant" name="ant-antunit" rev="1.1"/>
-        <dependency org="org.windyroad" name="bwunit" rev="6" transitive="false"/>
-        <dependency org="org.windyroad" name="tibant" rev="6" transitive="false"/>
-        <dependency org="org.apache.ant" name="ant-jsch" rev="1.8.2"  transitive="false"/>
-        <dependency org="net.sf.mime-util" name="mime-util" rev="1.2"  transitive="false"/>
-       </dependencies>
+        <dependency org="org.windyroad" name="bwunit" rev="6" transitive="false" conf="default"/>
+        <dependency org="org.apache.ant" name="ant-jsch" rev="1.8.2"  transitive="false" conf="dist"/>
+    </dependencies>
 </ivy-module>
