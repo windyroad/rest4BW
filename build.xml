@@ -38,16 +38,16 @@
 		<property name="ant-contrib.loaded" value="true" />
 	</target>
 
+	<target name="validate" depends="-load-ant-contrib">
+		<bwunit:validate-project dir="src/main/bw" project="rest-tib-lib" max-warnings="0" create-dtl-file="true" />
+	</target>
 
-	<target name="projlib" depends="-load-ant-contrib">
+	<target name="projlib" depends="-load-ant-contrib,validate">
 		<tibant:build-library lib="/Build/rest-tib-lib"
 		                      dir="src/main/bw"
 		                      project="rest-tib-lib"
-		                      aliases-refid="bwunit.aliases"
 		                      out="${rest-tib-lib.projlib}"
-		                      validate="true"
-		                      validate-max-warnings="0"
-		                      validate-expected-errors="0"
+		                      validate="false"
 		                      create-dtl-file="true" />
 	</target>
 
@@ -95,9 +95,7 @@
 	<target name="check-version" depends="-determine-version" description="" />
 
 	<target name="designer" depends="-load-ant-contrib" description="Launch ${ant.project.name} in TIBCO Designer">
-		<bwunit:designer dir="src/main/bw"
-		                 project="rest-tib-lib"
-		                 create-dtl-file="true" />
+		<bwunit:designer dir="src/main/bw" project="rest-tib-lib" create-dtl-file="true" />
 	</target>
 
 	<target name="clean" description="">
@@ -234,7 +232,9 @@
 
 	<target name="doc" description="builds user guide" depends="retrieve,-determine-version">
 		<mkdir dir="build" />
-		<bwubuild:gen-doc in="util/bwunit.xml" out="build/${ant.project.name}-User-Guide.html" version="${releases.new.revision}" />
+		<bwubuild:gen-doc in="util/bwunit.xml"
+		                  out="build/${ant.project.name}-User-Guide.html"
+		                  version="${releases.new.revision}" />
 	</target>
 
 	<target name="publish" depends="build,-determine-version" description="">
@@ -251,8 +251,8 @@
 		             pubrevision="${publish.revision}"
 		             status="integration"
 		             overwrite="true"
-		             update="true" 
-			         conf="default"/>
+		             update="true"
+		             conf="default" />
 		<echo level="info" message="...published" />
 		<echo file="build/pubrevision.properties">version=${publish.revision}</echo>
 	</target>
@@ -264,7 +264,8 @@ To Releases Version: ${releases.new.revision}</echo>
 		              module="${ivy.module}"
 		              revision="${snapshots.revision}"
 		              inline="true"
-		              transitive="false" conf="default" />
+		              transitive="false"
+		              conf="default" />
 		<ivy:publish artifactspattern="lib/[artifact]-${snapshots.revision}.[ext]"
 		             resolver="releases"
 		             pubrevision="${releases.new.revision}"
@@ -272,7 +273,8 @@ To Releases Version: ${releases.new.revision}</echo>
 		             overwrite="false"
 		             update="true"
 		             forcedeliver="true"
-		             delivertarget="-publish-recurse" conf="default"/>
+		             delivertarget="-publish-recurse"
+		             conf="default" />
 		<echo file="build/pubrevision.properties">version=${releases.new.revision}</echo>
 	</target>
 
@@ -331,18 +333,18 @@ To Releases Version: ${releases.new.revision}</echo>
 
 	<target name="run-quick-tests" description="Run Quick tests" depends="-load-ant-contrib,build">
 		<bwubuild:run-bwunit-tests phase="quick" />
-        <subant target="run-quick-tests">
-            <fileset dir="Examples" includes="*/build.xml" />
-        </subant>
+		<subant target="run-quick-tests">
+			<fileset dir="Examples" includes="*/build.xml" />
+		</subant>
 	</target>
 
 	<target name="report-quick-tests"
 	        description="Run Quick tests and create a JUnit compatible report"
 	        depends="-load-ant-contrib,build">
 		<bwubuild:report-bwunit-tests phase="quick" />
-        <subant target="report-quick-tests">
-            <fileset dir="Examples" includes="*/build.xml" />
-        </subant>
+		<subant target="report-quick-tests">
+			<fileset dir="Examples" includes="*/build.xml" />
+		</subant>
 	</target>
 
 	<target name="run-uat-tests" description="Run UATs" depends="-load-ant-contrib,build">
