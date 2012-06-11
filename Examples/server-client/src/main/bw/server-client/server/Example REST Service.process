@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:ns2="http://windyroad.org/wr-http.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://xmlns.tibco.com/bw/plugin-api/messages/context" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://xmlns.tibco.com/encodings/mime" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd">
+<pd:ProcessDefinition xmlns:ns1="http://xmlns.tibco.com/bw/plugin-api/messages/context" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://xmlns.tibco.com/encodings/mime" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns2="http://windyroad.org/wr-http.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
     <pd:name>server/Example REST Service.process</pd:name>
     <pd:startName>HTTP Receiver</pd:startName>
     <pd:startX>0</pd:startX>
@@ -217,9 +217,7 @@
                         </xsl:for-each>
                     </ns2:request>
                 </xsl:for-each>
-                <dynamicDelegatorProcessOverride>
-                    <xsl:value-of select="'/server/REST Service.process'"/>
-                </dynamicDelegatorProcessOverride>
+                <handlerProcess>/server/REST Service.process</handlerProcess>
             </root>
         </pd:inputBindings>
     </pd:activity>

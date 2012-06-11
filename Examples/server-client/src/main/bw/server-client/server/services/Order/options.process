@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx1="http://windyroad.org/bwunit-abstract/installLicense2Impl" xmlns:ns31="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:ns7="http://windyroad.org/wr-http.xsd" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd" xmlns:ns11="http://windyroad.org/bwunit-0.0.0.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns4="http://windyroad.org/bwunit-abstract" xmlns:ns3="http://xmlns.tibco.com/encodings/mime" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://www.tibco.com/pe/DeployedVarsType" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://windyroad.org/coffee-shop" xmlns:pfx3="http://www.tibco.com/schemas/server-client/server/shared variables/Schema.xsd" xmlns:pfx21="http://windyroad.org/bwunit-concrete" xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:pfx6="http://windyroad.org/coffee-shop-interface">
+<pd:ProcessDefinition xmlns:ns4="http://windyroad.org/bwunit-abstract" xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns7="http://windyroad.org/wr-http.xsd" xmlns:pfx3="http://www.tibco.com/schemas/server-client/server/shared variables/Schema.xsd" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx1="http://windyroad.org/bwunit-abstract/installLicense2Impl" xmlns:ns5="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:pfx4="http://windyroad.org/coffee-shop" xmlns:ns6="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns31="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:pfx21="http://windyroad.org/bwunit-concrete" xmlns:ns11="http://windyroad.org/bwunit-0.0.0.xsd" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx5="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx6="http://windyroad.org/coffee-shop-interface" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:ns3="http://xmlns.tibco.com/encodings/mime" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
     <xsd:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
     <xsd:import namespace="http://windyroad.org/rest-delegate.xsd"/>
     <xsd:import namespace="http://www.tibco.com/schemas/server-client/server/shared variables/Schema.xsd" schemaLocation="/server/shared variables/Schema.xsd"/>
@@ -20,7 +20,11 @@
     <pd:startX>78</pd:startX>
     <pd:startY>191</pd:startY>
     <pd:returnBindings>
-        <xsl:copy-of select="$OK/pfx:response"/>
+        <pfx:response xsi:type="ns5:sc-200_OK">
+            <pfx:text-content>
+                <xsl:value-of select="$optionsToString/xmlString"/>
+            </pfx:text-content>
+        </pfx:response>
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
     <pd:endType ref="pfx:response"/>
@@ -31,36 +35,6 @@
     </pd:errorSchemas>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1338181537186</pd:targetNamespace>
-    <pd:activity name="200 OK">
-        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-        <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>928</pd:x>
-        <pd:y>190</pd:y>
-        <config>
-            <processName>/REST/StatusCodes/2xx Successful/200 OK.process</processName>
-        </config>
-        <pd:inputBindings>
-            <pfx:response>
-                <pfx:text-content>
-                    <xsl:value-of select="$optionsToString/xmlString"/>
-                </pfx:text-content>
-            </pfx:response>
-        </pd:inputBindings>
-    </pd:activity>
-    <pd:activity name="404 Not Found">
-        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-        <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>348</pd:x>
-        <pd:y>316</pd:y>
-        <config>
-            <processName>/REST/StatusCodes/4xx Client Error/404 Not Found.process</processName>
-        </config>
-        <pd:inputBindings>
-            <path>
-                <xsl:value-of select="$Start/root/pfx:request/pfx:command"/>
-            </path>
-        </pd:inputBindings>
-    </pd:activity>
     <pd:activity name="build coffee-shop options">
         <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
         <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
@@ -213,13 +187,26 @@
             <xsl:copy-of select="$de-multiplex/root/pfx6:options"/>
         </pd:inputBindings>
     </pd:activity>
-    <pd:transition>
-        <pd:from>200 OK</pd:from>
-        <pd:to>End</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
+    <pd:activity name="404">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>368</pd:x>
+        <pd:y>324</pd:y>
+        <config>
+            <faultName>HTTP-Error</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns6:ActivityInput>
+                <data>
+                    <pfx:error xsi:type="ns5:sc-404_Not_Found">
+                        <pfx:text-content>
+                            <xsl:value-of select="concat('Resource not found: ' , $Start/root/pfx:request/pfx:command)"/>
+                        </pfx:text-content>
+                    </pfx:error>
+                </data>
+            </ns6:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
     <pd:transition>
         <pd:from>Start</pd:from>
         <pd:to>Null-1</pd:to>
@@ -247,14 +234,14 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Null-1</pd:from>
-        <pd:to>404 Not Found</pd:to>
+        <pd:to>404</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>otherwise</pd:conditionType>
     </pd:transition>
     <pd:transition>
         <pd:from>optionsToString</pd:from>
-        <pd:to>200 OK</pd:to>
+        <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>

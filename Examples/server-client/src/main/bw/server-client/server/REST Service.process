@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx3="http://www.tibco.com/schemas/server-client/server/shared variables/Schema.xsd" xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd">
+<pd:ProcessDefinition xmlns:ns4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:pfx3="http://www.tibco.com/schemas/server-client/server/shared variables/Schema.xsd" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns3="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
     <xsd:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
     <xsd:import namespace="http://windyroad.org/rest-delegate.xsd"/>
     <xsd:import namespace="http://www.tibco.com/schemas/server-client/server/shared variables/Schema.xsd" schemaLocation="/server/shared variables/Schema.xsd"/>
@@ -14,48 +14,18 @@
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
     <pd:endType ref="pfx:response"/>
-    <pd:endX>767</pd:endX>
-    <pd:endY>131</pd:endY>
+    <pd:endX>427</pd:endX>
+    <pd:endY>132</pd:endY>
     <pd:errorSchemas>
         <HTTP-Error ref="pfx:error"/>
     </pd:errorSchemas>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1338181537186</pd:targetNamespace>
-    <pd:activity name="404 Not Found">
-        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-        <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>381</pd:x>
-        <pd:y>277</pd:y>
-        <config>
-            <processName>/REST/StatusCodes/4xx Client Error/404 Not Found.process</processName>
-        </config>
-        <pd:inputBindings>
-            <path>
-                <xsl:value-of select="$Start/pfx:request/pfx:command"/>
-            </path>
-        </pd:inputBindings>
-    </pd:activity>
-    <pd:activity name="Null">
-        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
-        <pd:resourceType>ae.activities.null</pd:resourceType>
-        <pd:x>302</pd:x>
-        <pd:y>131</pd:y>
-        <config/>
-        <pd:inputBindings/>
-    </pd:activity>
-    <pd:activity name="Null-1">
-        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
-        <pd:resourceType>ae.activities.null</pd:resourceType>
-        <pd:x>464</pd:x>
-        <pd:y>132</pd:y>
-        <config/>
-        <pd:inputBindings/>
-    </pd:activity>
     <pd:activity name="Order Service">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>612</pd:x>
-        <pd:y>131</pd:y>
+        <pd:x>277</pd:x>
+        <pd:y>130</pd:y>
         <config>
             <processName>/server/services/Order Service.process</processName>
         </config>
@@ -70,70 +40,34 @@
             </root>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="tokenize command">
-        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-        <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>196</pd:x>
-        <pd:y>131</pd:y>
+    <pd:activity name="404">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>271</pd:x>
+        <pd:y>256</pd:y>
         <config>
-            <processName>/REST/Private/Common/string/tokenize.process</processName>
+            <faultName>HTTP-Error</faultName>
         </config>
         <pd:inputBindings>
-            <tokenize>
-                <string>
-                    <xsl:value-of select="$Start/pfx:request/pfx:command"/>
-                </string>
-                <pattern>
-                    <xsl:value-of select="'/'"/>
-                </pattern>
-            </tokenize>
+            <ns4:ActivityInput>
+                <data>
+                    <pfx:error xsi:type="ns3:sc-404_Not_Found">
+                        <pfx:text-content>
+                            <xsl:value-of select="concat('Resource not found: ', $Start/pfx:request/pfx:command)"/>
+                        </pfx:text-content>
+                    </pfx:error>
+                </data>
+            </ns4:ActivityInput>
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>
         <pd:from>Start</pd:from>
-        <pd:to>tokenize command</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>tokenize command</pd:from>
-        <pd:to>Null</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Null</pd:from>
-        <pd:to>Null-1</pd:to>
-        <pd:xpathDescription>/coffee-shop?</pd:xpathDescription>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>xpath</pd:conditionType>
-        <pd:xpath>count($tokenize-command/root/output) &gt;= 2 and $tokenize-command/root/output[2]='coffee-shop'</pd:xpath>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Null</pd:from>
-        <pd:to>404 Not Found</pd:to>
-        <pd:lineType>Straight</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>otherwise</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Null-1</pd:from>
         <pd:to>Order Service</pd:to>
-        <pd:xpathDescription>/order?</pd:xpathDescription>
+        <pd:xpathDescription>Order</pd:xpathDescription>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>xpath</pd:conditionType>
-        <pd:xpath>count($tokenize-command/root/output) &gt;= 3 and $tokenize-command/root/output[3]='order'</pd:xpath>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Null-1</pd:from>
-        <pd:to>404 Not Found</pd:to>
-        <pd:lineType>Straight</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>otherwise</pd:conditionType>
+        <pd:xpath>starts-with($Start/pfx:request/pfx:command, '/coffeeshot/order')</pd:xpath>
     </pd:transition>
     <pd:transition>
         <pd:from>Order Service</pd:from>
@@ -141,6 +75,13 @@
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>404</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
     </pd:transition>
     <pd:label>
         <pd:name>Label</pd:name>
