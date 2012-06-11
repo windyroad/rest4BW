@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://xmlns.tibco.com/encodings/mime" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns12="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:ns5="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns6="http://windyroad.org/coffee-shop" xmlns:pfx="http://windyroad.org/bwunit-abstract/installLicense2Impl" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns1="http://windyroad.org/bwunit-0.0.0.xsd" xmlns:ns4="http://windyroad.org/bwunit-abstract" xmlns:ns3="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://windyroad.org/bwunit-concrete">
+<pd:ProcessDefinition xmlns:ns4="http://windyroad.org/bwunit-abstract" xmlns:pfx2="http://windyroad.org/bwunit-concrete" xmlns:pfx="http://windyroad.org/bwunit-abstract/installLicense2Impl" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns12="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:ns5="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns6="http://windyroad.org/coffee-shop" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://windyroad.org/bwunit-0.0.0.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns="http://xmlns.tibco.com/encodings/mime" xmlns:ns3="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
     <xsd:import namespace="http://windyroad.org/bwunit-0.0.0.xsd" schemaLocation="/BWUnit/Public/Schemas/BWUnit.xsd"/>
     <wsdl:import namespace="http://windyroad.org/bwunit-concrete" location="/BWUnit/Public/WSDLs/BWUnit-concrete.wsdl"/>
     <wsdl:import namespace="http://windyroad.org/bwunit-abstract/installLicense2Impl"/>
@@ -14,46 +14,25 @@
     <pd:endY>80</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables>
-        <license-key ref="ns1:license-key"/>
+        <inputs>
+            <xsd:element name="inputs">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="input" minOccurs="0" maxOccurs="unbounded">
+                            <xsd:complexType>
+                                <xsd:sequence/>
+                                <xsd:attribute name="start-state" type="xsd:string" use="required"/>
+                                <xsd:attribute name="transition-action" type="xsd:string" use="required"/>
+                                <xsd:attribute name="http-status" type="xsd:string" use="required"/>
+                                <xsd:attribute name="http-text-content" type="xsd:string" use="required"/>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </inputs>
     </pd:processVariables>
     <pd:targetNamespace>http://xmlns.example.com/1255637097360</pd:targetNamespace>
-    <pd:activity name="csv inputs">
-        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-        <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>275</pd:x>
-        <pd:y>84</pd:y>
-        <config>
-            <processName>/REST/Private/Common/string/tokenize.process</processName>
-        </config>
-        <pd:inputBindings>
-            <tokenize>
-                <string>start state|transition action|http status|http text-content
-created|finish making|403 Forbidden|Can't finish making an order that is created
-created|pickup|403 Forbidden|Can't pickup an order that is created
-being made|edit|403 Forbidden|Can't edit an order that is being made
-being made|start making|403 Forbidden|Can't start making an order that is already being made
-being made|pickup|403 Forbidden|Can't pickup an order that is being made
-being made|cancel|403 Forbidden|Can't cancel an order that is being made
-ready|edit|403 Forbidden|Can't edit an order that is ready
-ready|start making|403 Forbidden|Can't start making an order that is ready
-ready|finish making|403 Forbidden|Can't finish making an order that has already been finished
-ready|cancel|403 Forbidden|Can't cancel an order that is ready
-picked up|edit|403 Forbidden|Can't edit an order that is picked up
-picked up|start making|403 Forbidden|Can't start making an order that is picked up
-picked up|finish making|403 Forbidden|Can't finish making an order that is picked up
-picked up|pickup|403 Forbidden|Can't pickup an order that has already been picked up
-picked up|cancel|403 Forbidden|Can't cancel an order that is picked up
-cancelled|edit|403 Forbidden|Can't edit an order that is cancelled
-cancelled|start making|403 Forbidden|Can't start making an order that is cancelled
-cancelled|finish making|403 Forbidden|Can't finish making an order that is cancelled
-cancelled|pickup|403 Forbidden|Can't pickup an order that is cancelled
-cancelled|cancel|403 Forbidden|Can't cancel an order that has already been cancelled</string>
-                <pattern>
-                    <xsl:value-of select="'\n'"/>
-                </pattern>
-            </tokenize>
-        </pd:inputBindings>
-    </pd:activity>
     <pd:group name="Group">
         <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
         <pd:resourceType>ae.process.group</pd:resourceType>
@@ -68,8 +47,8 @@ cancelled|cancel|403 Forbidden|Can't cancel an order that has already been cance
         <config>
             <pd:groupType>inputLoop</pd:groupType>
             <pd:serializable>false</pd:serializable>
-            <pd:over>$csv-inputs/root/output[position()&gt;1]</pd:over>
-            <pd:iterationElementSlot>csv-line</pd:iterationElementSlot>
+            <pd:over>$inputs/inputs/input</pd:over>
+            <pd:iterationElementSlot>input</pd:iterationElementSlot>
             <pd:indexSlot>index</pd:indexSlot>
             <pd:activityOutputName/>
             <pd:accumulateOutput>false</pd:accumulateOutput>
@@ -93,25 +72,149 @@ cancelled|cancel|403 Forbidden|Can't cancel an order that has already been cance
         <pd:activity name="invalidStateTransitionFixture">
             <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
             <pd:resourceType>ae.process.subprocess</pd:resourceType>
-            <pd:x>488</pd:x>
-            <pd:y>81</pd:y>
+            <pd:x>490</pd:x>
+            <pd:y>88</pd:y>
             <config>
                 <processName>/test/uatTestSuite/fixtures/invalidStateTransitionFixture.process</processName>
             </config>
             <pd:inputBindings>
-                <csv>
-                    <xsl:value-of select="$csv-line/output"/>
-                </csv>
+                <xsl:copy-of select="$input/input"/>
             </pd:inputBindings>
         </pd:activity>
     </pd:group>
-    <pd:transition>
-        <pd:from>Start</pd:from>
-        <pd:to>csv inputs</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
+    <pd:activity name="Assign">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>263</pd:x>
+        <pd:y>92</pd:y>
+        <config>
+            <variableName>inputs</variableName>
+        </config>
+        <pd:inputBindings>
+            <inputs>
+                <input>
+                    <xsl:attribute name="start-state">created</xsl:attribute>
+                    <xsl:attribute name="transition-action">finish making</xsl:attribute>
+                    <xsl:attribute name="http-status">403 Forbidden</xsl:attribute>
+                    <xsl:attribute name="http-text-content">Can't finish making an order that is created</xsl:attribute>
+                </input>
+                <input>
+                    <xsl:attribute name="start-state">created</xsl:attribute>
+                    <xsl:attribute name="transition-action">pickup</xsl:attribute>
+                    <xsl:attribute name="http-status">403 Forbidden</xsl:attribute>
+                    <xsl:attribute name="http-text-content">Can't pickup an order that is created</xsl:attribute>
+                </input>
+                <input>
+                    <xsl:attribute name="start-state">being made</xsl:attribute>
+                    <xsl:attribute name="transition-action">edit</xsl:attribute>
+                    <xsl:attribute name="http-status">403 Forbidden</xsl:attribute>
+                    <xsl:attribute name="http-text-content">Can't edit an order that is being made</xsl:attribute>
+                </input>
+                <input>
+                    <xsl:attribute name="start-state">being made</xsl:attribute>
+                    <xsl:attribute name="transition-action">start making</xsl:attribute>
+                    <xsl:attribute name="http-status">403 Forbidden</xsl:attribute>
+                    <xsl:attribute name="http-text-content">Can't start making an order that is already being made</xsl:attribute>
+                </input>
+                <input>
+                    <xsl:attribute name="start-state">being made</xsl:attribute>
+                    <xsl:attribute name="transition-action">pickup</xsl:attribute>
+                    <xsl:attribute name="http-status">403 Forbidden</xsl:attribute>
+                    <xsl:attribute name="http-text-content">Can't pickup an order that is being made</xsl:attribute>
+                </input>
+                <input>
+                    <xsl:attribute name="start-state">being made</xsl:attribute>
+                    <xsl:attribute name="transition-action">cancel</xsl:attribute>
+                    <xsl:attribute name="http-status">403 Forbidden</xsl:attribute>
+                    <xsl:attribute name="http-text-content">Can't cancel an order that is being made</xsl:attribute>
+                </input>
+                <input>
+                    <xsl:attribute name="start-state">ready</xsl:attribute>
+                    <xsl:attribute name="transition-action">edit</xsl:attribute>
+                    <xsl:attribute name="http-status">403 Forbidden</xsl:attribute>
+                    <xsl:attribute name="http-text-content">Can't edit an order that is ready</xsl:attribute>
+                </input>
+                <input>
+                    <xsl:attribute name="start-state">ready</xsl:attribute>
+                    <xsl:attribute name="transition-action">start making</xsl:attribute>
+                    <xsl:attribute name="http-status">403 Forbidden</xsl:attribute>
+                    <xsl:attribute name="http-text-content">Can't start making an order that is ready</xsl:attribute>
+                </input>
+                <input>
+                    <xsl:attribute name="start-state">ready</xsl:attribute>
+                    <xsl:attribute name="transition-action">finish making</xsl:attribute>
+                    <xsl:attribute name="http-status">403 Forbidden</xsl:attribute>
+                    <xsl:attribute name="http-text-content">Can't finish making an order that has already been finished</xsl:attribute>
+                </input>
+                <input>
+                    <xsl:attribute name="start-state">ready</xsl:attribute>
+                    <xsl:attribute name="transition-action">cancel</xsl:attribute>
+                    <xsl:attribute name="http-status">403 Forbidden</xsl:attribute>
+                    <xsl:attribute name="http-text-content">Can't cancel an order that is ready</xsl:attribute>
+                </input>
+                <input>
+                    <xsl:attribute name="start-state">picked up</xsl:attribute>
+                    <xsl:attribute name="transition-action">edit</xsl:attribute>
+                    <xsl:attribute name="http-status">403 Forbidden</xsl:attribute>
+                    <xsl:attribute name="http-text-content">Can't edit an order that is picked up</xsl:attribute>
+                </input>
+                <input>
+                    <xsl:attribute name="start-state">picked up</xsl:attribute>
+                    <xsl:attribute name="transition-action">start making</xsl:attribute>
+                    <xsl:attribute name="http-status">403 Forbidden</xsl:attribute>
+                    <xsl:attribute name="http-text-content">Can't start making an order that is picked up</xsl:attribute>
+                </input>
+                <input>
+                    <xsl:attribute name="start-state">picked up</xsl:attribute>
+                    <xsl:attribute name="transition-action">finish making</xsl:attribute>
+                    <xsl:attribute name="http-status">403 Forbidden</xsl:attribute>
+                    <xsl:attribute name="http-text-content">Can't finish making an order that is picked up</xsl:attribute>
+                </input>
+                <input>
+                    <xsl:attribute name="start-state">picked up</xsl:attribute>
+                    <xsl:attribute name="transition-action">pickup</xsl:attribute>
+                    <xsl:attribute name="http-status">403 Forbidden</xsl:attribute>
+                    <xsl:attribute name="http-text-content">Can't pickup an order that has already been picked up</xsl:attribute>
+                </input>
+                <input>
+                    <xsl:attribute name="start-state">picked up</xsl:attribute>
+                    <xsl:attribute name="transition-action">cancel</xsl:attribute>
+                    <xsl:attribute name="http-status">403 Forbidden</xsl:attribute>
+                    <xsl:attribute name="http-text-content">Can't cancel an order that is picked up</xsl:attribute>
+                </input>
+                <input>
+                    <xsl:attribute name="start-state">cancelled</xsl:attribute>
+                    <xsl:attribute name="transition-action">edit</xsl:attribute>
+                    <xsl:attribute name="http-status">403 Forbidden</xsl:attribute>
+                    <xsl:attribute name="http-text-content">Can't edit an order that is cancelled</xsl:attribute>
+                </input>
+                <input>
+                    <xsl:attribute name="start-state">cancelled</xsl:attribute>
+                    <xsl:attribute name="transition-action">start making</xsl:attribute>
+                    <xsl:attribute name="http-status">403 Forbidden</xsl:attribute>
+                    <xsl:attribute name="http-text-content">Can't start making an order that is cancelled</xsl:attribute>
+                </input>
+                <input>
+                    <xsl:attribute name="start-state">cancelled</xsl:attribute>
+                    <xsl:attribute name="transition-action">finish making</xsl:attribute>
+                    <xsl:attribute name="http-status">403 Forbidden</xsl:attribute>
+                    <xsl:attribute name="http-text-content">Can't finish making an order that is cancelled</xsl:attribute>
+                </input>
+                <input>
+                    <xsl:attribute name="start-state">cancelled</xsl:attribute>
+                    <xsl:attribute name="transition-action">pickup</xsl:attribute>
+                    <xsl:attribute name="http-status">403 Forbidden</xsl:attribute>
+                    <xsl:attribute name="http-text-content">Can't pickup an order that is cancelled</xsl:attribute>
+                </input>
+                <input>
+                    <xsl:attribute name="start-state">cancelled</xsl:attribute>
+                    <xsl:attribute name="transition-action">cancel</xsl:attribute>
+                    <xsl:attribute name="http-status">403 Forbidden</xsl:attribute>
+                    <xsl:attribute name="http-text-content">Can't cancel an order that has already been cancelled</xsl:attribute>
+                </input>
+            </inputs>
+        </pd:inputBindings>
+    </pd:activity>
     <pd:transition>
         <pd:from>Group</pd:from>
         <pd:to>End</pd:to>
@@ -120,12 +223,33 @@ cancelled|cancel|403 Forbidden|Can't cancel an order that has already been cance
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>csv inputs</pd:from>
+        <pd:from>Start</pd:from>
+        <pd:to>Assign</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign</pd:from>
         <pd:to>Group</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
+    <pd:label>
+        <pd:name>Label</pd:name>
+        <pd:description>These should be seperate tests, so that they all execute. As it stands
+the execution will stop on the first failure.</pd:description>
+        <pd:x>433</pd:x>
+        <pd:y>170</pd:y>
+        <pd:width>406</pd:width>
+        <pd:height>50</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-1</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
     <pd:iconImage>R0lGODlhMAAwAOemACk6Rys8SSw9SS09SjNEUDREUTVFUTZGUjdHUzhHUzhIVDlJVUBPW0NRXUNS&#xD;
 XkZVYFJfalNha2BsdmdzfGdzfWh0fWl1fnB7hHN+h2KRwGWTwWmWxImTmmqZxI2WnW+bx3GdyHah&#xD;
 y3eizHymzn+nzp+mrKCnrYOs0oWt0o6w0oqx1aatsoyy1ZKy06mwtZO01KqxtpC22Za21pO32Zi3&#xD;

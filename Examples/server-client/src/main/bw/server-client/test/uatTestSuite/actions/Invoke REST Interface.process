@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/wr-http.xsd">
+<pd:ProcessDefinition xmlns:pfx="http://windyroad.org/wr-http.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
     <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/REST/Private/Schemas/HttpConnection.xsd"/>
     <pd:name>test/uatTestSuite/actions/Invoke REST Interface.process</pd:name>
     <pd:startName>Start</pd:startName>
@@ -38,16 +38,16 @@
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
         <pd:x>336</pd:x>
-        <pd:y>66</pd:y>
+        <pd:y>65</pd:y>
         <config>
             <processName>/REST/REST Interface.process</processName>
         </config>
         <pd:inputBindings>
             <root>
                 <xsl:copy-of select="$Start/root/pfx:request"/>
-                <dynamicDelegatorProcessOverride>
+                <handlerProcess>
                     <xsl:value-of select="'/server/REST Service.process'"/>
-                </dynamicDelegatorProcessOverride>
+                </handlerProcess>
             </root>
         </pd:inputBindings>
     </pd:activity>
