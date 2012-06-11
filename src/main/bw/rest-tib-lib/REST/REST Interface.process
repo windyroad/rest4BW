@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://www.tibco.com/pe/EngineTypes" xmlns:pfx3="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx2="http://windyroad.org/wr-http.xsd" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd">
+<pd:ProcessDefinition xmlns:pfx2="http://windyroad.org/wr-http.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx3="http://www.tibco.com/pe/DeployedVarsType" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx5="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:rest="http://windyroad.org/rest-tib-lib.xsd" xmlns:ns="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:pfx4="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
     <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/REST/Private/Schemas/HttpConnection.xsd"/>
     <xsd:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
+    <xsd:import namespace="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" schemaLocation="/REST/Private/Schemas/StatusCodeDefinitions.xsd"/>
     <pd:name>REST/REST Interface.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType>
@@ -9,7 +10,8 @@
             <xsd:complexType>
                 <xsd:sequence>
                     <xsd:element ref="pfx2:request"/>
-                    <xsd:element name="dynamicDelegatorProcessOverride" type="xsd:string"/>
+                    <xsd:element name="handlerProcess" type="xsd:string"/>
+                    <xsd:element name="exceptionShielder" type="xsd:string" minOccurs="0"/>
                 </xsd:sequence>
             </xsd:complexType>
         </xsd:element>
@@ -81,15 +83,15 @@
         <pd:activity name="Dynamic Delegator">
             <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
             <pd:resourceType>ae.process.subprocess</pd:resourceType>
-            <pd:description>N.B. This must be configured via the Global Variable!</pd:description>
+            <pd:description/>
             <pd:x>429</pd:x>
             <pd:y>87</pd:y>
             <config>
-                <processNameXPath>$Start/root/dynamicDelegatorProcessOverride</processNameXPath>
+                <processNameXPath>$Start/root/handlerProcess</processNameXPath>
                 <processName>/REST/Example/server/Default Delegate.process</processName>
             </config>
             <pd:inputBindings>
-                <xsl:copy-of select="$Parse-HTTP-request/pfx:request"/>
+                <xsl:copy-of select="$Parse-HTTP-request/rest:request"/>
             </pd:inputBindings>
         </pd:activity>
         <pd:activity name="Parse HTTP request">
@@ -113,60 +115,45 @@
                 <processName>/REST/Private/Process/REST Interface/renderHTTPResponse.process</processName>
             </config>
             <pd:inputBindings>
-                <xsl:copy-of select="$Dynamic-Delegator/pfx:response"/>
+                <xsl:copy-of select="$Dynamic-Delegator/rest:response"/>
             </pd:inputBindings>
         </pd:activity>
     </pd:group>
-    <pd:activity name="Internal Server Error">
-        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-        <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>476</pd:x>
-        <pd:y>315</pd:y>
-        <config>
-            <processName>/REST/StatusCodes/5xx Server Error/500 Internal Server Error.process</processName>
-        </config>
-        <pd:inputBindings>
-            <root>
-                <errorMessage>
-                    <xsl:value-of select="if (not($_globalVariables/pfx3:GlobalVariables/REST/exception-shielding = 'true'))&#xA;then concat('PID:',$_processContext/pfx4:ProcessContext/ProcessId,' - ',$_error/pfx4:ErrorReport/Msg)&#xA;else concat('PID:',$_processContext/pfx4:ProcessContext/ProcessId)"/>
-                </errorMessage>
-            </root>
-        </pd:inputBindings>
-    </pd:activity>
     <pd:activity name="Null">
         <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
         <pd:resourceType>ae.activities.null</pd:resourceType>
-        <pd:x>380</pd:x>
-        <pd:y>210</pd:y>
+        <pd:x>424</pd:x>
+        <pd:y>227</pd:y>
         <config/>
         <pd:inputBindings/>
     </pd:activity>
     <pd:activity name="Render HTTP error response">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>602</pd:x>
-        <pd:y>217</pd:y>
+        <pd:x>579</pd:x>
+        <pd:y>233</pd:y>
         <config>
             <processName>/REST/Private/Process/REST Interface/renderHTTPResponse.process</processName>
         </config>
         <pd:inputBindings>
             <xsl:choose>
-                <xsl:when test="$_error_Internal-Server-Error">
-                    <xsl:copy-of select="$_error_Internal-Server-Error/pfx:error"/>
+                <xsl:when test="$Shield-Exception/rest:response">
+                    <xsl:copy-of select="$Shield-Exception/rest:response"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:copy-of select="$_error/pfx4:ErrorReport/Data/pfx:error"/>
+                    <xsl:copy-of select="$_error/pfx4:ErrorReport/Data/rest:error"/>
                 </xsl:otherwise>
             </xsl:choose>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="Write to log">
+    <pd:activity name="Shield Exception">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>229</pd:x>
-        <pd:y>211</pd:y>
+        <pd:x>499</pd:x>
+        <pd:y>340</pd:y>
         <config>
-            <processName>/REST/Private/Common/logging/writeToLog.process</processName>
+            <processName>/REST/Private/Common/logging/Shield Exception.process</processName>
+            <processNameXPath>$Start/root/exceptionShielder</processNameXPath>
         </config>
         <pd:inputBindings>
             <root>
@@ -181,13 +168,6 @@
             </root>
         </pd:inputBindings>
     </pd:activity>
-    <pd:transition>
-        <pd:from>Internal Server Error</pd:from>
-        <pd:to>Render HTTP error response</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-65536</pd:lineColor>
-        <pd:conditionType>error</pd:conditionType>
-    </pd:transition>
     <pd:transition>
         <pd:from>Group</pd:from>
         <pd:to>End</pd:to>
@@ -204,7 +184,7 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Null</pd:from>
-        <pd:to>Internal Server Error</pd:to>
+        <pd:to>Shield Exception</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>otherwise</pd:conditionType>
@@ -216,18 +196,18 @@
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>xpath</pd:conditionType>
-        <pd:xpath>exists($_error/pfx4:ErrorReport/Data/pfx:error)</pd:xpath>
+        <pd:xpath>exists($_error/pfx4:ErrorReport/Data/rest:error)</pd:xpath>
     </pd:transition>
     <pd:transition>
-        <pd:from>Write to log</pd:from>
-        <pd:to>Null</pd:to>
+        <pd:from>Shield Exception</pd:from>
+        <pd:to>Render HTTP error response</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
         <pd:from>Group</pd:from>
-        <pd:to>Write to log</pd:to>
+        <pd:to>Null</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-65536</pd:lineColor>
         <pd:conditionType>error</pd:conditionType>
