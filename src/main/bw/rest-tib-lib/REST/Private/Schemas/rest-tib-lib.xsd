@@ -2,9 +2,11 @@
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	 xmlns:rest="http://windyroad.org/rest-tib-lib.xsd"
+	 xmlns:http1.1="http://windyroad.org/HTTP1.1-StatusCodeDefinitions"
 	 targetNamespace="http://windyroad.org/rest-tib-lib.xsd"
 	 elementFormDefault="qualified"
 	 attributeFormDefault="unqualified">
+	<xs:import namespace="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" schemaLocation="StatusCodeDefinitions.xsd"/>
 	<xs:element name="query">
 		<xs:complexType>
 			<xs:sequence>
@@ -31,17 +33,7 @@
 			<xs:attribute name="if-modified-since" type="xs:string"/>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="response">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:choice minOccurs="0">
-					<xs:element ref="rest:text-content"/>
-					<xs:element ref="rest:binary-content"/>
-				</xs:choice>
-				<xs:element ref="rest:headers" minOccurs="0"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
+	<xs:element name="response" type="http1.1:statusCodeDefTyp"/>
 	<xs:element name="text-content" type="xs:string"/>
 	<xs:element name="binary-content" type="xs:base64Binary"/>
 	<xs:element name="post">
@@ -51,20 +43,12 @@
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="error">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="rest:headers"/>
-				<xs:element name="msg" type="xs:string" minOccurs="0"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
+	<xs:element name="error" type="http1.1:StatusCodeErrorDefType"/>
 	<xs:element name="headers">
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="rest:header" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
-			<xs:attribute name="status" type="xs:string"/>
 			<xs:attribute name="allow" type="xs:string"/>
 			<xs:attribute name="content-type" type="xs:string"/>
 			<xs:attribute name="cache-control" type="xs:string"/>

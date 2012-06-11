@@ -1,42 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd">
+<pd:ProcessDefinition xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:ns2="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
     <xsd:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
     <xsd:import namespace="http://windyroad.org/rest-delegate.xsd"/>
+    <xsd:import namespace="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" schemaLocation="/REST/Private/Schemas/StatusCodeDefinitions.xsd"/>
     <pd:name>REST/Example/server/Default Delegate.process</pd:name>
     <pd:description/>
     <pd:startName>Start</pd:startName>
     <pd:startType ref="pfx:request"/>
-    <pd:startX>121</pd:startX>
-    <pd:startY>82</pd:startY>
+    <pd:startX>67</pd:startX>
+    <pd:startY>78</pd:startY>
     <pd:returnBindings>
-        <pfx:response/>
+        <pfx:response xsi:type="ns:sc-500_Internal_Server_Error">
+            <pfx:text-content>This path should never execute</pfx:text-content>
+        </pfx:response>
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
     <pd:endType ref="pfx:response"/>
-    <pd:endX>505</pd:endX>
-    <pd:endY>82</pd:endY>
+    <pd:endX>298</pd:endX>
+    <pd:endY>77</pd:endY>
     <pd:errorSchemas>
         <Error ref="pfx:error"/>
     </pd:errorSchemas>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1338181537186</pd:targetNamespace>
     <pd:activity name="501 Not Implemented">
-        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-        <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>319</pd:x>
-        <pd:y>89</pd:y>
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>201</pd:x>
+        <pd:y>167</pd:y>
         <config>
-            <processName>/REST/StatusCodes/5xx Server Error/501 Not Implemented.process</processName>
+            <faultName>Error</faultName>
         </config>
         <pd:inputBindings>
-            <root>
-                <errorMessage>
-                    <xsl:value-of select="'The &quot;Delegator&quot; Dynamic Process Override was not overridden!'"/>
-                </errorMessage>
-                <generateError>
-                    <xsl:value-of select="true()"/>
-                </generateError>
-            </root>
+            <ns2:ActivityInput>
+                <message>No REST Handler</message>
+                <messageCode>
+                    <xsl:value-of select="501"/>
+                </messageCode>
+                <data>
+                    <pfx:error xsi:type="ns:sc-501_Not_Implemented">
+                        <pfx:text-content>No REST Handler</pfx:text-content>
+                        <pfx:headers/>
+                    </pfx:error>
+                </data>
+            </ns2:ActivityInput>
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>
@@ -44,14 +51,15 @@
         <pd:to>501 Not Implemented</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
+        <pd:conditionType>otherwise</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>501 Not Implemented</pd:from>
+        <pd:from>Start</pd:from>
         <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>false()</pd:xpath>
     </pd:transition>
     <pd:label>
         <pd:name>Label</pd:name>
@@ -59,7 +67,7 @@
  This process is invoked dynamically from the 'REST Interface'.
  When implementing, it is responsible for handling the REST request, and generating a response.</pd:description>
         <pd:x>380</pd:x>
-        <pd:y>196</pd:y>
+        <pd:y>262</pd:y>
         <pd:width>631</pd:width>
         <pd:height>67</pd:height>
         <pd:fontColor>-16777216</pd:fontColor>
