@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/coffee-shop" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<pd:ProcessDefinition xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://windyroad.org/coffee-shop" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
     <pd:name>test/uatTestSuite/fixtures/invalidStateTransitionFixture.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType>
-        <xsd:element name="csv" type="xsd:string"/>
+        <xsd:element name="input">
+            <xsd:complexType>
+                <xsd:sequence/>
+                <xsd:attribute name="start-state" type="xsd:string" use="required"/>
+                <xsd:attribute name="transition-action" type="xsd:string" use="required"/>
+                <xsd:attribute name="http-status" type="xsd:string" use="required"/>
+                <xsd:attribute name="http-text-content" type="xsd:string" use="required"/>
+            </xsd:complexType>
+        </xsd:element>
     </pd:startType>
     <pd:startX>91</pd:startX>
     <pd:startY>85</pd:startY>
@@ -17,7 +25,7 @@
     <pd:activity name="buildOrder">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>462</pd:x>
+        <pd:x>263</pd:x>
         <pd:y>85</pd:y>
         <config>
             <processName>/test/uatTestSuite/util/buildOrder.process</processName>
@@ -25,7 +33,7 @@
         <pd:inputBindings>
             <root>
                 <initial-state>
-                    <xsl:value-of select="$tokenize/root/output[1]"/>
+                    <xsl:value-of select="$Start/input/@start-state"/>
                 </initial-state>
             </root>
         </pd:inputBindings>
@@ -33,8 +41,8 @@
     <pd:activity name="invalidStateTransition">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>629</pd:x>
-        <pd:y>85</pd:y>
+        <pd:x>455</pd:x>
+        <pd:y>86</pd:y>
         <config>
             <processName>/test/uatTestSuite/scenarioOutlines/invalidStateTransition.process</processName>
         </config>
@@ -42,50 +50,17 @@
             <root>
                 <xsl:copy-of select="$buildOrder/ns:coffee-order"/>
                 <transition-action>
-                    <xsl:value-of select="$tokenize/root/output[2]"/>
+                    <xsl:value-of select="$Start/input/@transition-action"/>
                 </transition-action>
                 <expected-http-status>
-                    <xsl:value-of select="$tokenize/root/output[3]"/>
+                    <xsl:value-of select="$Start/input/@http-status"/>
                 </expected-http-status>
                 <expected-http-text-content>
-                    <xsl:value-of select="$tokenize/root/output[4]"/>
+                    <xsl:value-of select="$Start/input/@http-text-content"/>
                 </expected-http-text-content>
             </root>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="tokenize">
-        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-        <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>238</pd:x>
-        <pd:y>85</pd:y>
-        <config>
-            <processName>/REST/Private/Common/string/tokenize.process</processName>
-        </config>
-        <pd:inputBindings>
-            <tokenize>
-                <string>
-                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$Start/csv"/>
-                </string>
-                <pattern>
-                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="'\|'"/>
-                </pattern>
-            </tokenize>
-        </pd:inputBindings>
-    </pd:activity>
-    <pd:transition>
-        <pd:from>tokenize</pd:from>
-        <pd:to>buildOrder</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Start</pd:from>
-        <pd:to>tokenize</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
     <pd:transition>
         <pd:from>invalidStateTransition</pd:from>
         <pd:to>End</pd:to>
@@ -96,6 +71,13 @@
     <pd:transition>
         <pd:from>buildOrder</pd:from>
         <pd:to>invalidStateTransition</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>buildOrder</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>

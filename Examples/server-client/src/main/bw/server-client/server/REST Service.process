@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:ns4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:pfx3="http://www.tibco.com/schemas/server-client/server/shared variables/Schema.xsd" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns3="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
+<pd:ProcessDefinition xmlns:ns4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx3="http://www.tibco.com/schemas/server-client/server/shared variables/Schema.xsd" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:ns3="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
     <xsd:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
     <xsd:import namespace="http://windyroad.org/rest-delegate.xsd"/>
     <xsd:import namespace="http://www.tibco.com/schemas/server-client/server/shared variables/Schema.xsd" schemaLocation="/server/shared variables/Schema.xsd"/>
@@ -32,9 +32,9 @@
         <pd:inputBindings>
             <root>
                 <xsl:copy-of select="$Start/pfx:request"/>
-                <xsl:if test="count($tokenize-command/root/output) >= 4">
+                <xsl:if test="string-length(substring-after($Start/pfx:request/pfx:command, '/coffee-shop/order/')) >0">
                     <firstname>
-                        <xsl:value-of select="$tokenize-command/root/output[4]"/>
+                        <xsl:value-of select="substring-after($Start/pfx:request/pfx:command, '/coffee-shop/order/')"/>
                     </firstname>
                 </xsl:if>
             </root>
@@ -67,7 +67,7 @@
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>xpath</pd:conditionType>
-        <pd:xpath>starts-with($Start/pfx:request/pfx:command, '/coffeeshot/order')</pd:xpath>
+        <pd:xpath>starts-with($Start/pfx:request/pfx:command, '/coffee-shop/order')</pd:xpath>
     </pd:transition>
     <pd:transition>
         <pd:from>Order Service</pd:from>
