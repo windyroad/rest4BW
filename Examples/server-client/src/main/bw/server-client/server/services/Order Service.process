@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
+<pd:ProcessDefinition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx="http://windyroad.org/rest-tib-lib.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns3="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
     <xsd:import namespace="http://windyroad.org/rest-tib-lib.xsd" schemaLocation="/REST/Private/Schemas/rest-tib-lib.xsd"/>
     <pd:name>server/services/Order Service.process</pd:name>
     <pd:description/>
@@ -28,20 +28,6 @@
     </pd:errorSchemas>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1338181537186</pd:targetNamespace>
-    <pd:activity name="405 Method Not Allowed">
-        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-        <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>312</pd:x>
-        <pd:y>487</pd:y>
-        <config>
-            <processName>/REST/StatusCodes/4xx Client Error/405 Method Not Allowed.process</processName>
-        </config>
-        <pd:inputBindings>
-            <allow>
-                <xsl:value-of select="'POST,PUT,GET,DELETE,OPTIONS'"/>
-            </allow>
-        </pd:inputBindings>
-    </pd:activity>
     <pd:activity name="action">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
@@ -100,6 +86,22 @@
         </config>
         <pd:inputBindings>
             <xsl:copy-of select="$Start/*"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="405">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>316</pd:x>
+        <pd:y>489</pd:y>
+        <config>
+            <faultName>HTTP-Error</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns3:ActivityInput>
+                <data>
+                    <pfx:error xsi:type="ns:sc-405_Method_Not_Allowed"/>
+                </data>
+            </ns3:ActivityInput>
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>
@@ -184,9 +186,9 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Start</pd:from>
-        <pd:to>405 Method Not Allowed</pd:to>
+        <pd:to>405</pd:to>
         <pd:lineType>Straight</pd:lineType>
-        <pd:lineColor>-39424</pd:lineColor>
+        <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>otherwise</pd:conditionType>
     </pd:transition>
 </pd:ProcessDefinition>
