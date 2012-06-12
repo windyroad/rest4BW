@@ -3,7 +3,7 @@
        xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
     <info
         organisation="org.windyroad"
-        module="rest-tib-lib"
+        module="rest4BW"
         status="release"/>
     <configurations defaultconf="default" defaultconfmapping="default->default;test->default;dist->default">
         <conf name="default"/>
@@ -11,9 +11,9 @@
         <conf name="dist"/>
     </configurations>
 	<publications>
-		<artifact name="rest-tib-lib" type="projlib" conf="default"/>
+		<artifact name="rest4BW" type="projlib" conf="default"/>
 <!--
-		<artifact name="rest-tib-lib-lib-User-Guide" type="html" />
+		<artifact name="rest4BW-lib-User-Guide" type="html" />
 -->
 	</publications>
 	<dependencies>
