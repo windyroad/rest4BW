@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://xmlns.tibco.com/encodings/mime" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns12="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:ns5="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns6="http://windyroad.org/coffee-shop" xmlns:ns7="http://windyroad.org/wr-http.xsd" xmlns:pfx="http://windyroad.org/bwunit-abstract/installLicense2Impl" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns1="http://windyroad.org/bwunit-0.0.0.xsd" xmlns:ns4="http://windyroad.org/bwunit-abstract" xmlns:ns3="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://windyroad.org/coffee-shop-interface" xmlns:pfx2="http://windyroad.org/bwunit-concrete">
     <xsd:import namespace="http://windyroad.org/bwunit-0.0.0.xsd" schemaLocation="/BWUnit/Public/Schemas/BWUnit.xsd"/>
-    <xsd:import namespace="http://windyroad.org/coffee-shop-interface" schemaLocation="/server/interface/Interface.xsd"/>
-    <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/server/model/CoffeeShop.xsd"/>
+    <xsd:import namespace="http://windyroad.org/coffee-shop-interface" schemaLocation="/coffee-shop/interface/Interface.xsd"/>
+    <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/coffee-shop/model/CoffeeShop.xsd"/>
     <wsdl:import namespace="http://windyroad.org/bwunit-concrete" location="/BWUnit/Public/WSDLs/BWUnit-concrete.wsdl"/>
     <wsdl:import namespace="http://windyroad.org/bwunit-abstract/installLicense2Impl"/>
     <pd:name>test/uatTestSuite/F2 - Discover order options TestCase/S1 - Discover order options.process</pd:name>

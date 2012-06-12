@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://windyroad.org/coffee-shop" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-    <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/server/model/CoffeeShop.xsd"/>
+    <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/coffee-shop/model/CoffeeShop.xsd"/>
     <pd:name>test/uatTestSuite/step/Then the order is in state (end state).process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType>
@@ -52,7 +52,7 @@
         <pd:x>257</pd:x>
         <pd:y>69</pd:y>
         <config>
-            <processName>/server/persistence/get.process</processName>
+            <processName>/coffee-shop/persistence/get.process</processName>
         </config>
         <pd:inputBindings>
             <firstname>
