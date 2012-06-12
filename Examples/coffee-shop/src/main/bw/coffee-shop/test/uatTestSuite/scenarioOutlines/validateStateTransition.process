@@ -7,7 +7,7 @@
         <xsd:element name="root">
             <xsd:complexType>
                 <xsd:sequence>
-                    <xsd:element ref="pfx:coffee-order"/>
+                    <xsd:element name="initial-state" type="xsd:string"/>
                     <xsd:element name="transition-action" type="xsd:string"/>
                     <xsd:element name="expected-end-state" type="xsd:string"/>
                 </xsd:sequence>
@@ -33,7 +33,9 @@
         </config>
         <pd:inputBindings>
             <root>
-                <xsl:copy-of select="$Start/root/pfx:coffee-order"/>
+                <initial-state>
+                    <xsl:value-of select="$Start/root/initial-state"/>
+                </initial-state>
             </root>
         </pd:inputBindings>
     </pd:activity>
@@ -48,7 +50,7 @@
         <pd:inputBindings>
             <root>
                 <firstname>
-                    <xsl:value-of select="$Start/root/pfx:coffee-order/pfx:firstname"/>
+                    <xsl:value-of select="$Given-an-order-in-state-start-state/root/pfx:coffee-order/pfx:firstname"/>
                 </firstname>
                 <expected-state>
                     <xsl:value-of select="$Start/root/expected-end-state"/>
@@ -66,7 +68,7 @@
         </config>
         <pd:inputBindings>
             <root>
-                <xsl:copy-of select="$Start/root/pfx:coffee-order"/>
+                <xsl:copy-of select="$Given-an-order-in-state-start-state/root/pfx:coffee-order"/>
                 <transition-action>
                     <xsl:value-of select="$Start/root/transition-action"/>
                 </transition-action>

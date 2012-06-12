@@ -2,13 +2,21 @@
 <repository xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xmlns = "http://www.tibco.com/xmlns/repo/types/2002">
 	<globalVariables>
 		<globalVariable>
+			<name>base-url</name>
+			<value>/coffee-shop/order</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1339491488807</modTime>
+		</globalVariable>
+		<globalVariable>
 			<name>transition-action-key</name>
 			<value>transition-action</value>
 			<deploymentSettable>true</deploymentSettable>
 			<serviceSettable>false</serviceSettable>
 			<type>String</type>
 			<constraint></constraint>
-			<modTime>1338896465617</modTime>
+			<modTime>1339491390418</modTime>
 		</globalVariable>
 	</globalVariables>
 </repository>

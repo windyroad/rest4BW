@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:ns2="pfx" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="pfx4" xmlns:ns3="cfshp" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/coffee-shop">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="pfx" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="pfx4" xmlns:ns3="cfshp" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/coffee-shop">
     <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/coffee-shop/model/CoffeeShop.xsd"/>
-    <pd:name>server/persistence/save.process</pd:name>
+    <pd:name>coffee-shop/persistence/save.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType ref="pfx:coffee-order"/>
     <pd:startX>94</pd:startX>
     <pd:startY>68</pd:startY>
     <pd:returnBindings>
-        <xsl:variable name="user" select="$GetVariable/root/user[etag=$Start/etag]"/>
-        <xsl:copy-of select="$user"/>
+        <xsl:copy-of select="$Start/pfx:coffee-order"/>
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx:coffee-order"/>
     <pd:endX>716</pd:endX>
     <pd:endY>67</pd:endY>
     <pd:errorSchemas/>
@@ -23,9 +23,10 @@
         <pd:y>10</pd:y>
         <pd:width>442</pd:width>
         <pd:height>144</pd:height>
-        <pd:collapsedWidth>53</pd:collapsedWidth>
-        <pd:collapsedHeight>67</pd:collapsedHeight>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
         <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
         <config>
             <pd:groupType>criticalSection</pd:groupType>
             <pd:serializable>false</pd:serializable>

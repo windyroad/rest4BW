@@ -2,12 +2,12 @@
 <repository xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xmlns = "http://www.tibco.com/xmlns/repo/types/2002">
 	<globalVariables>
 		<globalVariable>
-			<name>exception-shielding</name>
-			<value>false</value>
+			<name>xml</name>
+			<value>application/vnd.coffee-shop+xml</value>
 			<deploymentSettable>true</deploymentSettable>
-			<serviceSettable>true</serviceSettable>
-			<type>Boolean</type>
-			<modTime>1338508730836</modTime>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1339492146665</modTime>
 		</globalVariable>
 	</globalVariables>
 </repository>

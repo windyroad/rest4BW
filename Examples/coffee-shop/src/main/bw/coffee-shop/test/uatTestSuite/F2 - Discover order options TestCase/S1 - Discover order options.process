@@ -22,8 +22,8 @@
     <pd:activity name="input data">
         <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
         <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-        <pd:x>255</pd:x>
-        <pd:y>86</pd:y>
+        <pd:x>217</pd:x>
+        <pd:y>94</pd:y>
         <config>
             <element>
                 <xsd:element name="root">
@@ -86,9 +86,9 @@
     <pd:group name="Group">
         <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
         <pd:resourceType>ae.process.group</pd:resourceType>
-        <pd:x>424</pd:x>
+        <pd:x>317</pd:x>
         <pd:y>25</pd:y>
-        <pd:width>238</pd:width>
+        <pd:width>346</pd:width>
         <pd:height>138</pd:height>
         <pd:collapsedWidth>57</pd:collapsedWidth>
         <pd:collapsedHeight>70</pd:collapsedHeight>
@@ -107,7 +107,7 @@
         <pd:expanded>true</pd:expanded>
         <pd:transition>
             <pd:from>start</pd:from>
-            <pd:to>discoverAnOrdersOptions</pd:to>
+            <pd:to>getUID</pd:to>
             <pd:lineType>Default</pd:lineType>
             <pd:lineColor>-16777216</pd:lineColor>
             <pd:conditionType>always</pd:conditionType>
@@ -119,29 +119,52 @@
             <pd:lineColor>-16777216</pd:lineColor>
             <pd:conditionType>always</pd:conditionType>
         </pd:transition>
+        <pd:transition>
+            <pd:from>getUID</pd:from>
+            <pd:to>discoverAnOrdersOptions</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
         <pd:activity name="discoverAnOrdersOptions">
             <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
             <pd:resourceType>ae.process.subprocess</pd:resourceType>
-            <pd:x>544</pd:x>
+            <pd:x>563</pd:x>
             <pd:y>94</pd:y>
             <config>
-                <processName>/test/uatTestSuite/fixtures/discoverAnOrdersOptions.process</processName>
+                <processName>/test/uatTestSuite/scenarioOutlines/discoverAnOrdersOptions.process</processName>
             </config>
             <pd:inputBindings>
                 <root>
-                    <order-state>
+                    <initial-state>
                         <xsl:value-of select="$param/param/order-state"/>
-                    </order-state>
+                    </initial-state>
+                    <firstname>
+                        <xsl:value-of select="$getUID/uniqueId"/>
+                    </firstname>
+                    <url>
+                        <xsl:value-of select="concat($_globalVariables/ns5:GlobalVariables/coffee-shop/interface/base-url,'/', $getUID/uniqueId)"/>
+                    </url>
+                    <xsl:for-each select="$param/param/expected-link-rel">
+                        <expected-link-rel>
+                            <xsl:value-of select="."/>
+                        </expected-link-rel>
+                    </xsl:for-each>
                     <expected-http-status>
                         <xsl:value-of select="$param/param/expected-http-status"/>
                     </expected-http-status>
-                    <xsl:for-each select="$param/param/expected-link-rel">
-                        <expected-list-rel>
-                            <xsl:value-of select="."/>
-                        </expected-list-rel>
-                    </xsl:for-each>
                 </root>
             </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="getUID">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>415</pd:x>
+            <pd:y>96</pd:y>
+            <config>
+                <processName>/test/uatTestSuite/util/getUID.process</processName>
+            </config>
+            <pd:inputBindings/>
         </pd:activity>
     </pd:group>
     <pd:transition>

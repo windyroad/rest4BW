@@ -8,8 +8,8 @@
     <pd:name>test/uatTestSuite/F7 - List orders TestCase/S1 - List one order.process</pd:name>
     <pd:description>@Timeout(60000)</pd:description>
     <pd:startName>Start</pd:startName>
-    <pd:startX>68</pd:startX>
-    <pd:startY>83</pd:startY>
+    <pd:startX>57</pd:startX>
+    <pd:startY>88</pd:startY>
     <pd:returnBindings/>
     <pd:endName>End</pd:endName>
     <pd:endX>1076</pd:endX>
@@ -19,22 +19,6 @@
         <license-key ref="ns1:license-key"/>
     </pd:processVariables>
     <pd:targetNamespace>http://xmlns.example.com/1255637097360</pd:targetNamespace>
-    <pd:activity name="buildOrder">
-        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-        <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>185</pd:x>
-        <pd:y>83</pd:y>
-        <config>
-            <processName>/test/uatTestSuite/util/buildOrder.process</processName>
-        </config>
-        <pd:inputBindings>
-            <root>
-                <initial-state>
-                    <xsl:value-of select="'created'"/>
-                </initial-state>
-            </root>
-        </pd:inputBindings>
-    </pd:activity>
     <pd:activity name="Given a coffee ordering system at (url)">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
@@ -61,22 +45,22 @@
         </config>
         <pd:inputBindings>
             <root>
-                <xsl:copy-of select="$input-data/root/ns6:coffee-order"/>
+                <xsl:copy-of select="$input-data/root/initial-state"/>
             </root>
         </pd:inputBindings>
     </pd:activity>
     <pd:activity name="input data">
         <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
         <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-        <pd:x>326</pd:x>
-        <pd:y>83</pd:y>
+        <pd:x>145</pd:x>
+        <pd:y>90</pd:y>
         <config>
             <element>
                 <xsd:element name="root">
                     <xsd:complexType>
                         <xsd:sequence>
                             <xsd:element name="url" type="xsd:string"/>
-                            <xsd:element ref="ns6:coffee-order"/>
+                            <xsd:element name="initial-state" type="xsd:string"/>
                             <xsd:element name="expected-status" type="xsd:string"/>
                             <xsd:element name="expected-link-rel" type="xsd:string" maxOccurs="unbounded"/>
                         </xsd:sequence>
@@ -85,13 +69,11 @@
             </element>
         </config>
         <pd:inputBindings>
-            <xsl:variable name="type" select="'application/vnd.coffee-shop+xml'"/>
-            <xsl:variable name="url" select="'/coffee-shop/order'"/>
             <root>
                 <url>
-                    <xsl:value-of select="$url"/>
+                    <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/coffee-shop/interface/base-url"/>
                 </url>
-                <xsl:copy-of select="$buildOrder/ns6:coffee-order"/>
+                <initial-state>created</initial-state>
                 <expected-status>200 OK</expected-status>
                 <expected-link-rel>create</expected-link-rel>
                 <expected-link-rel>list</expected-link-rel>
@@ -150,7 +132,7 @@
     </pd:activity>
     <pd:transition>
         <pd:from>Start</pd:from>
-        <pd:to>buildOrder</pd:to>
+        <pd:to>input data</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
@@ -179,13 +161,6 @@
     <pd:transition>
         <pd:from>When a staff member lists the orders</pd:from>
         <pd:to>Then the response status is (http status)</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>buildOrder</pd:from>
-        <pd:to>input data</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
