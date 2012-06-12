@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://windyroad.org/coffee-shop" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="http://windyroad.org/coffee-shop-interface" xmlns:pfx="http://windyroad.org/wr-http.xsd">
-    <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/server/model/CoffeeShop.xsd"/>
+    <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/coffee-shop/model/CoffeeShop.xsd"/>
     <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/rest4BW/Private/Schemas/HttpConnection.xsd"/>
-    <xsd:import namespace="http://windyroad.org/coffee-shop-interface" schemaLocation="/server/interface/Interface.xsd"/>
+    <xsd:import namespace="http://windyroad.org/coffee-shop-interface" schemaLocation="/coffee-shop/interface/Interface.xsd"/>
     <pd:name>test/uatTestSuite/steps/Then the response is a list containing an order for (firstname).process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType>
@@ -47,7 +47,7 @@
         <pd:x>144</pd:x>
         <pd:y>70</pd:y>
         <config>
-            <processName>/server/services/Order/Private/all order options.process</processName>
+            <processName>/coffee-shop/services/Order/Private/all order options.process</processName>
         </config>
         <pd:inputBindings>
             <root/>
@@ -59,7 +59,7 @@
         <pd:x>270</pd:x>
         <pd:y>70</pd:y>
         <config>
-            <processName>/server/persistence/getAll.process</processName>
+            <processName>/coffee-shop/persistence/getAll.process</processName>
         </config>
         <pd:inputBindings/>
     </pd:activity>
@@ -69,7 +69,7 @@
         <pd:x>725</pd:x>
         <pd:y>146</pd:y>
         <config>
-            <processName>/server/interface/coffeeOrderListToString.process</processName>
+            <processName>/coffee-shop/interface/coffeeOrderListToString.process</processName>
         </config>
         <pd:inputBindings>
             <pfx2:coffee-order-list>

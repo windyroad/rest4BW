@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <BWSharedResource xmlns:cfshp="http://windyroad.org/coffee-shop" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-    <import namespace="http://windyroad.org/coffee-shop" schemaLocation="/server/model/CoffeeShop.xsd"/>
+    <import namespace="http://windyroad.org/coffee-shop" schemaLocation="/coffee-shop/model/CoffeeShop.xsd"/>
     <name>UID</name>
     <resourceType>ae.shared.sharedVariable</resourceType>
     <config xmlns:xsd="http://www.w3.org/2001/XMLSchema">

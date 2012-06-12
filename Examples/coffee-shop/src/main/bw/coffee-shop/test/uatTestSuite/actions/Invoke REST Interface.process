@@ -46,7 +46,7 @@
             <root>
                 <xsl:copy-of select="$Start/root/pfx:request"/>
                 <handlerProcess>
-                    <xsl:value-of select="'/server/REST Service.process'"/>
+                    <xsl:value-of select="'/coffee-shop/REST Service.process'"/>
                 </handlerProcess>
             </root>
         </pd:inputBindings>

@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:ns1="http://xmlns.tibco.com/bw/plugin-api/messages/context" xmlns:pfx="http://windyroad.org/rest4BW.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://xmlns.tibco.com/encodings/mime" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns2="http://windyroad.org/wr-http.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
+    <pd:name>server/Example REST Service.process</pd:name>
+    <pd:startName>HTTP Receiver</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="HTTP Receiver">
+        <pd:type>com.tibco.plugin.http.HTTPEventSource</pd:type>
+        <pd:resourceType>httppalette.httpEventSource</pd:resourceType>
+        <pd:x>99</pd:x>
+        <pd:y>79</pd:y>
+        <config>
+            <outputMode>String</outputMode>
+            <defaultEncoding>UTF8</defaultEncoding>
+            <inputOutputVersion>5.3.0</inputOutputVersion>
+            <newMimeSupport>true</newMimeSupport>
+            <sharedChannel>/coffee-shop/HTTP Connection.sharedhttp</sharedChannel>
+            <parsePostData>false</parsePostData>
+            <Headers>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Accept" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Accept-Charset" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Accept-Encoding" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Content-Length" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Connection" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Cookie" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="host" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="If-Modified-Since" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="ETag" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </Headers>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>716</pd:endX>
+    <pd:endY>79</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1338202793084</pd:targetNamespace>
+    <pd:activity name="REST Interface">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>302</pd:x>
+        <pd:y>79</pd:y>
+        <config>
+            <processName>/rest4BW/REST Interface.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:for-each select="$HTTP-Receiver/ProcessStarterOutput">
+                    <ns2:request>
+                        <xsl:if test="Method">
+                            <ns2:Method>
+                                <xsl:value-of select="Method"/>
+                            </ns2:Method>
+                        </xsl:if>
+                        <xsl:if test="RequestURI">
+                            <ns2:RequestURI>
+                                <xsl:value-of select="RequestURI"/>
+                            </ns2:RequestURI>
+                        </xsl:if>
+                        <xsl:if test="HTTPVersion">
+                            <ns2:HTTPVersion>
+                                <xsl:value-of select="HTTPVersion"/>
+                            </ns2:HTTPVersion>
+                        </xsl:if>
+                        <xsl:if test="PostData">
+                            <ns2:PostData>
+                                <xsl:value-of select="PostData"/>
+                            </ns2:PostData>
+                        </xsl:if>
+                        <xsl:if test="Command">
+                            <ns2:Command>
+                                <xsl:value-of select="Command"/>
+                            </ns2:Command>
+                        </xsl:if>
+                        <xsl:if test="QueryString">
+                            <ns2:QueryString>
+                                <xsl:value-of select="QueryString"/>
+                            </ns2:QueryString>
+                        </xsl:if>
+                        <xsl:if test="Header">
+                            <ns2:Header>
+                                <xsl:value-of select="Header"/>
+                            </ns2:Header>
+                        </xsl:if>
+                        <xsl:if test="Protocol">
+                            <ns2:Protocol>
+                                <xsl:value-of select="Protocol"/>
+                            </ns2:Protocol>
+                        </xsl:if>
+                        <xsl:if test="Port">
+                            <ns2:Port>
+                                <xsl:value-of select="Port"/>
+                            </ns2:Port>
+                        </xsl:if>
+                        <xsl:for-each select="Headers">
+                            <ns2:Headers>
+                                <xsl:if test="Accept">
+                                    <ns2:Accept>
+                                        <xsl:value-of select="Accept"/>
+                                    </ns2:Accept>
+                                </xsl:if>
+                                <xsl:if test="Accept-Charset">
+                                    <ns2:Accept-Charset>
+                                        <xsl:value-of select="Accept-Charset"/>
+                                    </ns2:Accept-Charset>
+                                </xsl:if>
+                                <xsl:if test="Accept-Encoding">
+                                    <ns2:Accept-Encoding>
+                                        <xsl:value-of select="Accept-Encoding"/>
+                                    </ns2:Accept-Encoding>
+                                </xsl:if>
+                                <xsl:if test="Content-Type">
+                                    <ns2:Content-Type>
+                                        <xsl:value-of select="Content-Type"/>
+                                    </ns2:Content-Type>
+                                </xsl:if>
+                                <xsl:if test="Content-Length">
+                                    <ns2:Content-Length>
+                                        <xsl:value-of select="Content-Length"/>
+                                    </ns2:Content-Length>
+                                </xsl:if>
+                                <xsl:if test="Connection">
+                                    <ns2:Connection>
+                                        <xsl:value-of select="Connection"/>
+                                    </ns2:Connection>
+                                </xsl:if>
+                                <xsl:if test="Cookie">
+                                    <ns2:Cookie>
+                                        <xsl:value-of select="Cookie"/>
+                                    </ns2:Cookie>
+                                </xsl:if>
+                                <xsl:if test="Pragma">
+                                    <ns2:Pragma>
+                                        <xsl:value-of select="Pragma"/>
+                                    </ns2:Pragma>
+                                </xsl:if>
+                                <xsl:if test="host">
+                                    <ns2:host>
+                                        <xsl:value-of select="host"/>
+                                    </ns2:host>
+                                </xsl:if>
+                                <xsl:if test="If-Modified-Since">
+                                    <ns2:If-Modified-Since>
+                                        <xsl:value-of select="If-Modified-Since"/>
+                                    </ns2:If-Modified-Since>
+                                </xsl:if>
+                                <xsl:if test="ETag">
+                                    <ns2:ETag>
+                                        <xsl:value-of select="ETag"/>
+                                    </ns2:ETag>
+                                </xsl:if>
+                            </ns2:Headers>
+                        </xsl:for-each>
+                        <xsl:for-each select="ns:mimeEnvelopeElement">
+                            <ns2:mimeEnvelopeElement>
+                                <xsl:for-each select="mimePart">
+                                    <ns2:mimePart>
+                                        <xsl:for-each select="mimeHeaders">
+                                            <ns2:mimeHeaders>
+                                                <xsl:if test="content-disposition">
+                                                    <ns2:content-disposition>
+                                                        <xsl:value-of select="content-disposition"/>
+                                                    </ns2:content-disposition>
+                                                </xsl:if>
+                                                <ns2:content-type>
+                                                    <xsl:value-of select="content-type"/>
+                                                </ns2:content-type>
+                                                <xsl:if test="content-transfer-encoding">
+                                                    <ns2:content-transfer-encoding>
+                                                        <xsl:value-of select="content-transfer-encoding"/>
+                                                    </ns2:content-transfer-encoding>
+                                                </xsl:if>
+                                                <xsl:if test="content-id">
+                                                    <ns2:content-id>
+                                                        <xsl:value-of select="content-id"/>
+                                                    </ns2:content-id>
+                                                </xsl:if>
+                                            </ns2:mimeHeaders>
+                                        </xsl:for-each>
+                                        <xsl:choose>
+                                            <xsl:when test="binaryContent">
+                                                <ns2:binaryContent>
+                                                    <xsl:value-of select="binaryContent"/>
+                                                </ns2:binaryContent>
+                                            </xsl:when>
+                                            <xsl:when test="textContent">
+                                                <ns2:textContent>
+                                                    <xsl:value-of select="textContent"/>
+                                                </ns2:textContent>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <ns2:fileName>
+                                                    <xsl:value-of select="fileName"/>
+                                                </ns2:fileName>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                    </ns2:mimePart>
+                                </xsl:for-each>
+                            </ns2:mimeEnvelopeElement>
+                        </xsl:for-each>
+                        <xsl:for-each select="ns1:Context">
+                            <ns2:Context>
+                                <ns2:RemoteAddress>
+                                    <xsl:value-of select="RemoteAddress"/>
+                                </ns2:RemoteAddress>
+                            </ns2:Context>
+                        </xsl:for-each>
+                    </ns2:request>
+                </xsl:for-each>
+                <handlerProcess>/coffee-shop/REST Service.process</handlerProcess>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Send HTTP Response">
+        <pd:type>com.tibco.plugin.http.HTTPResponseActivity</pd:type>
+        <pd:resourceType>httppalette.httpWebResponse</pd:resourceType>
+        <pd:x>526</pd:x>
+        <pd:y>79</pd:y>
+        <config>
+            <closeConnection>true</closeConnection>
+            <eventSource>HTTP Receiver</eventSource>
+            <Headers>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Allow" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Cache-Control" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Last-Modified" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Expires" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="StatusLine" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Set-Cookie" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Pragma" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="Location" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="ETag" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </Headers>
+        </config>
+        <pd:inputBindings>
+            <ResponseActivityInput>
+                <xsl:if test="$REST-Interface/ns2:response/ns2:binaryContent">
+                    <binaryContent>
+                        <xsl:value-of select="$REST-Interface/ns2:response/ns2:binaryContent"/>
+                    </binaryContent>
+                </xsl:if>
+                <xsl:if test="$REST-Interface/ns2:response/ns2:asciiContent">
+                    <asciiContent>
+                        <xsl:value-of select="$REST-Interface/ns2:response/ns2:asciiContent"/>
+                    </asciiContent>
+                </xsl:if>
+                <xsl:for-each select="$REST-Interface/ns2:response/ns2:Headers">
+                    <Headers>
+                        <xsl:if test="ns2:Allow">
+                            <Allow>
+                                <xsl:value-of select="ns2:Allow"/>
+                            </Allow>
+                        </xsl:if>
+                        <xsl:if test="ns2:Cache-Control">
+                            <Cache-Control>
+                                <xsl:value-of select="ns2:Cache-Control"/>
+                            </Cache-Control>
+                        </xsl:if>
+                        <xsl:if test="ns2:Last-Modified">
+                            <Last-Modified>
+                                <xsl:value-of select="ns2:Last-Modified"/>
+                            </Last-Modified>
+                        </xsl:if>
+                        <xsl:if test="ns2:Expires">
+                            <Expires>
+                                <xsl:value-of select="ns2:Expires"/>
+                            </Expires>
+                        </xsl:if>
+                        <xsl:if test="ns2:StatusLine">
+                            <StatusLine>
+                                <xsl:value-of select="ns2:StatusLine"/>
+                            </StatusLine>
+                        </xsl:if>
+                        <xsl:if test="ns2:Content-Type">
+                            <Content-Type>
+                                <xsl:value-of select="ns2:Content-Type"/>
+                            </Content-Type>
+                        </xsl:if>
+                        <xsl:if test="ns2:Set-Cookie">
+                            <Set-Cookie>
+                                <xsl:value-of select="ns2:Set-Cookie"/>
+                            </Set-Cookie>
+                        </xsl:if>
+                        <xsl:if test="ns2:Pragma">
+                            <Pragma>
+                                <xsl:value-of select="ns2:Pragma"/>
+                            </Pragma>
+                        </xsl:if>
+                        <xsl:if test="ns2:Location">
+                            <Location>
+                                <xsl:value-of select="ns2:Location"/>
+                            </Location>
+                        </xsl:if>
+                        <xsl:if test="ns2:ETag">
+                            <ETag>
+                                <xsl:value-of select="ns2:ETag"/>
+                            </ETag>
+                        </xsl:if>
+                    </Headers>
+                </xsl:for-each>
+                <xsl:for-each select="$REST-Interface/ns2:response/ns2:mimeEnvelopeElement">
+                    <ns:mimeEnvelopeElement>
+                        <xsl:for-each select="ns2:mimePart">
+                            <mimePart>
+                                <xsl:for-each select="ns2:mimeHeaders">
+                                    <mimeHeaders>
+                                        <xsl:if test="ns2:content-disposition">
+                                            <content-disposition>
+                                                <xsl:value-of select="ns2:content-disposition"/>
+                                            </content-disposition>
+                                        </xsl:if>
+                                        <content-type>
+                                            <xsl:value-of select="ns2:content-type"/>
+                                        </content-type>
+                                        <xsl:if test="ns2:content-transfer-encoding">
+                                            <content-transfer-encoding>
+                                                <xsl:value-of select="ns2:content-transfer-encoding"/>
+                                            </content-transfer-encoding>
+                                        </xsl:if>
+                                        <xsl:if test="ns2:content-id">
+                                            <content-id>
+                                                <xsl:value-of select="ns2:content-id"/>
+                                            </content-id>
+                                        </xsl:if>
+                                    </mimeHeaders>
+                                </xsl:for-each>
+                                <xsl:choose>
+                                    <xsl:when test="ns2:binaryContent">
+                                        <binaryContent>
+                                            <xsl:value-of select="ns2:binaryContent"/>
+                                        </binaryContent>
+                                    </xsl:when>
+                                    <xsl:when test="ns2:textContent">
+                                        <textContent>
+                                            <xsl:value-of select="ns2:textContent"/>
+                                        </textContent>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <fileName>
+                                            <xsl:value-of select="ns2:fileName"/>
+                                        </fileName>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </mimePart>
+                        </xsl:for-each>
+                    </ns:mimeEnvelopeElement>
+                </xsl:for-each>
+            </ResponseActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>HTTP Receiver</pd:from>
+        <pd:to>REST Interface</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>REST Interface</pd:from>
+        <pd:to>Send HTTP Response</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send HTTP Response</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:label>
+        <pd:name>Label</pd:name>
+        <pd:description> This is an example usage of the REST Interface.
+ When implementing, change the 'dynamicDelegatorProcessOverride' variable to the Delegate implementation.
+ By default, it uses 'Default Delegate.process'. 
+
+ In addition, the HTTP Connection should be changed.</pd:description>
+        <pd:x>416</pd:x>
+        <pd:y>191</pd:y>
+        <pd:width>719</pd:width>
+        <pd:height>94</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-6697729</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
+</pd:ProcessDefinition>

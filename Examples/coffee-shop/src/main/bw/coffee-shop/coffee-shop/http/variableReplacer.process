@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <pd:name>coffee-shop/http/variableReplacer.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="string" type="xsd:string"/>
+                    <xsd:element name="params" minOccurs="0">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="param" maxOccurs="unbounded">
+                                    <xsd:complexType>
+                                        <xsd:sequence>
+                                            <xsd:element name="key" type="xsd:string"/>
+                                            <xsd:element name="value" type="xsd:string"/>
+                                        </xsd:sequence>
+                                    </xsd:complexType>
+                                </xsd:element>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="startTag" type="xsd:string"/>
+                    <xsd:element name="endTag" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>133</pd:startX>
+    <pd:startY>65</pd:startY>
+    <pd:returnBindings>
+        <string>
+            <xsl:value-of select="$replaceMultiple/root/output"/>
+        </string>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="string" type="xsd:string"/>
+    </pd:endType>
+    <pd:endX>510</pd:endX>
+    <pd:endY>63</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1338432265101</pd:targetNamespace>
+    <pd:activity name="replaceMultiple">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>298</pd:x>
+        <pd:y>67</pd:y>
+        <config>
+            <processName>/coffee-shop/Private/Common/string/replaceMultiple.process</processName>
+        </config>
+        <pd:inputBindings>
+            <replace>
+                <string>
+                    <xsl:value-of select="$Start/root/string"/>
+                </string>
+                <xsl:for-each select="$Start/root/params/param">
+                    <param>
+                        <pattern>
+                            <xsl:value-of select="concat(../../startTag,key,../../endTag)"/>
+                        </pattern>
+                        <replace>
+                            <xsl:value-of select="value"/>
+                        </replace>
+                    </param>
+                </xsl:for-each>
+            </replace>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>replaceMultiple</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>replaceMultiple</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

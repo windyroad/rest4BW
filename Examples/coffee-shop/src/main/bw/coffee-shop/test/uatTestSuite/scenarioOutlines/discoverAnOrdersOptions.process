@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://windyroad.org/wr-http.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/coffee-shop">
-    <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/server/model/CoffeeShop.xsd"/>
+    <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/coffee-shop/model/CoffeeShop.xsd"/>
     <pd:name>test/uatTestSuite/scenarioOutlines/discoverAnOrdersOptions.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType>

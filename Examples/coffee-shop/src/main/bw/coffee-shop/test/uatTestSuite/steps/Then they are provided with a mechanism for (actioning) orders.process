@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:ns2="http://windyroad.org/coffee-shop-interface" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://windyroad.org/coffee-shop" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/wr-http.xsd">
-    <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/server/model/CoffeeShop.xsd"/>
+    <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/coffee-shop/model/CoffeeShop.xsd"/>
     <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/rest4BW/Private/Schemas/HttpConnection.xsd"/>
     <pd:name>test/uatTestSuite/steps/Then they are provided with a mechanism for (actioning) orders.process</pd:name>
     <pd:startName>Start</pd:startName>
@@ -47,7 +47,7 @@
         <pd:x>264</pd:x>
         <pd:y>116</pd:y>
         <config>
-            <processName>/server/services/Order/Private/all order options.process</processName>
+            <processName>/coffee-shop/services/Order/Private/all order options.process</processName>
         </config>
         <pd:inputBindings>
             <root>
@@ -63,7 +63,7 @@
         <pd:x>437</pd:x>
         <pd:y>116</pd:y>
         <config>
-            <processName>/server/interface/optionsToString.process</processName>
+            <processName>/coffee-shop/interface/optionsToString.process</processName>
         </config>
         <pd:inputBindings>
             <ns2:options>
