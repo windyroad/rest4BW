@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:ns1="http://windyroad.org/rest4BW.xsd" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns2="http://windyroad.org/wr-http.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://windyroad.org/wr-http.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://windyroad.org/rest4BW.xsd" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd">
     <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/REST/Private/Schemas/rest4BW.xsd"/>
     <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/REST/Private/Schemas/HttpConnection.xsd"/>
-    <pd:name>test/quickTestSuite/Feature 4 - Rest Interface TestCase/Scenario 4 - Missing delegate interface.process</pd:name>
+    <pd:name>test/quickTestSuite/F4 - Rest Interface TestCase/S4 - Missing delegate interface.process</pd:name>
     <pd:description>@Timeout(60000)</pd:description>
     <pd:startName>Start</pd:startName>
     <pd:startX>150</pd:startX>
@@ -25,18 +25,12 @@
         <pd:inputBindings>
             <root>
                 <ns2:request>
-                    <ns2:Command>
-                        <xsl:value-of select="'/GET'"/>
-                    </ns2:Command>
+                    <ns2:Command>/GET</ns2:Command>
                     <ns2:Context>
-                        <ns2:RemoteAddress>
-                            <xsl:value-of select="'localhost'"/>
-                        </ns2:RemoteAddress>
+                        <ns2:RemoteAddress>localhost</ns2:RemoteAddress>
                     </ns2:Context>
                 </ns2:request>
-                <handlerProcess>
-                    <xsl:value-of select="'not a real process.process'"/>
-                </handlerProcess>
+                <handlerProcess>not a real process.process</handlerProcess>
             </root>
         </pd:inputBindings>
     </pd:activity>
