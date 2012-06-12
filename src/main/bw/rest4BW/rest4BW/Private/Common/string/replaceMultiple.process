@@ -110,7 +110,7 @@
             <pd:x>344</pd:x>
             <pd:y>102</pd:y>
             <config>
-                <processName>/REST/Private/Common/string/replace.process</processName>
+                <processName>/rest4BW/Private/Common/string/replace.process</processName>
             </config>
             <pd:inputBindings>
                 <replace>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://windyroad.org/rest4BW.xsd" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:pfx="http://windyroad.org/wr-http.xsd">
-    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/REST/Private/Schemas/rest4BW.xsd"/>
-    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/REST/Private/Schemas/HttpConnection.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Private/Schemas/rest4BW.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/rest4BW/Private/Schemas/HttpConnection.xsd"/>
     <pd:name>quickTestSuite/Feature 2 - Multipart Form Data parser TestCase/Scenario 2 - Multiple Mimeparts with blank values.process</pd:name>
     <pd:description>@Timeout(60000)</pd:description>
     <pd:startName>Start</pd:startName>
@@ -139,7 +139,7 @@ This is the end of the file.</pfx:textContent>
         <pd:x>402</pd:x>
         <pd:y>64</pd:y>
         <config>
-            <processName>/REST/Private/Common/http/parseHttpReceiverMultipart.process</processName>
+            <processName>/rest4BW/Private/Common/http/parseHttpReceiverMultipart.process</processName>
         </config>
         <pd:inputBindings>
             <root>

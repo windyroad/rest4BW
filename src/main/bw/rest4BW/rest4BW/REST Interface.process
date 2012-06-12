@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:pfx2="http://windyroad.org/wr-http.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx3="http://www.tibco.com/pe/DeployedVarsType" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx5="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:rest="http://windyroad.org/rest4BW.xsd" xmlns:ns="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:pfx4="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
-    <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/REST/Private/Schemas/HttpConnection.xsd"/>
-    <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/REST/Private/Schemas/rest4BW.xsd"/>
-    <xsd:import namespace="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" schemaLocation="/REST/Private/Schemas/StatusCodeDefinitions.xsd"/>
+    <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/rest4BW/Private/Schemas/HttpConnection.xsd"/>
+    <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Private/Schemas/rest4BW.xsd"/>
+    <xsd:import namespace="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" schemaLocation="/rest4BW/Private/Schemas/StatusCodeDefinitions.xsd"/>
     <pd:name>REST/REST Interface.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType>
@@ -88,7 +88,7 @@
             <pd:y>87</pd:y>
             <config>
                 <processNameXPath>$Start/root/handlerProcess</processNameXPath>
-                <processName>/REST/Example/server/Default Delegate.process</processName>
+                <processName>/rest4BW/Example/server/Default Delegate.process</processName>
             </config>
             <pd:inputBindings>
                 <xsl:copy-of select="$Parse-HTTP-request/rest:request"/>
@@ -100,7 +100,7 @@
             <pd:x>275</pd:x>
             <pd:y>87</pd:y>
             <config>
-                <processName>/REST/Private/Process/REST Interface/parseHTTPRequest.process</processName>
+                <processName>/rest4BW/Private/Process/REST Interface/parseHTTPRequest.process</processName>
             </config>
             <pd:inputBindings>
                 <xsl:copy-of select="$Start/root/pfx2:request"/>
@@ -112,7 +112,7 @@
             <pd:x>584</pd:x>
             <pd:y>94</pd:y>
             <config>
-                <processName>/REST/Private/Process/REST Interface/renderHTTPResponse.process</processName>
+                <processName>/rest4BW/Private/Process/REST Interface/renderHTTPResponse.process</processName>
             </config>
             <pd:inputBindings>
                 <xsl:copy-of select="$Dynamic-Delegator/rest:response"/>
@@ -133,7 +133,7 @@
         <pd:x>579</pd:x>
         <pd:y>233</pd:y>
         <config>
-            <processName>/REST/Private/Process/REST Interface/renderHTTPResponse.process</processName>
+            <processName>/rest4BW/Private/Process/REST Interface/renderHTTPResponse.process</processName>
         </config>
         <pd:inputBindings>
             <xsl:choose>
@@ -152,7 +152,7 @@
         <pd:x>499</pd:x>
         <pd:y>340</pd:y>
         <config>
-            <processName>/REST/Private/Common/logging/Shield Exception.process</processName>
+            <processName>/rest4BW/Private/Common/logging/Shield Exception.process</processName>
             <processNameXPath>$Start/root/exceptionShielder</processNameXPath>
         </config>
         <pd:inputBindings>

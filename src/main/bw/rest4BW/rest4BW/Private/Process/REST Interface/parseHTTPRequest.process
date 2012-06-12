@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:pfx2="http://windyroad.org/rest4BW.xsd" xmlns:pfx="http://windyroad.org/wr-http.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
-    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/REST/Private/Schemas/HttpConnection.xsd"/>
-    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/REST/Private/Schemas/rest4BW.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/rest4BW/Private/Schemas/HttpConnection.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Private/Schemas/rest4BW.xsd"/>
     <pd:name>REST/Private/Process/REST Interface/parseHTTPRequest.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType ref="pfx:request"/>
@@ -53,7 +53,7 @@
         <pd:x>488</pd:x>
         <pd:y>82</pd:y>
         <config>
-            <processName>/REST/Private/Common/http/parseAccept.process</processName>
+            <processName>/rest4BW/Private/Common/http/parseAccept.process</processName>
         </config>
         <pd:inputBindings>
             <accept>
@@ -67,7 +67,7 @@
         <pd:x>354</pd:x>
         <pd:y>82</pd:y>
         <config>
-            <processName>/REST/Private/Common/http/parseHttpReceiverMultipart.process</processName>
+            <processName>/rest4BW/Private/Common/http/parseHttpReceiverMultipart.process</processName>
         </config>
         <pd:inputBindings>
             <root>
@@ -83,7 +83,7 @@
         <pd:x>211</pd:x>
         <pd:y>82</pd:y>
         <config>
-            <processName>/REST/Private/Common/http/parseQuery.process</processName>
+            <processName>/rest4BW/Private/Common/http/parseQuery.process</processName>
         </config>
         <pd:inputBindings>
             <query>

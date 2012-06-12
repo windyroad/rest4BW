@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:ns1="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://windyroad.org/coffee-shop" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns2="http://windyroad.org/rest4BW.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
-    <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/REST/Private/Schemas/rest4BW.xsd"/>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://windyroad.org/rest4BW.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:ns="http://windyroad.org/coffee-shop" xmlns:ns0="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Private/Schemas/rest4BW.xsd"/>
     <pd:name>server/services/Order/Private/state machine.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType>
@@ -17,7 +17,6 @@
     <pd:startY>83</pd:startY>
     <pd:returnBindings/>
     <pd:endName>End</pd:endName>
-    <pd:endType/>
     <pd:endX>1063</pd:endX>
     <pd:endY>84</pd:endY>
     <pd:errorSchemas>
@@ -292,9 +291,9 @@
                 <faultName>HTTP-Error</faultName>
             </config>
             <pd:inputBindings>
-                <ns0:ActivityInput xmlns:ns0="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema">
+                <ns0:ActivityInput>
                     <data>
-                        <ns2:error xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns1:sc-403_Forbidden">
+                        <ns2:error xsi:type="ns1:sc-403_Forbidden">
                             <ns2:text-content>
                                 <xsl:value-of select="if (exists($message-overrides/root/param[current-state=$get/ns:coffee-order/ns:state and transition-action=$Start/root/transition-action-name]))&#xA;then $message-overrides/root/param[current-state=$get/ns:coffee-order/ns:state and transition-action=$Start/root/transition-action-name]/message[1]&#xA;else concat(&quot;Can't &quot;,$Start/root/transition-action-name,' an order that is ',$get/ns:coffee-order/ns:state)"/>
                             </ns2:text-content>

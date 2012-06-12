@@ -15,7 +15,7 @@
             <defaultEncoding>UTF8</defaultEncoding>
             <inputOutputVersion>5.3.0</inputOutputVersion>
             <newMimeSupport>true</newMimeSupport>
-            <sharedChannel>/REST/Example/server/HTTP Connection.sharedhttp</sharedChannel>
+            <sharedChannel>/rest4BW/Example/server/HTTP Connection.sharedhttp</sharedChannel>
             <parsePostData>false</parsePostData>
             <Headers>
                 <xsd:element name="root">
@@ -51,7 +51,7 @@
         <pd:x>302</pd:x>
         <pd:y>79</pd:y>
         <config>
-            <processName>/REST/REST Interface.process</processName>
+            <processName>/rest4BW/REST Interface.process</processName>
         </config>
         <pd:inputBindings>
             <root>
@@ -217,7 +217,7 @@
                         </xsl:for-each>
                     </ns2:request>
                 </xsl:for-each>
-                <handlerProcess>/REST/Example/server/Default Delegate.process</handlerProcess>
+                <handlerProcess>/rest4BW/Example/server/Default Delegate.process</handlerProcess>
             </root>
         </pd:inputBindings>
     </pd:activity>

@@ -49,7 +49,7 @@
         <pd:x>298</pd:x>
         <pd:y>67</pd:y>
         <config>
-            <processName>/REST/Private/Common/string/replaceMultiple.process</processName>
+            <processName>/rest4BW/Private/Common/string/replaceMultiple.process</processName>
         </config>
         <pd:inputBindings>
             <replace>

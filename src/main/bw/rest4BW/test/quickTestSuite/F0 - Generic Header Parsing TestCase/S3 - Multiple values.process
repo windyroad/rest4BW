@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://windyroad.org/rest4BW.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd">
-    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/REST/Private/Schemas/rest4BW.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Private/Schemas/rest4BW.xsd"/>
     <pd:name>quickTestSuite/Feature 0 - Generic Header Parsing TestCase/Scenario 3 - Multiple values.process</pd:name>
     <pd:description>@Timeout(60000)</pd:description>
     <pd:startName>Start</pd:startName>
@@ -87,7 +87,7 @@
         <pd:x>311</pd:x>
         <pd:y>67</pd:y>
         <config>
-            <processName>/REST/Private/Common/http/parseHeaders.process</processName>
+            <processName>/rest4BW/Private/Common/http/parseHeaders.process</processName>
         </config>
         <pd:inputBindings>
             <root>
