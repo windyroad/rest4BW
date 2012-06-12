@@ -53,11 +53,9 @@
             </element>
         </config>
         <pd:inputBindings>
-            <xsl:variable name="type" select="'application/vnd.coffee-shop+xml'"/>
-            <xsl:variable name="url" select="'/coffee-shop/order'"/>
             <root>
                 <url>
-                    <xsl:value-of select="$url"/>
+                    <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/coffee-shop/interface/base-url"/>
                 </url>
                 <expected-status>200 OK</expected-status>
                 <expected-link-rel>create</expected-link-rel>

@@ -43,7 +43,6 @@
 	</target>
 
 	<target name="projlib" depends="-load-ant-contrib,validate">
-    <echo message=">>> 1 ${rest4BW.projlib}" />
 		<tibant:build-library lib="/Build/rest4BW"
 		                      dir="src/main/bw"
 		                      project="rest4BW"
@@ -51,7 +50,6 @@
 		                      validate="false"
 		                      create-dtl-file="true" />
 	</target>
-    <echo message=">>> 2 ${rest4BW.projlib}" />
 
 	<target name="init">
 		<mkdir dir="build" />

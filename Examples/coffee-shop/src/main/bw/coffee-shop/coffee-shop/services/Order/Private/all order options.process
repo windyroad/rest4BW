@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://xmlns.tibco.com/encodings/mime" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx1="http://windyroad.org/bwunit-abstract/installLicense2Impl" xmlns:ns12="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:ns5="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns6="http://windyroad.org/coffee-shop" xmlns:pfx="http://windyroad.org/coffee-shop-interface" xmlns:ns7="http://windyroad.org/wr-http.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns1="http://windyroad.org/bwunit-0.0.0.xsd" xmlns:ns4="http://windyroad.org/bwunit-abstract" xmlns:ns3="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://windyroad.org/bwunit-concrete">
     <xsd:import namespace="http://windyroad.org/coffee-shop-interface" schemaLocation="/coffee-shop/interface/Interface.xsd"/>
-    <pd:name>server/services/Order/Private/all order options.process</pd:name>
+    <pd:name>coffee-shop/services/Order/Private/all order options.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType>
         <xsd:element name="root">
@@ -49,8 +49,8 @@
             </element>
         </config>
         <pd:inputBindings>
-            <xsl:variable name="url" select="if (exists($Start/root/firstname) and $Start/root/firstname!='')&#xA;then concat('/coffee-shop/order/',$Start/root/firstname)&#xA;else '/coffee-shop/order'"/>
-            <xsl:variable name="type" select="'application/vnd.coffee-shop+xml'"/>
+            <xsl:variable name="url" select="if (exists($Start/root/firstname) and $Start/root/firstname!='')&#xA;then concat($_globalVariables/ns5:GlobalVariables/coffee-shop/interface/base-url,'/',$Start/root/firstname)&#xA;else $_globalVariables/ns5:GlobalVariables/coffee-shop/interface/base-url"/>
+            <xsl:variable name="type" select="$_globalVariables/ns5:GlobalVariables/coffee-shop/interface/types/xml"/>
             <root>
                 <pfx:options>
                     <pfx:link>

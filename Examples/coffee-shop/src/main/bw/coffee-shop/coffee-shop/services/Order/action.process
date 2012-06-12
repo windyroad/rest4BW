@@ -44,7 +44,7 @@
                     <xsl:value-of select="$Start/root/firstname"/>
                 </firstname>
                 <transition-action-name>
-                    <xsl:value-of select="$Start/root/pfx:request/pfx:post/pfx:part/pfx:meta[@name=$_globalVariables/pfx5:GlobalVariables/REST-Example/interface/transition-action-key]/@value"/>
+                    <xsl:value-of select="$Start/root/pfx:request/pfx:post/pfx:part/pfx:meta[@name=$_globalVariables/pfx5:GlobalVariables/coffee-shop/interface/transition-action-key]/@value"/>
                 </transition-action-name>
             </root>
         </pd:inputBindings>
@@ -78,7 +78,7 @@
                 <data>
                     <pfx:error xsi:type="ns3:sc-403_Forbidden">
                         <pfx:text-content>
-                            <xsl:value-of select="concat('firstname or ',$_globalVariables/pfx5:GlobalVariables/REST-Example/interface/transition-action-key,' parameter could not be found!')"/>
+                            <xsl:value-of select="concat('firstname or ',$_globalVariables/pfx5:GlobalVariables/coffee-shop/interface/transition-action-key,' parameter could not be found!')"/>
                         </pfx:text-content>
                     </pfx:error>
                 </data>
@@ -106,7 +106,7 @@
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>xpath</pd:conditionType>
-        <pd:xpath>exists($Start/root/firstname) and exists($Start/root/pfx:request/pfx:post/pfx:part/pfx:meta[@name=$_globalVariables/pfx5:GlobalVariables/REST-Example/interface/transition-action-key]/@value)</pd:xpath>
+        <pd:xpath>exists($Start/root/firstname) and exists($Start/root/pfx:request/pfx:post/pfx:part/pfx:meta[@name=$_globalVariables/pfx5:GlobalVariables/coffee-shop/interface/transition-action-key]/@value)</pd:xpath>
     </pd:transition>
     <pd:transition>
         <pd:from>Null</pd:from>
