@@ -1,7 +1,6 @@
 # use glob syntax.
 syntax:glob
 
-
 # Ignore sys files
 *~
 lib/*~
@@ -12,16 +11,11 @@ lib/*
 # Ignore generated files/folders
 build
 src/main/bw/.designtimelibs
-src/main/bw/rest-tib-lib/.designtimelibs
-
-# Don't ignore this projlib file
-#!Examples/server-client/lib/rest-tib-lib.projlib
-#!Examples/server-client/lib/BWUnit.projlib
-
+src/main/bw/rest4BW/.designtimelibs
 
 
 
 syntax: regexp
-^Examples/server-client/src/main/bw/server-client/server-client/\.designtimelibs$
+^Examples/coffee-shop/src/main/bw/coffee-shop/coffee-shop/\.designtimelibs$
 syntax: regexp
-^Examples/server-client/src/main/bw/server-client/\.designtimelibs$
+^Examples/coffee-shop/src/main/bw/coffee-shop/\.designtimelibs$
