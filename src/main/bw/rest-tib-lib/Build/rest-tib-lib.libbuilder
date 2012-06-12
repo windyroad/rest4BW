@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Repository:repository xmlns:Repository="http://www.tibco.com/xmlns/repo/types/2002">
-    <name name="rest-tib-lib">
-        <version>16</version>
-        <author>Windy Road Technology Pty Limited</author>
-        <fileLocation>/tmp/rest-tib-lib.projlib</fileLocation>
-        <resources>/REST/REST Interface.process</resources>
-    </name>
-</Repository:repository>

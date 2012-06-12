@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project default="pre-commit"
-         name="rest-tib-lib"
+         name="rest4BW"
          xmlns="antlib:org.apache.tools.ant"
          xmlns:bwubuild="org.windyroad.bwunit.build"
          xmlns:bwunit="org.windyroad.bwunit"
@@ -30,7 +30,7 @@
 	<property name="ivy.jar.file" location="${ivy.jar.dir}/ivy-${ivy.install.version}.jar" />
 
 	<property name="bwunit.home" location="lib/bwunit" />
-	<property name="rest-tib-lib.projlib" location="build/rest-tib-lib.projlib" />
+	<property name="rest4BW.projlib" location="build/rest4BW.projlib" />
 	<import file="lib/bwunit/util/bwunit.xml" optional="true" />
 
 	<target name="-load-ant-contrib" depends="retrieve" unless="ant-contrib.loaded">
@@ -39,17 +39,19 @@
 	</target>
 
 	<target name="validate" depends="-load-ant-contrib">
-		<bwunit:validate-project dir="src/main/bw" project="rest-tib-lib" max-warnings="0" create-dtl-file="true" />
+		<bwunit:validate-project dir="src/main/bw" project="rest4BW" max-warnings="0" create-dtl-file="true" />
 	</target>
 
 	<target name="projlib" depends="-load-ant-contrib,validate">
-		<tibant:build-library lib="/Build/rest-tib-lib"
+    <echo message=">>> 1 ${rest4BW.projlib}" />
+		<tibant:build-library lib="/Build/rest4BW"
 		                      dir="src/main/bw"
-		                      project="rest-tib-lib"
-		                      out="${rest-tib-lib.projlib}"
+		                      project="rest4BW"
+		                      out="${rest4BW.projlib}"
 		                      validate="false"
 		                      create-dtl-file="true" />
 	</target>
+    <echo message=">>> 2 ${rest4BW.projlib}" />
 
 	<target name="init">
 		<mkdir dir="build" />
@@ -95,7 +97,7 @@
 	<target name="check-version" depends="-determine-version" description="" />
 
 	<target name="designer" depends="-load-ant-contrib" description="Launch ${ant.project.name} in TIBCO Designer">
-		<bwunit:designer dir="src/main/bw" project="rest-tib-lib" create-dtl-file="true" />
+		<bwunit:designer dir="src/main/bw" project="rest4BW" create-dtl-file="true" />
 	</target>
 
 	<target name="clean" description="">
@@ -328,7 +330,7 @@ To Releases Version: ${releases.new.revision}</echo>
 	</macrodef>
 
 	<target name="validate-projlib" description="Validate the compiled projlib">
-		<tibant:designer dir="src/main/bw" project="rest-tib-lib" expected-errors="0" max-warnings="0" />
+		<tibant:designer dir="src/main/bw" project="rest4BW" expected-errors="0" max-warnings="0" />
 	</target>
 
 	<target name="run-quick-tests" description="Run Quick tests" depends="-load-ant-contrib,build">
@@ -546,7 +548,7 @@ Source Code Revision ${mercurial.revision}</echo>
     &lt;/app:control&gt;
     &lt;content type="xhtml" xml:lang="en"&gt;
         &lt;p xmlns="http://www.w3.org/1999/xhtml"&gt;
-            &lt;a href="https://windyroad.assembla.com/spaces/rest-tib-lib/milestones/${milestone.@{version}.id}"&gt;${ant.project.name} v@{version}&lt;/a&gt; has been released. For details, please see the &lt;a href="https://windyroad.assembla.com/spaces/rest-tib-lib/tickets/custom_report/28347"&gt;Closed Defects and Implemented Features List&lt;/a&gt;.&lt;/p&gt;
+            &lt;a href="https://windyroad.assembla.com/spaces/rest4BW/milestones/${milestone.@{version}.id}"&gt;${ant.project.name} v@{version}&lt;/a&gt; has been released. For details, please see the &lt;a href="https://windyroad.assembla.com/spaces/rest4BW/tickets/custom_report/28347"&gt;Closed Defects and Implemented Features List&lt;/a&gt;.&lt;/p&gt;
     &lt;/content&gt;
     &lt;category scheme="http://windyroad.org" term="News" /&gt;
     &lt;category scheme="http://windyroad.org" term="Software Releases" /&gt;

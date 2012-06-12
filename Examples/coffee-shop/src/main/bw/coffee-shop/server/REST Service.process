@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:ns4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx3="http://www.tibco.com/schemas/coffee-shop/server/shared variables/Schema.xsd" xmlns:pfx="http://windyroad.org/rest4BW.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:ns3="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
+    <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/REST/Private/Schemas/rest4BW.xsd"/>
+    <xsd:import namespace="http://windyroad.org/rest-delegate.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/coffee-shop/server/shared variables/Schema.xsd" schemaLocation="/server/shared variables/Schema.xsd"/>
+    <pd:name>server/REST Service.process</pd:name>
+    <pd:description/>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:request"/>
+    <pd:startX>91</pd:startX>
+    <pd:startY>131</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$Order-Service/*"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx:response"/>
+    <pd:endX>427</pd:endX>
+    <pd:endY>132</pd:endY>
+    <pd:errorSchemas>
+        <HTTP-Error ref="pfx:error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1338181537186</pd:targetNamespace>
+    <pd:activity name="Order Service">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>277</pd:x>
+        <pd:y>130</pd:y>
+        <config>
+            <processName>/server/services/Order Service.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:copy-of select="$Start/pfx:request"/>
+                <xsl:if test="string-length(substring-after($Start/pfx:request/pfx:command, '/coffee-shop/order/')) >0">
+                    <firstname>
+                        <xsl:value-of select="substring-after($Start/pfx:request/pfx:command, '/coffee-shop/order/')"/>
+                    </firstname>
+                </xsl:if>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="404">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>271</pd:x>
+        <pd:y>256</pd:y>
+        <config>
+            <faultName>HTTP-Error</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns4:ActivityInput>
+                <data>
+                    <pfx:error xsi:type="ns3:sc-404_Not_Found">
+                        <pfx:text-content>
+                            <xsl:value-of select="concat('Resource not found: ', $Start/pfx:request/pfx:command)"/>
+                        </pfx:text-content>
+                    </pfx:error>
+                </data>
+            </ns4:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Order Service</pd:to>
+        <pd:xpathDescription>Order</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>starts-with($Start/pfx:request/pfx:command, '/coffee-shop/order')</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Order Service</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>404</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:label>
+        <pd:name>Label</pd:name>
+        <pd:description> This is an example implementation of the Delegate Interface.
+ This process is invoked dynamically from the 'REST Interface'.
+ When implementing, it is responsible for handling the REST request, and generating a response.</pd:description>
+        <pd:x>320</pd:x>
+        <pd:y>48</pd:y>
+        <pd:width>631</pd:width>
+        <pd:height>67</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-6697729</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
+</pd:ProcessDefinition>
