@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx3="http://windyroad.org/wr-http.xsd" xmlns:pfx2="http://windyroad.org/rest4BW.xsd" xmlns:pfx="http://windyroad.org/coffee-shop">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx3="http://windyroad.org/wr-http.xsd" xmlns:pfx2="http://windyroad.org/rest4BW.xsd" xmlns:pfx="http://windyroad.org/coffee-shop">
     <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/coffee-shop/model/CoffeeShop.xsd"/>
     <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/rest4BW/Private/Schemas/HttpConnection.xsd"/>
     <pd:name>test/uatTestSuite/actions/coffee-order-interfaces/edit.process</pd:name>
@@ -46,7 +46,7 @@
                 <pfx3:request>
                     <pfx3:Method>PUT</pfx3:Method>
                     <pfx3:Command>
-                        <xsl:value-of select="concat($_globalVariables/ns1:GlobalVariables/coffee-shop/interface/base-url,'/', $Start/root/pfx:coffee-order/pfx:firstname)"/>
+                        <xsl:value-of select="concat($_globalVariables/ns1:GlobalVariables/coffee-shop/interface/base-url,'/',$Start/root/pfx:coffee-order/pfx:firstname)"/>
                     </pfx3:Command>
                     <pfx3:Headers>
                         <pfx3:Accept>text/html</pfx3:Accept>
