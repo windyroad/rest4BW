@@ -63,7 +63,7 @@
         <config>
             <inputStyle>text</inputStyle>
             <engine>Saxon</engine>
-            <stylesheet>/REST/Private/Common/xslt2/xslt2-function-delegator.xslt</stylesheet>
+            <stylesheet>/rest4BW/Private/Common/xslt2/xslt2-function-delegator.xslt</stylesheet>
         </config>
         <pd:inputBindings>
             <textInput>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://windyroad.org/rest4BW.xsd">
-    <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/REST/Private/Schemas/rest4BW.xsd"/>
+    <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Private/Schemas/rest4BW.xsd"/>
     <pd:name>REST/Private/Common/http/parseHeaders.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType>

@@ -4,6 +4,6 @@
         <version>16</version>
         <author>Windy Road Technology Pty Limited</author>
         <fileLocation>/tmp/rest4BW.projlib</fileLocation>
-        <resources>/REST/REST Interface.process</resources>
+        <resources>/rest4BW/REST Interface.process</resources>
     </name>
 </Repository:repository>

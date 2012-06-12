@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:ns4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx3="http://www.tibco.com/schemas/coffee-shop/server/shared variables/Schema.xsd" xmlns:pfx="http://windyroad.org/rest4BW.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:ns3="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
-    <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/REST/Private/Schemas/rest4BW.xsd"/>
+    <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Private/Schemas/rest4BW.xsd"/>
     <xsd:import namespace="http://windyroad.org/rest-delegate.xsd"/>
     <xsd:import namespace="http://www.tibco.com/schemas/coffee-shop/server/shared variables/Schema.xsd" schemaLocation="/server/shared variables/Schema.xsd"/>
     <pd:name>server/REST Service.process</pd:name>

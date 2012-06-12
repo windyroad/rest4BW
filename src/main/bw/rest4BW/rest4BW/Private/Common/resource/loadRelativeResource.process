@@ -61,7 +61,7 @@
         <pd:x>220</pd:x>
         <pd:y>60</pd:y>
         <config>
-            <processName>/REST/Private/Common/resource/getAbsolutePath.process</processName>
+            <processName>/rest4BW/Private/Common/resource/getAbsolutePath.process</processName>
         </config>
         <pd:inputBindings>
             <relativePath>

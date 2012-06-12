@@ -38,7 +38,7 @@
         <pd:x>349</pd:x>
         <pd:y>70</pd:y>
         <config>
-            <processName>/REST/Private/Common/xslt2/invoke-xslt2-function-delegator.process</processName>
+            <processName>/rest4BW/Private/Common/xslt2/invoke-xslt2-function-delegator.process</processName>
         </config>
         <pd:inputBindings>
             <xsl:copy-of select="$Start/tokenize"/>
