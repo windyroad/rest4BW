@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://xmlns.tibco.com/encodings/mime" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns12="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:ns5="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns6="http://windyroad.org/coffee-shop" xmlns:pfx="http://windyroad.org/bwunit-abstract/installLicense2Impl" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://windyroad.org/bwunit-0.0.0.xsd" xmlns:ns4="http://windyroad.org/bwunit-abstract" xmlns:ns3="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://windyroad.org/bwunit-concrete">
+    <xsd:import namespace="http://windyroad.org/bwunit-0.0.0.xsd" schemaLocation="/BWUnit/Public/Schemas/BWUnit.xsd"/>
+    <wsdl:import namespace="http://windyroad.org/bwunit-concrete" location="/BWUnit/Public/WSDLs/BWUnit-concrete.wsdl"/>
+    <wsdl:import namespace="http://windyroad.org/bwunit-abstract/installLicense2Impl"/>
+    <pd:name>test/uatTestSuite/F6 - Action an order TestSuite/SO2 - Invalid actions cause an error TestCase/S17 - cancelled-start making.process</pd:name>
+    <pd:description>@Timeout(60000)</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>118</pd:startX>
+    <pd:startY>83</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>608</pd:endX>
+    <pd:endY>83</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <inputs>
+            <xsd:element name="inputs">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="input">
+                            <xsd:complexType>
+                                <xsd:sequence/>
+                                <xsd:attribute name="start-state" type="xsd:string" use="required"/>
+                                <xsd:attribute name="transition-action" type="xsd:string" use="required"/>
+                                <xsd:attribute name="http-status" type="xsd:string" use="required"/>
+                                <xsd:attribute name="http-text-content" type="xsd:string" use="required"/>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </inputs>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1255637097360</pd:targetNamespace>
+    <pd:activity name="Assign">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>263</pd:x>
+        <pd:y>83</pd:y>
+        <config>
+            <variableName>inputs</variableName>
+        </config>
+        <pd:inputBindings>
+            <inputs>
+                <input>
+                    <xsl:attribute name="start-state">cancelled</xsl:attribute>
+                    <xsl:attribute name="transition-action">start making</xsl:attribute>
+                    <xsl:attribute name="http-status">403 Forbidden</xsl:attribute>
+                    <xsl:attribute name="http-text-content">Can't start making an order that is cancelled</xsl:attribute>
+                </input>
+            </inputs>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="invalidStateTransitionFixture">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>437</pd:x>
+        <pd:y>83</pd:y>
+        <config>
+            <processName>/test/uatTestSuite/scenarioOutlines/invalidStateTransition.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <initial-state>
+                    <xsl:value-of select="$inputs/inputs/input/@start-state"/>
+                </initial-state>
+                <transition-action>
+                    <xsl:value-of select="$inputs/inputs/input/@transition-action"/>
+                </transition-action>
+                <expected-http-status>
+                    <xsl:value-of select="$inputs/inputs/input/@http-status"/>
+                </expected-http-status>
+                <expected-http-text-content>
+                    <xsl:value-of select="$inputs/inputs/input/@http-text-content"/>
+                </expected-http-text-content>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Assign</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign</pd:from>
+        <pd:to>invalidStateTransitionFixture</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>invalidStateTransitionFixture</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:iconImage>R0lGODlhMAAwAOemACk6Rys8SSw9SS09SjNEUDREUTVFUTZGUjdHUzhHUzhIVDlJVUBPW0NRXUNS&#xD;
+XkZVYFJfalNha2BsdmdzfGdzfWh0fWl1fnB7hHN+h2KRwGWTwWmWxImTmmqZxI2WnW+bx3GdyHah&#xD;
+y3eizHymzn+nzp+mrKCnrYOs0oWt0o6w0oqx1aatsoyy1ZKy06mwtZO01KqxtpC22Za21pO32Zi3&#xD;
+1660ua62u5u52LC3u7G3vJe83J272Zm83Z+92qG/3KTB3Li+wqbB26bD3qPF46rE3ajF36TH47HF&#xD;
+2K7G36rH4bPG2q3I4cDFyLXI27LK4a/L47jL3bHN5LXN5K/P6rTO5rDP6bvN3rzO27zO3bbP5sjM&#xD;
+0L7P4LnQ5cDR38DS4bzT587S1cPU4r3V68XV47/W68DW6dDU17vY8MfW4bzZ8MTY683X38rZ5tXZ&#xD;
+28Xc78fc78ve79De6cji99Ti7M7j9Mrk9s/k9NLk89/i5ODi5eHj5eLk5uPl59bp+Nnp9tjq+Obo&#xD;
+6ufp6t7r9ujq6+nq7Ors7evt7uzt7+zu8O3u7+3v8O3v8e7v8O7w8u/w8e/w8u/x8vDx8vHy8/Lz&#xD;
+9PT19vb39/f4+Pj4+fj5+fn5+fn5+vn6+vr6+/r7+/v7/Pv8/Pz8/Pz8/fz9/f39/f39/v7+/v//&#xD;
+////////////////////////////////////////////////////////////////////////////&#xD;
+////////////////////////////////////////////////////////////////////////////&#xD;
+////////////////////////////////////////////////////////////////////////////&#xD;
+////////////////////////////////////////////////////////////////////////////&#xD;
+/////////////////////////////////////////////////////yH5BAEKAP8ALAAAAAAwADAA&#xD;
+AAj+AP8JHPjPlMGDCBMqXKiQoMOBDCNKnPhQ4MSLGBsSzGgQiAUKIEOCrGCCo6mNGQsBWMmy5Uot&#xD;
+HCFybAPgAZObOG9KAIDDpEWOZgAcWKEQCAMANXyaNFXJAYABkhIuAFCAz9Krkw4ASJRQK56rYKcy&#xD;
+6gogKtilYsmaPctRAQBHatmadAsXoda1ci/SjZsXYwIAkPj2nfg3sN2ygy8WFpyY4eLDeBsrRAAg&#xD;
+EmPJCSlbhoyZIeUjKVpoyBBE6+bOmQEoeSGjwwYiWhGhngygCY0bID4g0bpodmooO3qICOGEt2+E&#xD;
+lK34+EFihBTjxw1S3iKkCIoTXKBHp+wlyRIWKr7MaD9OOcyTKDNilBnvm/IYKll46FCjtVF06QDY&#xD;
+iCFjZAic+veZQlkcbrxRxRR3AHgfZXPQYUcaZ/ih1SMBNgDAGn38UYccgggQACcBYgCAB2hcgUUX&#xD;
+NgAQQYCmBAUAB3kckgMBAMDAoiUluATABaUEiIkihoAxgQEDQODCKCwmqeSSTF5UUJMG/QSlTBmR&#xD;
+EgoomBCyhx6ATAIWShyVQskggQQyyJmG+QQmRp44AkkloYyiSSSOXKLmQxltYkknpIji5yeWZJJR&#xD;
+RQ4dV1FAADs=&#xD;
+</pd:iconImage>
+</pd:ProcessDefinition>
