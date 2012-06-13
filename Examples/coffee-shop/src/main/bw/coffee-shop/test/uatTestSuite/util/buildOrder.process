@@ -19,12 +19,8 @@
             <pfx:firstname>
                 <xsl:value-of select="concat('George-',$getUniqueId/uniqueId)"/>
             </pfx:firstname>
-            <pfx:coffee>
-                <xsl:value-of select="'Cappuccino'"/>
-            </pfx:coffee>
-            <pfx:sugar>
-                <xsl:value-of select="'5'"/>
-            </pfx:sugar>
+            <pfx:coffee>Orange Mocha Frappuccino</pfx:coffee>
+            <pfx:sugar>99</pfx:sugar>
             <pfx:state>
                 <xsl:value-of select="$Start/root/initial-state"/>
             </pfx:state>
