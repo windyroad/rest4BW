@@ -3,7 +3,7 @@
     <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Private/Schemas/rest4BW.xsd"/>
     <xsd:import namespace="http://windyroad.org/rest-delegate.xsd"/>
     <xsd:import namespace="http://www.tibco.com/schemas/coffee-shop/coffee-shop/shared variables/Schema.xsd" schemaLocation="/coffee-shop/shared variables/Schema.xsd"/>
-    <pd:name>coffee-shop/services/Order/edit.process</pd:name>
+    <pd:name>coffee-shop/services/Order/create.process</pd:name>
     <pd:description/>
     <pd:startName>Start</pd:startName>
     <pd:startType>
@@ -19,48 +19,83 @@
     <pd:startX>72</pd:startX>
     <pd:startY>121</pd:startY>
     <pd:returnBindings>
-        <pfx:response xsi:type="ns3:sc-200_OK"/>
+        <pfx:response xsi:type="ns3:sc-201_Created">
+            <xsl:copy-of select="($get/pfx:response/pfx:text-content | $get/pfx:response/pfx:binary-content)[1]"/>
+            <pfx:headers>
+                <xsl:attribute name="content-location">
+                    <xsl:value-of select="concat($_globalVariables/pfx5:GlobalVariables/coffee-shop/interface/base-url, '/', $save/pfx4:coffee-order/pfx4:firstname)"/>
+                </xsl:attribute>
+            </pfx:headers>
+        </pfx:response>
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
     <pd:endType ref="pfx:response"/>
-    <pd:endX>336</pd:endX>
-    <pd:endY>121</pd:endY>
+    <pd:endX>424</pd:endX>
+    <pd:endY>125</pd:endY>
     <pd:errorSchemas>
         <HTTP-Error ref="pfx:error"/>
     </pd:errorSchemas>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1338181537186</pd:targetNamespace>
-    <pd:activity name="update order">
+    <pd:activity name="save">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>215</pd:x>
-        <pd:y>121</pd:y>
+        <pd:x>186</pd:x>
+        <pd:y>123</pd:y>
         <config>
-            <processName>/coffee-shop/services/Order/Private/update order.process</processName>
+            <processName>/coffee-shop/persistence/save.process</processName>
+        </config>
+        <pd:inputBindings>
+            <pfx4:coffee-order>
+                <pfx4:firstname>
+                    <xsl:value-of select="$Start/root/pfx:request/pfx:post/pfx:part/pfx:meta[@name=$_globalVariables/pfx5:GlobalVariables/coffee-shop/interface/post-params/firstname]/@value"/>
+                </pfx4:firstname>
+                <pfx4:coffee>
+                    <xsl:value-of select="$Start/root/pfx:request/pfx:post/pfx:part/pfx:meta[@name=$_globalVariables/pfx5:GlobalVariables/coffee-shop/interface/post-params/coffee]/@value"/>
+                </pfx4:coffee>
+                <pfx4:sugar>
+                    <xsl:value-of select="$Start/root/pfx:request/pfx:post/pfx:part/pfx:meta[@name=$_globalVariables/pfx5:GlobalVariables/coffee-shop/interface/post-params/sugar]/@value"/>
+                </pfx4:sugar>
+                <pfx4:state>created</pfx4:state>
+                <pfx4:created-datetime>
+                    <xsl:value-of select="current-dateTime()"/>
+                </pfx4:created-datetime>
+            </pfx4:coffee-order>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="get">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>300</pd:x>
+        <pd:y>125</pd:y>
+        <config>
+            <processName>/coffee-shop/services/Order/get.process</processName>
         </config>
         <pd:inputBindings>
             <root>
+                <xsl:copy-of select="$Start/root/pfx:request"/>
                 <firstname>
-                    <xsl:value-of select="$Start/root/pfx:request/pfx:post/pfx:part/pfx:meta[@name='firstname']/@value"/>
+                    <xsl:value-of select="$save/pfx4:coffee-order/pfx4:firstname"/>
                 </firstname>
-                <coffee>
-                    <xsl:value-of select="$Start/root/pfx:request/pfx:post/pfx:part/pfx:meta[@name='coffee']/@value"/>
-                </coffee>
-                <sugar>
-                    <xsl:value-of select="$Start/root/pfx:request/pfx:post/pfx:part/pfx:meta[@name='sugar']/@value"/>
-                </sugar>
             </root>
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>
-        <pd:from>Start</pd:from>
-        <pd:to>update order</pd:to>
+        <pd:from>save</pd:from>
+        <pd:to>get</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>update order</pd:from>
+        <pd:from>Start</pd:from>
+        <pd:to>save</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>get</pd:from>
         <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>

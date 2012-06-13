@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="http://windyroad.org/wr-http.xsd" xmlns:pfx="http://windyroad.org/coffee-shop">
+    <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/coffee-shop/model/CoffeeShop.xsd"/>
+    <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/rest4BW/Private/Schemas/HttpConnection.xsd"/>
+    <pd:name>test/uatTestSuite/steps/When a staff member creates an order with firstname (firstname) coffee (coffee) and sugar (sugar).process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="firstname" type="xsd:string"/>
+                    <xsd:element name="coffee" type="xsd:string"/>
+                    <xsd:element name="sugar" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>154</pd:startX>
+    <pd:startY>59</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$dynamically-invoke-action-process/*"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx2:response"/>
+    <pd:endX>560</pd:endX>
+    <pd:endY>59</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1338635071359</pd:targetNamespace>
+    <pd:activity name="dynamically invoke action process">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>350</pd:x>
+        <pd:y>66</pd:y>
+        <config>
+            <processName>/test/uatTestSuite/actions/coffee-order-interfaces/not implemented.process</processName>
+            <processNameXPath>'/test/uatTestSuite/actions/coffee-order-interfaces/create.process'</processNameXPath>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <pfx:coffee-order>
+                    <pfx:firstname>
+                        <xsl:value-of select="$Start/root/firstname"/>
+                    </pfx:firstname>
+                    <pfx:coffee>
+                        <xsl:value-of select="$Start/root/coffee"/>
+                    </pfx:coffee>
+                    <pfx:sugar>
+                        <xsl:value-of select="$Start/root/sugar"/>
+                    </pfx:sugar>
+                    <pfx:state>
+                        <xsl:value-of select="'invalid state'"/>
+                    </pfx:state>
+                    <pfx:created-datetime>
+                        <xsl:value-of select="current-dateTime()"/>
+                    </pfx:created-datetime>
+                </pfx:coffee-order>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>556</pd:x>
+        <pd:y>158</pd:y>
+        <config>
+            <faultName/>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <message>
+                    <xsl:value-of select="$_error/ns1:ErrorReport/Msg"/>
+                </message>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>dynamically invoke action process</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>dynamically invoke action process</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>dynamically invoke action process</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

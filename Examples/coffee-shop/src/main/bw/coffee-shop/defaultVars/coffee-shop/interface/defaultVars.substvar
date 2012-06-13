@@ -9,14 +9,5 @@
 			<type>String</type>
 			<modTime>1339491488807</modTime>
 		</globalVariable>
-		<globalVariable>
-			<name>transition-action-key</name>
-			<value>transition-action</value>
-			<deploymentSettable>true</deploymentSettable>
-			<serviceSettable>false</serviceSettable>
-			<type>String</type>
-			<constraint></constraint>
-			<modTime>1339491390418</modTime>
-		</globalVariable>
 	</globalVariables>
 </repository>
