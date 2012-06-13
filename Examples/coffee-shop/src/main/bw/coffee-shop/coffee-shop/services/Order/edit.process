@@ -1,66 +1,178 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:pfx="http://windyroad.org/rest4BW.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns3="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx4="http://windyroad.org/coffee-shop" xmlns:pfx3="http://www.tibco.com/schemas/coffee-shop/coffee-shop/shared variables/Schema.xsd" xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://windyroad.org/rest4BW.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:ns="http://windyroad.org/coffee-shop" xmlns:ns0="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Private/Schemas/rest4BW.xsd"/>
-    <xsd:import namespace="http://windyroad.org/rest-delegate.xsd"/>
-    <xsd:import namespace="http://www.tibco.com/schemas/coffee-shop/coffee-shop/shared variables/Schema.xsd" schemaLocation="/coffee-shop/shared variables/Schema.xsd"/>
     <pd:name>coffee-shop/services/Order/edit.process</pd:name>
-    <pd:description/>
     <pd:startName>Start</pd:startName>
     <pd:startType>
         <xsd:element name="root">
             <xsd:complexType>
                 <xsd:sequence>
-                    <xsd:element ref="pfx:request"/>
-                    <xsd:element name="firstname" type="xsd:string" minOccurs="0"/>
+                    <xsd:element ref="ns2:request"/>
+                    <xsd:element name="firstname" type="xsd:string"/>
+                    <xsd:element name="coffee" type="xsd:string"/>
+                    <xsd:element name="sugar" type="xsd:string"/>
                 </xsd:sequence>
             </xsd:complexType>
         </xsd:element>
     </pd:startType>
-    <pd:startX>72</pd:startX>
-    <pd:startY>121</pd:startY>
+    <pd:startX>62</pd:startX>
+    <pd:startY>166</pd:startY>
     <pd:returnBindings>
-        <pfx:response xsi:type="ns3:sc-200_OK"/>
+        <xsl:copy-of select="$get-order-svc/ns2:response"/>
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
-    <pd:endType ref="pfx:response"/>
-    <pd:endX>336</pd:endX>
-    <pd:endY>121</pd:endY>
+    <pd:endType ref="ns2:response"/>
+    <pd:endX>717</pd:endX>
+    <pd:endY>169</pd:endY>
     <pd:errorSchemas>
-        <HTTP-Error ref="pfx:error"/>
+        <HTTP-Error ref="ns2:error"/>
     </pd:errorSchemas>
     <pd:processVariables/>
-    <pd:targetNamespace>http://xmlns.example.com/1338181537186</pd:targetNamespace>
-    <pd:activity name="update order">
+    <pd:targetNamespace>http://xmlns.example.com/1338659136797</pd:targetNamespace>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.CriticalSectionGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>170</pd:x>
+        <pd:y>21</pd:y>
+        <pd:width>347</pd:width>
+        <pd:height>282</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>criticalSection</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:scope>single</pd:scope>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>get</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>save</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>get</pd:from>
+            <pd:to>save</pd:to>
+            <pd:xpathDescription>valid?</pd:xpathDescription>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>xpath</pd:conditionType>
+            <pd:xpath>$get/ns:coffee-order/ns:state='created'</pd:xpath>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>get</pd:from>
+            <pd:to>Generate Error</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>otherwise</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="get">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>258</pd:x>
+            <pd:y>109</pd:y>
+            <config>
+                <processName>/coffee-shop/persistence/get.process</processName>
+            </config>
+            <pd:inputBindings>
+                <firstname>
+                    <xsl:value-of select="$Start/root/firstname"/>
+                </firstname>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="save">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>406</pd:x>
+            <pd:y>110</pd:y>
+            <config>
+                <processName>/coffee-shop/persistence/save.process</processName>
+            </config>
+            <pd:inputBindings>
+                <ns:coffee-order>
+                    <ns:firstname>
+                        <xsl:value-of select="$Start/root/firstname"/>
+                    </ns:firstname>
+                    <ns:coffee>
+                        <xsl:value-of select="$Start/root/coffee"/>
+                    </ns:coffee>
+                    <ns:sugar>
+                        <xsl:value-of select="$Start/root/sugar"/>
+                    </ns:sugar>
+                    <ns:state>
+                        <xsl:value-of select="$get/ns:coffee-order/ns:state"/>
+                    </ns:state>
+                    <ns:created-datetime>
+                        <xsl:value-of select="$get/ns:coffee-order/ns:created-datetime"/>
+                    </ns:created-datetime>
+                </ns:coffee-order>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Generate Error">
+            <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+            <pd:resourceType>ae.activities.throw</pd:resourceType>
+            <pd:x>394</pd:x>
+            <pd:y>215</pd:y>
+            <config>
+                <faultName>HTTP-Error</faultName>
+            </config>
+            <pd:inputBindings>
+                <ns0:ActivityInput>
+                    <data>
+                        <ns2:error xsi:type="ns1:sc-403_Forbidden">
+                            <ns2:text-content>
+                                <xsl:value-of select="concat(&quot;Can't edit an order that is &quot;, $get/ns:coffee-order/ns:state)"/>
+                            </ns2:text-content>
+                        </ns2:error>
+                    </data>
+                </ns0:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="get order svc">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>215</pd:x>
-        <pd:y>121</pd:y>
+        <pd:x>597</pd:x>
+        <pd:y>169</pd:y>
         <config>
-            <processName>/coffee-shop/services/Order/Private/update order.process</processName>
+            <processName>/coffee-shop/services/Order/get.process</processName>
         </config>
         <pd:inputBindings>
             <root>
+                <xsl:copy-of select="$Start/root/ns2:request"/>
                 <firstname>
-                    <xsl:value-of select="$Start/root/pfx:request/pfx:post/pfx:part/pfx:meta[@name='firstname']/@value"/>
+                    <xsl:value-of select="$Start/root/firstname"/>
                 </firstname>
-                <coffee>
-                    <xsl:value-of select="$Start/root/pfx:request/pfx:post/pfx:part/pfx:meta[@name='coffee']/@value"/>
-                </coffee>
-                <sugar>
-                    <xsl:value-of select="$Start/root/pfx:request/pfx:post/pfx:part/pfx:meta[@name='sugar']/@value"/>
-                </sugar>
             </root>
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>
         <pd:from>Start</pd:from>
-        <pd:to>update order</pd:to>
+        <pd:to>Group</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>update order</pd:from>
+        <pd:from>Group</pd:from>
+        <pd:to>get order svc</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>get order svc</pd:from>
         <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>

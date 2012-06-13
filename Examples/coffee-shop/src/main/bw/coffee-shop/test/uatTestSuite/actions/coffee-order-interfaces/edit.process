@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx3="http://windyroad.org/wr-http.xsd" xmlns:pfx2="http://windyroad.org/rest4BW.xsd" xmlns:pfx="http://windyroad.org/coffee-shop">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx3="http://windyroad.org/wr-http.xsd" xmlns:pfx2="http://windyroad.org/rest4BW.xsd" xmlns:pfx="http://windyroad.org/coffee-shop">
     <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/coffee-shop/model/CoffeeShop.xsd"/>
     <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/rest4BW/Private/Schemas/HttpConnection.xsd"/>
     <pd:name>test/uatTestSuite/actions/coffee-order-interfaces/edit.process</pd:name>
@@ -53,15 +53,6 @@
                         <pfx3:Accept-Encoding>utf-8</pfx3:Accept-Encoding>
                     </pfx3:Headers>
                     <pfx3:mimeEnvelopeElement>
-                        <pfx3:mimePart>
-                            <pfx3:mimeHeaders>
-                                <pfx3:content-disposition>form-data; name="firstname"</pfx3:content-disposition>
-                                <pfx3:content-type>text/plain</pfx3:content-type>
-                            </pfx3:mimeHeaders>
-                            <pfx3:textContent>
-                                <xsl:value-of select="$Start/root/pfx:coffee-order/pfx:firstname"/>
-                            </pfx3:textContent>
-                        </pfx3:mimePart>
                         <pfx3:mimePart>
                             <pfx3:mimeHeaders>
                                 <pfx3:content-disposition>form-data; name="coffee"</pfx3:content-disposition>

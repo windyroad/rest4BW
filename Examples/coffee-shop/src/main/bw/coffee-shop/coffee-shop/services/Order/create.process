@@ -20,7 +20,7 @@
     <pd:startY>121</pd:startY>
     <pd:returnBindings>
         <pfx:response xsi:type="ns3:sc-201_Created">
-            <xsl:copy-of select="($get/pfx:response/pfx:text-content | $get/pfx:response/pfx:binary-content)[1]"/>
+            <xsl:copy-of select="($get-order-svc/pfx:response/pfx:text-content | $get-order-svc/pfx:response/pfx:binary-content)[1]"/>
             <pfx:headers>
                 <xsl:attribute name="content-location">
                     <xsl:value-of select="concat($_globalVariables/pfx5:GlobalVariables/coffee-shop/interface/base-url, '/', $save/pfx4:coffee-order/pfx4:firstname)"/>
@@ -63,7 +63,7 @@
             </pfx4:coffee-order>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="get">
+    <pd:activity name="get order svc">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
         <pd:x>300</pd:x>
@@ -82,7 +82,7 @@
     </pd:activity>
     <pd:transition>
         <pd:from>save</pd:from>
-        <pd:to>get</pd:to>
+        <pd:to>get order svc</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
@@ -95,7 +95,7 @@
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>get</pd:from>
+        <pd:from>get order svc</pd:from>
         <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
