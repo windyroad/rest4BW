@@ -56,7 +56,7 @@
                         <pfx3:mimePart>
                             <pfx3:mimeHeaders>
                                 <pfx3:content-disposition>
-                                    <xsl:value-of select="concat('form-data; name=&quot;',$_globalVariables/ns1:GlobalVariables/coffee-shop/interface/transition-action-key,'&quot;')"/>
+                                    <xsl:value-of select="concat('form-data; name=&quot;',$_globalVariables/ns1:GlobalVariables/coffee-shop/interface/post-params/transition-action,'&quot;')"/>
                                 </pfx3:content-disposition>
                                 <pfx3:content-type>text/plain</pfx3:content-type>
                             </pfx3:mimeHeaders>

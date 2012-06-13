@@ -333,18 +333,20 @@ To Releases Version: ${releases.new.revision}</echo>
 
 	<target name="run-quick-tests" description="Run Quick tests" depends="-load-ant-contrib,build">
 		<bwubuild:run-bwunit-tests phase="quick" />
+    <echo message=">>> Invoked bwunit tests" />
 		<subant target="run-quick-tests">
 			<fileset dir="Examples" includes="*/build.xml" />
 		</subant>
+    <echo message=">>> Invoked sub project tests" />
 	</target>
 
 	<target name="report-quick-tests"
 	        description="Run Quick tests and create a JUnit compatible report"
 	        depends="-load-ant-contrib,build">
 		<bwubuild:report-bwunit-tests phase="quick" />
-		<subant target="report-quick-tests">
+		<!--subant target="report-quick-tests">
 			<fileset dir="Examples" includes="*/build.xml" />
-		</subant>
+		</subant-->
 	</target>
 
 	<target name="run-uat-tests" description="Run UATs" depends="-load-ant-contrib,build">
