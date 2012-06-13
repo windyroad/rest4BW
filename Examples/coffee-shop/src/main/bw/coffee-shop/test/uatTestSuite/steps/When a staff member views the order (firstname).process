@@ -2,13 +2,13 @@
 <pd:ProcessDefinition xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="http://windyroad.org/wr-http.xsd" xmlns:pfx="http://windyroad.org/coffee-shop">
     <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/coffee-shop/model/CoffeeShop.xsd"/>
     <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/rest4BW/Private/Schemas/HttpConnection.xsd"/>
-    <pd:name>test/uatTestSuite/steps/When a staff member checks the available options.process</pd:name>
+    <pd:name>test/uatTestSuite/steps/When a staff member views the order (firstname).process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType>
         <xsd:element name="root">
             <xsd:complexType>
                 <xsd:sequence>
-                    <xsd:element name="firstname" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="firstname" type="xsd:string"/>
                 </xsd:sequence>
             </xsd:complexType>
         </xsd:element>
@@ -16,7 +16,7 @@
     <pd:startX>154</pd:startX>
     <pd:startY>59</pd:startY>
     <pd:returnBindings>
-        <xsl:copy-of select="$options/pfx2:response"/>
+        <xsl:copy-of select="$When-a-staff-member-gets-the-resource-resource/pfx2:response"/>
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
     <pd:endType ref="pfx2:response"/>
@@ -25,31 +25,31 @@
     <pd:errorSchemas/>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1338635071359</pd:targetNamespace>
-    <pd:activity name="options">
+    <pd:activity name="When a staff member gets the resource (resource)">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>349</pd:x>
-        <pd:y>61</pd:y>
+        <pd:x>358</pd:x>
+        <pd:y>84</pd:y>
         <config>
-            <processName>/test/uatTestSuite/actions/coffee-order-interfaces/options.process</processName>
+            <processName>/test/uatTestSuite/steps/When a staff member gets the resource (resource).process</processName>
         </config>
         <pd:inputBindings>
             <root>
                 <url>
-                    <xsl:value-of select="if (exists($Start/root/firstname) and $Start/root/firstname !='')&#xA;then concat($_globalVariables/ns2:GlobalVariables/coffee-shop/interface/base-url, '/', $Start/root/firstname) &#xA;else $_globalVariables/ns2:GlobalVariables/coffee-shop/interface/base-url"/>
+                    <xsl:value-of select="concat($_globalVariables/ns2:GlobalVariables/coffee-shop/interface/base-url, '/', $Start/root/firstname)"/>
                 </url>
             </root>
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>
         <pd:from>Start</pd:from>
-        <pd:to>options</pd:to>
+        <pd:to>When a staff member gets the resource (resource)</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>options</pd:from>
+        <pd:from>When a staff member gets the resource (resource)</pd:from>
         <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>

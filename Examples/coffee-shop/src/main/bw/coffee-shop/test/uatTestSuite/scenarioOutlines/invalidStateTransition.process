@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://windyroad.org/wr-http.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/coffee-shop">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://windyroad.org/wr-http.xsd" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/coffee-shop">
     <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/coffee-shop/model/CoffeeShop.xsd"/>
     <pd:name>test/uatTestSuite/scenarioOutlines/invalidStateTransition.process</pd:name>
     <pd:startName>Start</pd:startName>
@@ -51,10 +51,10 @@
         <pd:inputBindings>
             <root>
                 <firstname>
-                    <xsl:value-of select="$Given-an-order-in-state-start-state/root/pfx:coffee-order/pfx:firstname"/>
+                    <xsl:value-of select="$Given-an-order-in-state-start-state/pfx:coffee-order/pfx:firstname"/>
                 </firstname>
                 <expected-state>
-                    <xsl:value-of select="$Given-an-order-in-state-start-state/root/pfx:coffee-order/pfx:state"/>
+                    <xsl:value-of select="$Given-an-order-in-state-start-state/pfx:coffee-order/pfx:state"/>
                 </expected-state>
             </root>
         </pd:inputBindings>
@@ -62,8 +62,8 @@
     <pd:activity name="Then the response status is (http status)">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>533</pd:x>
-        <pd:y>106</pd:y>
+        <pd:x>503</pd:x>
+        <pd:y>104</pd:y>
         <config>
             <processName>/test/uatTestSuite/steps/Then the response status is (http status).process</processName>
         </config>
@@ -86,7 +86,7 @@
         </config>
         <pd:inputBindings>
             <root>
-                <xsl:copy-of select="$Given-an-order-in-state-start-state/root/pfx:coffee-order"/>
+                <xsl:copy-of select="$Given-an-order-in-state-start-state/pfx:coffee-order"/>
                 <transition-action>
                     <xsl:value-of select="$Start/root/transition-action"/>
                 </transition-action>

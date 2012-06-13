@@ -2,35 +2,82 @@
 <pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://xmlns.tibco.com/encodings/mime" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns12="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:ns5="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns6="http://windyroad.org/coffee-shop" xmlns:ns7="http://windyroad.org/wr-http.xsd" xmlns:pfx="http://windyroad.org/bwunit-abstract/installLicense2Impl" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns1="http://windyroad.org/bwunit-0.0.0.xsd" xmlns:ns4="http://windyroad.org/bwunit-abstract" xmlns:ns3="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://windyroad.org/coffee-shop-interface" xmlns:pfx2="http://windyroad.org/bwunit-concrete">
     <xsd:import namespace="http://windyroad.org/bwunit-0.0.0.xsd" schemaLocation="/BWUnit/Public/Schemas/BWUnit.xsd"/>
     <xsd:import namespace="http://windyroad.org/coffee-shop-interface" schemaLocation="/coffee-shop/interface/Interface.xsd"/>
+    <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/coffee-shop/model/CoffeeShop.xsd"/>
     <wsdl:import namespace="http://windyroad.org/bwunit-concrete" location="/BWUnit/Public/WSDLs/BWUnit-concrete.wsdl"/>
     <wsdl:import namespace="http://windyroad.org/bwunit-abstract/installLicense2Impl"/>
-    <pd:name>test/uatTestSuite/F1 - Discover main options TestCase/S1 - Discover base options.process</pd:name>
+    <pd:name>test/uatTestSuite/F2 - Discover order options TestCase/S1 - invalid state.process</pd:name>
     <pd:description>@Timeout(60000)</pd:description>
     <pd:startName>Start</pd:startName>
     <pd:startX>68</pd:startX>
     <pd:startY>87</pd:startY>
     <pd:returnBindings/>
     <pd:endName>End</pd:endName>
-    <pd:endX>936</pd:endX>
-    <pd:endY>237</pd:endY>
+    <pd:endX>710</pd:endX>
+    <pd:endY>87</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables>
         <license-key ref="ns1:license-key"/>
     </pd:processVariables>
     <pd:targetNamespace>http://xmlns.example.com/1255637097360</pd:targetNamespace>
+    <pd:activity name="discoverAnOrdersOptions">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>517</pd:x>
+        <pd:y>87</pd:y>
+        <config>
+            <processName>/test/uatTestSuite/scenarioOutlines/discoverAnOrdersOptions.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <initial-state>
+                    <xsl:value-of select="$input-data/root/param/order-state"/>
+                </initial-state>
+                <firstname>
+                    <xsl:value-of select="$getUID/uniqueId"/>
+                </firstname>
+                <url>
+                    <xsl:value-of select="concat($_globalVariables/ns5:GlobalVariables/coffee-shop/interface/base-url,'/', $getUID/uniqueId)"/>
+                </url>
+                <xsl:for-each select="$input-data/root/param/expected-link-rel">
+                    <expected-link-rel>
+                        <xsl:value-of select="."/>
+                    </expected-link-rel>
+                </xsl:for-each>
+                <expected-http-status>
+                    <xsl:value-of select="$input-data/root/param/expected-http-status"/>
+                </expected-http-status>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="getUID">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>369</pd:x>
+        <pd:y>87</pd:y>
+        <config>
+            <processName>/test/uatTestSuite/util/getUID.process</processName>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
     <pd:activity name="input data">
         <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
         <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-        <pd:x>200</pd:x>
-        <pd:y>85</pd:y>
+        <pd:x>217</pd:x>
+        <pd:y>87</pd:y>
         <config>
             <element>
                 <xsd:element name="root">
                     <xsd:complexType>
                         <xsd:sequence>
-                            <xsd:element name="url" type="xsd:string"/>
-                            <xsd:element name="expected-status" type="xsd:string"/>
-                            <xsd:element name="expected-link-rel" type="xsd:string" maxOccurs="unbounded"/>
+                            <xsd:element name="param">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="order-state" type="xsd:string"/>
+                                        <xsd:element name="expected-http-status" type="xsd:string"/>
+                                        <xsd:element name="expected-link-rel" type="xsd:string" maxOccurs="unbounded"/>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>
@@ -38,81 +85,21 @@
         </config>
         <pd:inputBindings>
             <root>
-                <url>
-                    <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/coffee-shop/interface/base-url"/>
-                </url>
-                <expected-status>200 OK</expected-status>
-                <expected-link-rel>create</expected-link-rel>
-                <expected-link-rel>list</expected-link-rel>
+                <param>
+                    <order-state>not a valid state</order-state>
+                    <expected-http-status>200 OK</expected-http-status>
+                    <expected-link-rel>view</expected-link-rel>
+                </param>
             </root>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="Then the response status is (http status)">
-        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-        <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>389</pd:x>
-        <pd:y>256</pd:y>
-        <config>
-            <processName>/test/uatTestSuite/steps/Then the response status is (http status).process</processName>
-        </config>
-        <pd:inputBindings>
-            <root>
-                <xsl:copy-of select="$When-a-staff-member-checks-the-available-options/ns7:response"/>
-                <expected-status>
-                    <xsl:value-of select="$input-data/root/expected-status"/>
-                </expected-status>
-            </root>
-        </pd:inputBindings>
-    </pd:activity>
-    <pd:activity name="Then they are provided with a mechanism for (actioning) orders">
-        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-        <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>753</pd:x>
-        <pd:y>258</pd:y>
-        <config>
-            <processName>/test/uatTestSuite/steps/Then they are provided with a mechanism for (actioning) orders.process</processName>
-        </config>
-        <pd:inputBindings>
-            <root>
-                <expected>
-                    <xsl:for-each select="$input-data/root/expected-link-rel">
-                        <actions>
-                            <xsl:value-of select="."/>
-                        </actions>
-                    </xsl:for-each>
-                </expected>
-                <actual>
-                    <xsl:copy-of select="$Then-the-response-is-an-options-xml-object/pfx3:options"/>
-                </actual>
-            </root>
-        </pd:inputBindings>
-    </pd:activity>
-    <pd:activity name="When a staff member checks the available options">
-        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-        <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>205</pd:x>
-        <pd:y>256</pd:y>
-        <config>
-            <processName>/test/uatTestSuite/steps/When a staff member checks the available options.process</processName>
-        </config>
-        <pd:inputBindings>
-            <root/>
-        </pd:inputBindings>
-    </pd:activity>
-    <pd:activity name="Then the response is an options xml object">
-        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-        <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>563</pd:x>
-        <pd:y>258</pd:y>
-        <config>
-            <processName>/test/uatTestSuite/steps/Then the response is an options xml object.process</processName>
-        </config>
-        <pd:inputBindings>
-            <root>
-                <xsl:copy-of select="$When-a-staff-member-checks-the-available-options/ns7:response"/>
-            </root>
-        </pd:inputBindings>
-    </pd:activity>
+    <pd:transition>
+        <pd:from>getUID</pd:from>
+        <pd:to>discoverAnOrdersOptions</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
     <pd:transition>
         <pd:from>Start</pd:from>
         <pd:to>input data</pd:to>
@@ -121,36 +108,15 @@
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>When a staff member checks the available options</pd:from>
-        <pd:to>Then the response status is (http status)</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Then they are provided with a mechanism for (actioning) orders</pd:from>
-        <pd:to>End</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
         <pd:from>input data</pd:from>
-        <pd:to>When a staff member checks the available options</pd:to>
+        <pd:to>getUID</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>Then the response status is (http status)</pd:from>
-        <pd:to>Then the response is an options xml object</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Then the response is an options xml object</pd:from>
-        <pd:to>Then they are provided with a mechanism for (actioning) orders</pd:to>
+        <pd:from>discoverAnOrdersOptions</pd:from>
+        <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>

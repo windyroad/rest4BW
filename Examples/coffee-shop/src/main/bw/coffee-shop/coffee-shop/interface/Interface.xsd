@@ -43,7 +43,7 @@
 	<xs:element name="hypermedia-coffee-order">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="csi:link"/>
+				<xs:element ref="csi:options"/>
 				<xs:element ref="cfshp:coffee-order"/>
 			</xs:sequence>
 		</xs:complexType>
