@@ -5,15 +5,15 @@
     <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/coffee-shop/model/CoffeeShop.xsd"/>
     <wsdl:import namespace="http://windyroad.org/bwunit-concrete" location="/BWUnit/Public/WSDLs/BWUnit-concrete.wsdl"/>
     <wsdl:import namespace="http://windyroad.org/bwunit-abstract/installLicense2Impl"/>
-    <pd:name>test/uatTestSuite/F7 - List orders TestCase/S1 - List one order.process</pd:name>
+    <pd:name>test/uatTestSuite/F7 - List orders TestCase/S1 - List orders.process</pd:name>
     <pd:description>@Timeout(60000)</pd:description>
     <pd:startName>Start</pd:startName>
     <pd:startX>57</pd:startX>
     <pd:startY>88</pd:startY>
     <pd:returnBindings/>
     <pd:endName>End</pd:endName>
-    <pd:endX>1076</pd:endX>
-    <pd:endY>244</pd:endY>
+    <pd:endX>1103</pd:endX>
+    <pd:endY>229</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables>
         <license-key ref="ns1:license-key"/>
@@ -22,24 +22,22 @@
     <pd:activity name="Given a coffee ordering system at (url)">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>146</pd:x>
-        <pd:y>252</pd:y>
+        <pd:x>145</pd:x>
+        <pd:y>238</pd:y>
         <config>
             <processName>/test/uatTestSuite/steps/Given a coffee ordering system at (url).process</processName>
         </config>
         <pd:inputBindings>
-            <root>
-                <url>
-                    <xsl:value-of select="$input-data/root/url"/>
-                </url>
-            </root>
+            <url>
+                <xsl:value-of select="$input-data/root/url"/>
+            </url>
         </pd:inputBindings>
     </pd:activity>
     <pd:activity name="Given an order in state (start state)">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>323</pd:x>
-        <pd:y>252</pd:y>
+        <pd:x>303</pd:x>
+        <pd:y>238</pd:y>
         <config>
             <processName>/test/uatTestSuite/steps/Given an order in state (start state).process</processName>
         </config>
@@ -83,8 +81,8 @@
     <pd:activity name="Then the response status is (http status)">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>674</pd:x>
-        <pd:y>252</pd:y>
+        <pd:x>610</pd:x>
+        <pd:y>240</pd:y>
         <config>
             <processName>/test/uatTestSuite/steps/Then the response status is (http status).process</processName>
         </config>
@@ -100,33 +98,43 @@
     <pd:activity name="When a staff member lists the orders">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>498</pd:x>
-        <pd:y>252</pd:y>
+        <pd:x>447</pd:x>
+        <pd:y>237</pd:y>
         <config>
-            <processName>/test/uatTestSuite/steps/When a staff member gets the resource (resource).process</processName>
+            <processName>/test/uatTestSuite/steps/When a staff member lists the orders.process</processName>
         </config>
-        <pd:inputBindings>
-            <root>
-                <url>
-                    <xsl:value-of select="$input-data/root/url"/>
-                </url>
-            </root>
-        </pd:inputBindings>
+        <pd:inputBindings/>
     </pd:activity>
-    <pd:activity name="Then the response is a list containing an order for (firstname)">
+    <pd:activity name="Then the response is a coffee-order-list">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>862</pd:x>
-        <pd:y>270</pd:y>
+        <pd:x>776</pd:x>
+        <pd:y>236</pd:y>
         <config>
-            <processName>/test/uatTestSuite/steps/Then the response is a list containing an order for (firstname).process</processName>
+            <processName>/test/uatTestSuite/steps/Then the response is a coffee-order-list.process</processName>
         </config>
         <pd:inputBindings>
             <root>
                 <xsl:copy-of select="$When-a-staff-member-lists-the-orders/ns7:response"/>
-                <expected-order-firstname>
-                    <xsl:value-of select="$Given-an-order-in-state-start-state/root/ns6:coffee-order/ns6:firstname"/>
-                </expected-order-firstname>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Then the response contains the Order (order)">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>946</pd:x>
+        <pd:y>241</pd:y>
+        <config>
+            <processName>/test/uatTestSuite/steps/Then the response contains the Order (order).process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <expected>
+                    <xsl:copy-of select="$Given-an-order-in-state-start-state/ns6:coffee-order"/>
+                </expected>
+                <actual>
+                    <xsl:copy-of select="$Then-the-response-is-a-coffee-order-list/pfx3:coffee-order-list/pfx3:hypermedia-coffee-order/ns6:coffee-order[ns6:firstname=$Given-an-order-in-state-start-state/ns6:coffee-order/ns6:firstname]"/>
+                </actual>
             </root>
         </pd:inputBindings>
     </pd:activity>
@@ -159,6 +167,13 @@
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
+        <pd:from>Then the response status is (http status)</pd:from>
+        <pd:to>Then the response is a coffee-order-list</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
         <pd:from>When a staff member lists the orders</pd:from>
         <pd:to>Then the response status is (http status)</pd:to>
         <pd:lineType>Default</pd:lineType>
@@ -166,14 +181,14 @@
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>Then the response status is (http status)</pd:from>
-        <pd:to>Then the response is a list containing an order for (firstname)</pd:to>
+        <pd:from>Then the response is a coffee-order-list</pd:from>
+        <pd:to>Then the response contains the Order (order)</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>Then the response is a list containing an order for (firstname)</pd:from>
+        <pd:from>Then the response contains the Order (order)</pd:from>
         <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>

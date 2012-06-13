@@ -2,35 +2,52 @@
 <pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://xmlns.tibco.com/encodings/mime" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns12="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:ns5="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns6="http://windyroad.org/coffee-shop" xmlns:ns7="http://windyroad.org/wr-http.xsd" xmlns:pfx="http://windyroad.org/bwunit-abstract/installLicense2Impl" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns1="http://windyroad.org/bwunit-0.0.0.xsd" xmlns:ns4="http://windyroad.org/bwunit-abstract" xmlns:ns3="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://windyroad.org/coffee-shop-interface" xmlns:pfx2="http://windyroad.org/bwunit-concrete">
     <xsd:import namespace="http://windyroad.org/bwunit-0.0.0.xsd" schemaLocation="/BWUnit/Public/Schemas/BWUnit.xsd"/>
     <xsd:import namespace="http://windyroad.org/coffee-shop-interface" schemaLocation="/coffee-shop/interface/Interface.xsd"/>
+    <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/coffee-shop/model/CoffeeShop.xsd"/>
     <wsdl:import namespace="http://windyroad.org/bwunit-concrete" location="/BWUnit/Public/WSDLs/BWUnit-concrete.wsdl"/>
     <wsdl:import namespace="http://windyroad.org/bwunit-abstract/installLicense2Impl"/>
-    <pd:name>test/uatTestSuite/F1 - Discover main options TestCase/S1 - Discover base options.process</pd:name>
+    <pd:name>test/uatTestSuite/F5 - View an order TestCase/S1 - created.process</pd:name>
     <pd:description>@Timeout(60000)</pd:description>
     <pd:startName>Start</pd:startName>
     <pd:startX>68</pd:startX>
     <pd:startY>87</pd:startY>
     <pd:returnBindings/>
     <pd:endName>End</pd:endName>
-    <pd:endX>936</pd:endX>
-    <pd:endY>237</pd:endY>
+    <pd:endX>1152</pd:endX>
+    <pd:endY>253</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables>
         <license-key ref="ns1:license-key"/>
     </pd:processVariables>
     <pd:targetNamespace>http://xmlns.example.com/1255637097360</pd:targetNamespace>
+    <pd:activity name="Given an order in state (start state)">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>114</pd:x>
+        <pd:y>267</pd:y>
+        <config>
+            <processName>/test/uatTestSuite/steps/Given an order in state (start state).process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <initial-state>
+                    <xsl:value-of select="$input-data/root/initial-state"/>
+                </initial-state>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
     <pd:activity name="input data">
         <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
         <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-        <pd:x>200</pd:x>
-        <pd:y>85</pd:y>
+        <pd:x>173</pd:x>
+        <pd:y>87</pd:y>
         <config>
             <element>
                 <xsd:element name="root">
                     <xsd:complexType>
                         <xsd:sequence>
-                            <xsd:element name="url" type="xsd:string"/>
-                            <xsd:element name="expected-status" type="xsd:string"/>
-                            <xsd:element name="expected-link-rel" type="xsd:string" maxOccurs="unbounded"/>
+                            <xsd:element name="initial-state" type="xsd:string"/>
+                            <xsd:element name="http-status" type="xsd:string"/>
+                            <xsd:element name="actions" type="xsd:string" maxOccurs="unbounded"/>
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>
@@ -38,28 +55,80 @@
         </config>
         <pd:inputBindings>
             <root>
-                <url>
-                    <xsl:value-of select="$_globalVariables/ns5:GlobalVariables/coffee-shop/interface/base-url"/>
-                </url>
-                <expected-status>200 OK</expected-status>
-                <expected-link-rel>create</expected-link-rel>
-                <expected-link-rel>list</expected-link-rel>
+                <initial-state>created</initial-state>
+                <http-status>200 OK</http-status>
+                <actions>view</actions>
+                <actions>edit</actions>
+                <actions>start making</actions>
+                <actions>cancel</actions>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Then the order is in state (end state)">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>892</pd:x>
+        <pd:y>267</pd:y>
+        <config>
+            <processName>/test/uatTestSuite/steps/Then the order is in state (end state).process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <firstname>
+                    <xsl:value-of select="$Given-an-order-in-state-start-state/ns6:coffee-order/ns6:firstname"/>
+                </firstname>
+                <expected-state>
+                    <xsl:value-of select="$Given-an-order-in-state-start-state/ns6:coffee-order/ns6:state"/>
+                </expected-state>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Then the response contains the Order (order)">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>580</pd:x>
+        <pd:y>267</pd:y>
+        <config>
+            <processName>/test/uatTestSuite/steps/Then the response contains the Order (order).process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <expected>
+                    <xsl:copy-of select="$Given-an-order-in-state-start-state/ns6:coffee-order"/>
+                </expected>
+                <actual>
+                    <xsl:copy-of select="$Then-the-response-is-a-hypermedia-coffee-order/pfx3:hypermedia-coffee-order/ns6:coffee-order"/>
+                </actual>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Then the response is a hypermedia-coffee-order">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>420</pd:x>
+        <pd:y>260</pd:y>
+        <config>
+            <processName>/test/uatTestSuite/steps/Then the response is a hypermedia-coffee-order.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:copy-of select="$When-a-staff-member-views-the-order-firstname/*"/>
             </root>
         </pd:inputBindings>
     </pd:activity>
     <pd:activity name="Then the response status is (http status)">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>389</pd:x>
-        <pd:y>256</pd:y>
+        <pd:x>1051</pd:x>
+        <pd:y>267</pd:y>
         <config>
             <processName>/test/uatTestSuite/steps/Then the response status is (http status).process</processName>
         </config>
         <pd:inputBindings>
             <root>
-                <xsl:copy-of select="$When-a-staff-member-checks-the-available-options/ns7:response"/>
+                <xsl:copy-of select="$When-a-staff-member-views-the-order-firstname/ns7:response"/>
                 <expected-status>
-                    <xsl:value-of select="$input-data/root/expected-status"/>
+                    <xsl:value-of select="$input-data/root/http-status"/>
                 </expected-status>
             </root>
         </pd:inputBindings>
@@ -67,49 +136,42 @@
     <pd:activity name="Then they are provided with a mechanism for (actioning) orders">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>753</pd:x>
-        <pd:y>258</pd:y>
+        <pd:x>740</pd:x>
+        <pd:y>274</pd:y>
         <config>
             <processName>/test/uatTestSuite/steps/Then they are provided with a mechanism for (actioning) orders.process</processName>
         </config>
         <pd:inputBindings>
             <root>
                 <expected>
-                    <xsl:for-each select="$input-data/root/expected-link-rel">
+                    <xsl:for-each select="$input-data/root/actions">
                         <actions>
                             <xsl:value-of select="."/>
                         </actions>
                     </xsl:for-each>
+                    <firstname>
+                        <xsl:value-of select="$Given-an-order-in-state-start-state/ns6:coffee-order/ns6:firstname"/>
+                    </firstname>
                 </expected>
                 <actual>
-                    <xsl:copy-of select="$Then-the-response-is-an-options-xml-object/pfx3:options"/>
+                    <xsl:copy-of select="$Then-the-response-is-a-hypermedia-coffee-order/pfx3:hypermedia-coffee-order/pfx3:options"/>
                 </actual>
             </root>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="When a staff member checks the available options">
+    <pd:activity name="When a staff member views the order (firstname)">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>205</pd:x>
-        <pd:y>256</pd:y>
+        <pd:x>265</pd:x>
+        <pd:y>267</pd:y>
         <config>
-            <processName>/test/uatTestSuite/steps/When a staff member checks the available options.process</processName>
-        </config>
-        <pd:inputBindings>
-            <root/>
-        </pd:inputBindings>
-    </pd:activity>
-    <pd:activity name="Then the response is an options xml object">
-        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-        <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>563</pd:x>
-        <pd:y>258</pd:y>
-        <config>
-            <processName>/test/uatTestSuite/steps/Then the response is an options xml object.process</processName>
+            <processName>/test/uatTestSuite/steps/When a staff member views the order (firstname).process</processName>
         </config>
         <pd:inputBindings>
             <root>
-                <xsl:copy-of select="$When-a-staff-member-checks-the-available-options/ns7:response"/>
+                <firstname>
+                    <xsl:value-of select="$Given-an-order-in-state-start-state/ns6:coffee-order/ns6:firstname"/>
+                </firstname>
             </root>
         </pd:inputBindings>
     </pd:activity>
@@ -121,35 +183,56 @@
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>When a staff member checks the available options</pd:from>
+        <pd:from>input data</pd:from>
+        <pd:to>Given an order in state (start state)</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Then the order is in state (end state)</pd:from>
         <pd:to>Then the response status is (http status)</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>Then they are provided with a mechanism for (actioning) orders</pd:from>
+        <pd:from>Then the response status is (http status)</pd:from>
         <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>input data</pd:from>
-        <pd:to>When a staff member checks the available options</pd:to>
+        <pd:from>Given an order in state (start state)</pd:from>
+        <pd:to>When a staff member views the order (firstname)</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>Then the response status is (http status)</pd:from>
-        <pd:to>Then the response is an options xml object</pd:to>
+        <pd:from>When a staff member views the order (firstname)</pd:from>
+        <pd:to>Then the response is a hypermedia-coffee-order</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>Then the response is an options xml object</pd:from>
+        <pd:from>Then the response is a hypermedia-coffee-order</pd:from>
+        <pd:to>Then the response contains the Order (order)</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Then they are provided with a mechanism for (actioning) orders</pd:from>
+        <pd:to>Then the order is in state (end state)</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Then the response contains the Order (order)</pd:from>
         <pd:to>Then they are provided with a mechanism for (actioning) orders</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>

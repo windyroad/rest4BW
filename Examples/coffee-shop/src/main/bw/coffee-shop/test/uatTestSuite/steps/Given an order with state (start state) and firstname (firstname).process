@@ -16,20 +16,10 @@
     <pd:startX>86</pd:startX>
     <pd:startY>92</pd:startY>
     <pd:returnBindings>
-        <root>
-            <xsl:copy-of select="$save/pfx:coffee-order"/>
-        </root>
+        <xsl:copy-of select="$save/*"/>
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
-    <pd:endType>
-        <xsd:element name="root">
-            <xsd:complexType>
-                <xsd:sequence>
-                    <xsd:element ref="pfx:coffee-order"/>
-                </xsd:sequence>
-            </xsd:complexType>
-        </xsd:element>
-    </pd:endType>
+    <pd:endType ref="pfx:coffee-order"/>
     <pd:endX>516</pd:endX>
     <pd:endY>94</pd:endY>
     <pd:errorSchemas/>

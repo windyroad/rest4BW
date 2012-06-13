@@ -5,31 +5,71 @@
     <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/coffee-shop/model/CoffeeShop.xsd"/>
     <wsdl:import namespace="http://windyroad.org/bwunit-concrete" location="/BWUnit/Public/WSDLs/BWUnit-concrete.wsdl"/>
     <wsdl:import namespace="http://windyroad.org/bwunit-abstract/installLicense2Impl"/>
-    <pd:name>test/uatTestSuite/F2 - Discover order options TestCase/S1 - Discover order options.process</pd:name>
+    <pd:name>test/uatTestSuite/F2 - Discover order options TestCase/S3 - being made.process</pd:name>
     <pd:description>@Timeout(60000)</pd:description>
     <pd:startName>Start</pd:startName>
     <pd:startX>68</pd:startX>
     <pd:startY>87</pd:startY>
     <pd:returnBindings/>
     <pd:endName>End</pd:endName>
-    <pd:endX>753</pd:endX>
-    <pd:endY>91</pd:endY>
+    <pd:endX>710</pd:endX>
+    <pd:endY>87</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables>
         <license-key ref="ns1:license-key"/>
     </pd:processVariables>
     <pd:targetNamespace>http://xmlns.example.com/1255637097360</pd:targetNamespace>
+    <pd:activity name="discoverAnOrdersOptions">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>517</pd:x>
+        <pd:y>87</pd:y>
+        <config>
+            <processName>/test/uatTestSuite/scenarioOutlines/discoverAnOrdersOptions.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <initial-state>
+                    <xsl:value-of select="$input-data/root/param/order-state"/>
+                </initial-state>
+                <firstname>
+                    <xsl:value-of select="$getUID/uniqueId"/>
+                </firstname>
+                <url>
+                    <xsl:value-of select="concat($_globalVariables/ns5:GlobalVariables/coffee-shop/interface/base-url,'/', $getUID/uniqueId)"/>
+                </url>
+                <xsl:for-each select="$input-data/root/param/expected-link-rel">
+                    <expected-link-rel>
+                        <xsl:value-of select="."/>
+                    </expected-link-rel>
+                </xsl:for-each>
+                <expected-http-status>
+                    <xsl:value-of select="$input-data/root/param/expected-http-status"/>
+                </expected-http-status>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="getUID">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>369</pd:x>
+        <pd:y>87</pd:y>
+        <config>
+            <processName>/test/uatTestSuite/util/getUID.process</processName>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
     <pd:activity name="input data">
         <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
         <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
         <pd:x>217</pd:x>
-        <pd:y>94</pd:y>
+        <pd:y>87</pd:y>
         <config>
             <element>
                 <xsd:element name="root">
                     <xsd:complexType>
                         <xsd:sequence>
-                            <xsd:element name="param" maxOccurs="unbounded">
+                            <xsd:element name="param">
                                 <xsd:complexType>
                                     <xsd:sequence>
                                         <xsd:element name="order-state" type="xsd:string"/>
@@ -46,127 +86,21 @@
         <pd:inputBindings>
             <root>
                 <param>
-                    <order-state>not a valid state</order-state>
-                    <expected-http-status>200 OK</expected-http-status>
-                    <expected-link-rel>view</expected-link-rel>
-                </param>
-                <param>
-                    <order-state>created</order-state>
-                    <expected-http-status>200 OK</expected-http-status>
-                    <expected-link-rel>view</expected-link-rel>
-                    <expected-link-rel>edit</expected-link-rel>
-                    <expected-link-rel>start making</expected-link-rel>
-                    <expected-link-rel>cancel</expected-link-rel>
-                </param>
-                <param>
                     <order-state>being made</order-state>
                     <expected-http-status>200 OK</expected-http-status>
                     <expected-link-rel>view</expected-link-rel>
                     <expected-link-rel>finish making</expected-link-rel>
                 </param>
-                <param>
-                    <order-state>ready</order-state>
-                    <expected-http-status>200 OK</expected-http-status>
-                    <expected-link-rel>view</expected-link-rel>
-                    <expected-link-rel>pickup</expected-link-rel>
-                </param>
-                <param>
-                    <order-state>picked up</order-state>
-                    <expected-http-status>200 OK</expected-http-status>
-                    <expected-link-rel>view</expected-link-rel>
-                </param>
-                <param>
-                    <order-state>cancelled</order-state>
-                    <expected-http-status>200 OK</expected-http-status>
-                    <expected-link-rel>view</expected-link-rel>
-                </param>
             </root>
         </pd:inputBindings>
     </pd:activity>
-    <pd:group name="Group">
-        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
-        <pd:resourceType>ae.process.group</pd:resourceType>
-        <pd:x>317</pd:x>
-        <pd:y>25</pd:y>
-        <pd:width>346</pd:width>
-        <pd:height>138</pd:height>
-        <pd:collapsedWidth>57</pd:collapsedWidth>
-        <pd:collapsedHeight>70</pd:collapsedHeight>
-        <pd:groupVariables/>
-        <pd:joinToggle>inherit</pd:joinToggle>
-        <config>
-            <pd:groupType>inputLoop</pd:groupType>
-            <pd:serializable>false</pd:serializable>
-            <pd:over>$input-data/root/param</pd:over>
-            <pd:iterationElementSlot>param</pd:iterationElementSlot>
-            <pd:indexSlot>index</pd:indexSlot>
-            <pd:activityOutputName/>
-            <pd:accumulateOutput>false</pd:accumulateOutput>
-        </config>
-        <pd:inputBindings/>
-        <pd:expanded>true</pd:expanded>
-        <pd:transition>
-            <pd:from>start</pd:from>
-            <pd:to>getUID</pd:to>
-            <pd:lineType>Default</pd:lineType>
-            <pd:lineColor>-16777216</pd:lineColor>
-            <pd:conditionType>always</pd:conditionType>
-        </pd:transition>
-        <pd:transition>
-            <pd:from>discoverAnOrdersOptions</pd:from>
-            <pd:to>end</pd:to>
-            <pd:lineType>Default</pd:lineType>
-            <pd:lineColor>-16777216</pd:lineColor>
-            <pd:conditionType>always</pd:conditionType>
-        </pd:transition>
-        <pd:transition>
-            <pd:from>getUID</pd:from>
-            <pd:to>discoverAnOrdersOptions</pd:to>
-            <pd:lineType>Default</pd:lineType>
-            <pd:lineColor>-16777216</pd:lineColor>
-            <pd:conditionType>always</pd:conditionType>
-        </pd:transition>
-        <pd:activity name="discoverAnOrdersOptions">
-            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-            <pd:resourceType>ae.process.subprocess</pd:resourceType>
-            <pd:x>563</pd:x>
-            <pd:y>94</pd:y>
-            <config>
-                <processName>/test/uatTestSuite/scenarioOutlines/discoverAnOrdersOptions.process</processName>
-            </config>
-            <pd:inputBindings>
-                <root>
-                    <initial-state>
-                        <xsl:value-of select="$param/param/order-state"/>
-                    </initial-state>
-                    <firstname>
-                        <xsl:value-of select="$getUID/uniqueId"/>
-                    </firstname>
-                    <url>
-                        <xsl:value-of select="concat($_globalVariables/ns5:GlobalVariables/coffee-shop/interface/base-url,'/', $getUID/uniqueId)"/>
-                    </url>
-                    <xsl:for-each select="$param/param/expected-link-rel">
-                        <expected-link-rel>
-                            <xsl:value-of select="."/>
-                        </expected-link-rel>
-                    </xsl:for-each>
-                    <expected-http-status>
-                        <xsl:value-of select="$param/param/expected-http-status"/>
-                    </expected-http-status>
-                </root>
-            </pd:inputBindings>
-        </pd:activity>
-        <pd:activity name="getUID">
-            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-            <pd:resourceType>ae.process.subprocess</pd:resourceType>
-            <pd:x>415</pd:x>
-            <pd:y>96</pd:y>
-            <config>
-                <processName>/test/uatTestSuite/util/getUID.process</processName>
-            </config>
-            <pd:inputBindings/>
-        </pd:activity>
-    </pd:group>
+    <pd:transition>
+        <pd:from>getUID</pd:from>
+        <pd:to>discoverAnOrdersOptions</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
     <pd:transition>
         <pd:from>Start</pd:from>
         <pd:to>input data</pd:to>
@@ -176,13 +110,13 @@
     </pd:transition>
     <pd:transition>
         <pd:from>input data</pd:from>
-        <pd:to>Group</pd:to>
+        <pd:to>getUID</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>Group</pd:from>
+        <pd:from>discoverAnOrdersOptions</pd:from>
         <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>

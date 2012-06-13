@@ -4,28 +4,16 @@
     <pd:name>test/uatTestSuite/steps/Given a coffee ordering system at (url).process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType>
-        <xsd:element name="root">
-            <xsd:complexType>
-                <xsd:sequence>
-                    <xsd:element name="url" type="xsd:string"/>
-                </xsd:sequence>
-            </xsd:complexType>
-        </xsd:element>
+        <xsd:element name="url" type="xsd:string"/>
     </pd:startType>
     <pd:startX>95</pd:startX>
     <pd:startY>64</pd:startY>
     <pd:returnBindings>
-        <xsl:copy-of select="$Start/root"/>
+        <xsl:copy-of select="$Start/*"/>
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
     <pd:endType>
-        <xsd:element name="root">
-            <xsd:complexType>
-                <xsd:sequence>
-                    <xsd:element name="url" type="xsd:string"/>
-                </xsd:sequence>
-            </xsd:complexType>
-        </xsd:element>
+        <xsd:element name="url" type="xsd:string"/>
     </pd:endType>
     <pd:endX>450</pd:endX>
     <pd:endY>64</pd:endY>
