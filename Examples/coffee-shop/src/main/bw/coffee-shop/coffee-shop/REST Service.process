@@ -14,8 +14,8 @@
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
     <pd:endType ref="pfx:response"/>
-    <pd:endX>427</pd:endX>
-    <pd:endY>132</pd:endY>
+    <pd:endX>413</pd:endX>
+    <pd:endY>134</pd:endY>
     <pd:errorSchemas>
         <HTTP-Error ref="pfx:error"/>
     </pd:errorSchemas>
@@ -24,8 +24,8 @@
     <pd:activity name="Order Service">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>277</pd:x>
-        <pd:y>130</pd:y>
+        <pd:x>263</pd:x>
+        <pd:y>132</pd:y>
         <config>
             <processName>/coffee-shop/services/Order Service.process</processName>
         </config>
@@ -43,8 +43,8 @@
     <pd:activity name="404">
         <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
         <pd:resourceType>ae.activities.throw</pd:resourceType>
-        <pd:x>271</pd:x>
-        <pd:y>256</pd:y>
+        <pd:x>257</pd:x>
+        <pd:y>258</pd:y>
         <config>
             <faultName>HTTP-Error</faultName>
         </config>

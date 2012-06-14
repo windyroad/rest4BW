@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="cfshp" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/coffee-shop">
     <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/coffee-shop/model/CoffeeShop.xsd"/>
-    <pd:name>server/persistence/getAll.process</pd:name>
+    <pd:name>coffee-shop/persistence/getAll.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startX>94</pd:startX>
     <pd:startY>68</pd:startY>
@@ -18,15 +18,15 @@
             </xsd:complexType>
         </xsd:element>
     </pd:endType>
-    <pd:endX>482</pd:endX>
-    <pd:endY>71</pd:endY>
+    <pd:endX>364</pd:endX>
+    <pd:endY>72</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1338360464424</pd:targetNamespace>
     <pd:activity name="GetVariable">
         <pd:type>com.tibco.pe.core.GetSharedVariableActivity</pd:type>
         <pd:resourceType>ae.activities.getSharedVariable</pd:resourceType>
-        <pd:x>275</pd:x>
+        <pd:x>228</pd:x>
         <pd:y>71</pd:y>
         <config>
             <variableConfig>/coffee-shop/persistence/sudo-database.sharedvariable</variableConfig>

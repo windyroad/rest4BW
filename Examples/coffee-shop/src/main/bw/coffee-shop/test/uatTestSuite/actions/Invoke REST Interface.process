@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pfx="http://windyroad.org/wr-http.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/wr-http.xsd">
     <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/rest4BW/Private/Schemas/HttpConnection.xsd"/>
     <pd:name>test/uatTestSuite/actions/Invoke REST Interface.process</pd:name>
     <pd:startName>Start</pd:startName>
@@ -29,25 +29,23 @@
             </xsd:complexType>
         </xsd:element>
     </pd:endType>
-    <pd:endX>566</pd:endX>
-    <pd:endY>63</pd:endY>
+    <pd:endX>438</pd:endX>
+    <pd:endY>67</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1338654627204</pd:targetNamespace>
     <pd:activity name="REST Interface">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>336</pd:x>
-        <pd:y>65</pd:y>
+        <pd:x>294</pd:x>
+        <pd:y>63</pd:y>
         <config>
             <processName>/rest4BW/REST Interface.process</processName>
         </config>
         <pd:inputBindings>
             <root>
                 <xsl:copy-of select="$Start/root/pfx:request"/>
-                <handlerProcess>
-                    <xsl:value-of select="'/coffee-shop/REST Service.process'"/>
-                </handlerProcess>
+                <handlerProcess>/coffee-shop/REST Service.process</handlerProcess>
             </root>
         </pd:inputBindings>
     </pd:activity>

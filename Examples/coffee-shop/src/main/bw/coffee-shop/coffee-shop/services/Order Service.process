@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:ns3="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/rest4BW.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:ns3="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/rest4BW.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Private/Schemas/rest4BW.xsd"/>
     <pd:name>coffee-shop/services/Order Service.process</pd:name>
     <pd:description/>
@@ -14,15 +14,15 @@
             </xsd:complexType>
         </xsd:element>
     </pd:startType>
-    <pd:startX>59</pd:startX>
-    <pd:startY>245</pd:startY>
+    <pd:startX>58</pd:startX>
+    <pd:startY>323</pd:startY>
     <pd:returnBindings>
         <xsl:copy-of select="($get/pfx:response | $edit/pfx:response | $cancel/pfx:response | $state-machine/pfx:response | $create/pfx:response | $options/pfx:response)[1]"/>
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
     <pd:endType ref="pfx:response"/>
-    <pd:endX>481</pd:endX>
-    <pd:endY>250</pd:endY>
+    <pd:endX>484</pd:endX>
+    <pd:endY>325</pd:endY>
     <pd:errorSchemas>
         <HTTP-Error ref="pfx:error"/>
     </pd:errorSchemas>
@@ -31,7 +31,7 @@
     <pd:activity name="405">
         <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
         <pd:resourceType>ae.activities.throw</pd:resourceType>
-        <pd:x>318</pd:x>
+        <pd:x>280</pd:x>
         <pd:y>586</pd:y>
         <config>
             <faultName>HTTP-Error</faultName>
@@ -47,7 +47,7 @@
     <pd:activity name="create">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>318</pd:x>
+        <pd:x>280</pd:x>
         <pd:y>408</pd:y>
         <config>
             <processName>/coffee-shop/services/Order/create.process</processName>
@@ -59,7 +59,7 @@
     <pd:activity name="get">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>318</pd:x>
+        <pd:x>280</pd:x>
         <pd:y>75</pd:y>
         <config>
             <processName>/coffee-shop/services/Order/get.process</processName>
@@ -71,7 +71,7 @@
     <pd:activity name="options">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>318</pd:x>
+        <pd:x>280</pd:x>
         <pd:y>503</pd:y>
         <config>
             <processName>/coffee-shop/services/Order/options.process</processName>
@@ -83,7 +83,7 @@
     <pd:activity name="state machine">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>317</pd:x>
+        <pd:x>279</pd:x>
         <pd:y>324</pd:y>
         <config>
             <processName>/coffee-shop/services/Order/state machine.process</processName>
@@ -103,7 +103,7 @@
     <pd:activity name="cancel">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>312</pd:x>
+        <pd:x>274</pd:x>
         <pd:y>243</pd:y>
         <config>
             <processName>/coffee-shop/services/Order/state machine.process</processName>
@@ -121,7 +121,7 @@
     <pd:activity name="edit">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>309</pd:x>
+        <pd:x>271</pd:x>
         <pd:y>163</pd:y>
         <config>
             <processName>/coffee-shop/services/Order/edit.process</processName>

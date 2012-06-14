@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="pfx" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="pfx4" xmlns:ns3="cfshp" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/coffee-shop">
+<pd:ProcessDefinition xmlns:ns2="pfx" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="pfx4" xmlns:ns3="cfshp" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/coffee-shop">
     <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/coffee-shop/model/CoffeeShop.xsd"/>
     <pd:name>coffee-shop/persistence/save.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType ref="pfx:coffee-order"/>
-    <pd:startX>94</pd:startX>
-    <pd:startY>68</pd:startY>
+    <pd:startX>98</pd:startX>
+    <pd:startY>90</pd:startY>
     <pd:returnBindings>
         <xsl:copy-of select="$Start/pfx:coffee-order"/>
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
     <pd:endType ref="pfx:coffee-order"/>
-    <pd:endX>716</pd:endX>
-    <pd:endY>67</pd:endY>
+    <pd:endX>604</pd:endX>
+    <pd:endY>92</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1338360464424</pd:targetNamespace>
-    <pd:group name="Group">
+    <pd:group name="Update Order object">
         <pd:type>com.tibco.pe.core.CriticalSectionGroup</pd:type>
         <pd:resourceType>ae.process.group</pd:resourceType>
         <pd:x>193</pd:x>
         <pd:y>10</pd:y>
-        <pd:width>442</pd:width>
+        <pd:width>317</pd:width>
         <pd:height>144</pd:height>
         <pd:collapsedWidth>57</pd:collapsedWidth>
         <pd:collapsedHeight>70</pd:collapsedHeight>
@@ -58,8 +58,8 @@
         <pd:activity name="SetVariable">
             <pd:type>com.tibco.pe.core.SetSharedVariableActivity</pd:type>
             <pd:resourceType>ae.activities.setSharedVariable</pd:resourceType>
-            <pd:x>531</pd:x>
-            <pd:y>73</pd:y>
+            <pd:x>413</pd:x>
+            <pd:y>79</pd:y>
             <config>
                 <variableConfig>/coffee-shop/persistence/sudo-database.sharedvariable</variableConfig>
             </config>
@@ -85,7 +85,7 @@
         </pd:activity>
     </pd:group>
     <pd:transition>
-        <pd:from>Group</pd:from>
+        <pd:from>Update Order object</pd:from>
         <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
@@ -93,7 +93,7 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Start</pd:from>
-        <pd:to>Group</pd:to>
+        <pd:to>Update Order object</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>

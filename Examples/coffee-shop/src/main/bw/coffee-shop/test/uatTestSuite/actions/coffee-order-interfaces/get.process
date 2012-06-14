@@ -21,26 +21,18 @@
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
     <pd:endType ref="pfx3:response"/>
-    <pd:endX>771</pd:endX>
-    <pd:endY>64</pd:endY>
+    <pd:endX>427</pd:endX>
+    <pd:endY>65</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1338645339939</pd:targetNamespace>
-    <pd:activity name="Build HTTP Request">
-        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
-        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-        <pd:x>308</pd:x>
-        <pd:y>63</pd:y>
+    <pd:activity name="Invoke REST Interface">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>294</pd:x>
+        <pd:y>70</pd:y>
         <config>
-            <element>
-                <xsd:element name="root">
-                    <xsd:complexType>
-                        <xsd:sequence>
-                            <xsd:element ref="pfx3:request"/>
-                        </xsd:sequence>
-                    </xsd:complexType>
-                </xsd:element>
-            </element>
+            <processName>/test/uatTestSuite/actions/Invoke REST Interface.process</processName>
         </config>
         <pd:inputBindings>
             <root>
@@ -60,35 +52,8 @@
             </root>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="Invoke REST Interface">
-        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-        <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>475</pd:x>
-        <pd:y>71</pd:y>
-        <config>
-            <processName>/test/uatTestSuite/actions/Invoke REST Interface.process</processName>
-        </config>
-        <pd:inputBindings>
-            <xsl:copy-of select="$Build-HTTP-Request/root"/>
-        </pd:inputBindings>
-    </pd:activity>
-    <pd:activity name="Null">
-        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
-        <pd:resourceType>ae.activities.null</pd:resourceType>
-        <pd:x>627</pd:x>
-        <pd:y>64</pd:y>
-        <config/>
-        <pd:inputBindings/>
-    </pd:activity>
     <pd:transition>
         <pd:from>Start</pd:from>
-        <pd:to>Build HTTP Request</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Build HTTP Request</pd:from>
         <pd:to>Invoke REST Interface</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
@@ -96,13 +61,6 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Invoke REST Interface</pd:from>
-        <pd:to>Null</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Null</pd:from>
         <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
