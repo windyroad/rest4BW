@@ -21,13 +21,14 @@
     <pd:group name="Group">
         <pd:type>com.tibco.pe.core.CriticalSectionGroup</pd:type>
         <pd:resourceType>ae.process.group</pd:resourceType>
-        <pd:x>200</pd:x>
-        <pd:y>18</pd:y>
+        <pd:x>192</pd:x>
+        <pd:y>14</pd:y>
         <pd:width>462</pd:width>
         <pd:height>141</pd:height>
-        <pd:collapsedWidth>53</pd:collapsedWidth>
-        <pd:collapsedHeight>67</pd:collapsedHeight>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
         <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
         <config>
             <pd:groupType>criticalSection</pd:groupType>
             <pd:serializable>false</pd:serializable>
@@ -66,8 +67,8 @@
         <pd:activity name="SetVariable">
             <pd:type>com.tibco.pe.core.SetSharedVariableActivity</pd:type>
             <pd:resourceType>ae.activities.setSharedVariable</pd:resourceType>
-            <pd:x>573</pd:x>
-            <pd:y>83</pd:y>
+            <pd:x>565</pd:x>
+            <pd:y>78</pd:y>
             <config>
                 <variableConfig>/test/uatTestSuite/util/UID.sharedvariable</variableConfig>
             </config>
@@ -80,8 +81,8 @@
         <pd:activity name="GetVariable">
             <pd:type>com.tibco.pe.core.GetSharedVariableActivity</pd:type>
             <pd:resourceType>ae.activities.getSharedVariable</pd:resourceType>
-            <pd:x>268</pd:x>
-            <pd:y>80</pd:y>
+            <pd:x>260</pd:x>
+            <pd:y>75</pd:y>
             <config>
                 <variableConfig>/test/uatTestSuite/util/UID.sharedvariable</variableConfig>
             </config>
@@ -90,8 +91,8 @@
         <pd:activity name="incrementUID">
             <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
             <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-            <pd:x>421</pd:x>
-            <pd:y>81</pd:y>
+            <pd:x>413</pd:x>
+            <pd:y>76</pd:y>
             <config>
                 <element>
                     <xsd:element name="uniqueId" type="xsd:long"/>

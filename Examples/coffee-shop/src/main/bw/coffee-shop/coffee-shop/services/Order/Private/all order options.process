@@ -12,10 +12,133 @@
             </xsd:complexType>
         </xsd:element>
     </pd:startType>
-    <pd:startX>150</pd:startX>
-    <pd:startY>64</pd:startY>
+    <pd:startX>110</pd:startX>
+    <pd:startY>99</pd:startY>
     <pd:returnBindings>
-        <xsl:copy-of select="$all-order-options/*"/>
+        <xsl:variable name="url" select="if (exists($Start/root/firstname) and $Start/root/firstname!='')&#xA;then concat($_globalVariables/ns5:GlobalVariables/coffee-shop/interface/base-url,'/',$Start/root/firstname)&#xA;else $_globalVariables/ns5:GlobalVariables/coffee-shop/interface/base-url"/>
+        <xsl:variable name="type" select="$_globalVariables/ns5:GlobalVariables/coffee-shop/interface/types/xml"/>
+        <root>
+            <pfx:options>
+                <pfx:link>
+                    <xsl:attribute name="title">View Order</xsl:attribute>
+                    <xsl:attribute name="rel">view</xsl:attribute>
+                    <xsl:attribute name="type">
+                        <xsl:value-of select="$type"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="$url"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="method">GET</xsl:attribute>
+                </pfx:link>
+                <pfx:link>
+                    <xsl:attribute name="title">Create Order</xsl:attribute>
+                    <xsl:attribute name="rel">create</xsl:attribute>
+                    <xsl:attribute name="type">
+                        <xsl:value-of select="$type"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="$url"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="method">POST</xsl:attribute>
+                    <pfx:parameter>
+                        <xsl:attribute name="title">Firstname</xsl:attribute>
+                        <xsl:attribute name="name">firstname</xsl:attribute>
+                        <xsl:attribute name="type">text</xsl:attribute>
+                    </pfx:parameter>
+                    <pfx:parameter>
+                        <xsl:attribute name="title">Coffee</xsl:attribute>
+                        <xsl:attribute name="name">coffee</xsl:attribute>
+                        <xsl:attribute name="type">text</xsl:attribute>
+                    </pfx:parameter>
+                    <pfx:parameter>
+                        <xsl:attribute name="title">Sugar</xsl:attribute>
+                        <xsl:attribute name="name">sugar</xsl:attribute>
+                        <xsl:attribute name="type">text</xsl:attribute>
+                    </pfx:parameter>
+                </pfx:link>
+                <pfx:link>
+                    <xsl:attribute name="title">Edit Order</xsl:attribute>
+                    <xsl:attribute name="rel">edit</xsl:attribute>
+                    <xsl:attribute name="type">
+                        <xsl:value-of select="$type"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="$url"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="method">PUT</xsl:attribute>
+                    <pfx:parameter>
+                        <xsl:attribute name="title">Firstname</xsl:attribute>
+                        <xsl:attribute name="name">firstname</xsl:attribute>
+                        <xsl:attribute name="type">text</xsl:attribute>
+                    </pfx:parameter>
+                    <pfx:parameter>
+                        <xsl:attribute name="title">Coffee</xsl:attribute>
+                        <xsl:attribute name="name">coffee</xsl:attribute>
+                        <xsl:attribute name="type">text</xsl:attribute>
+                    </pfx:parameter>
+                    <pfx:parameter>
+                        <xsl:attribute name="title">Sugar</xsl:attribute>
+                        <xsl:attribute name="name">sugar</xsl:attribute>
+                        <xsl:attribute name="type">text</xsl:attribute>
+                    </pfx:parameter>
+                </pfx:link>
+                <pfx:link>
+                    <xsl:attribute name="title">Start Making</xsl:attribute>
+                    <xsl:attribute name="rel">start making</xsl:attribute>
+                    <xsl:attribute name="type">
+                        <xsl:value-of select="$type"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="$url"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="method">POST</xsl:attribute>
+                </pfx:link>
+                <pfx:link>
+                    <xsl:attribute name="title">Finish Making</xsl:attribute>
+                    <xsl:attribute name="rel">finish making</xsl:attribute>
+                    <xsl:attribute name="type">
+                        <xsl:value-of select="$type"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="$url"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="method">POST</xsl:attribute>
+                </pfx:link>
+                <pfx:link>
+                    <xsl:attribute name="title">Pickup</xsl:attribute>
+                    <xsl:attribute name="rel">pickup</xsl:attribute>
+                    <xsl:attribute name="type">
+                        <xsl:value-of select="$type"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="$url"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="method">POST</xsl:attribute>
+                </pfx:link>
+                <pfx:link>
+                    <xsl:attribute name="title">Cancel Order</xsl:attribute>
+                    <xsl:attribute name="rel">cancel</xsl:attribute>
+                    <xsl:attribute name="type">
+                        <xsl:value-of select="$type"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="$url"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="method">DELETE</xsl:attribute>
+                </pfx:link>
+                <pfx:link>
+                    <xsl:attribute name="title">List Orders</xsl:attribute>
+                    <xsl:attribute name="rel">list</xsl:attribute>
+                    <xsl:attribute name="type">
+                        <xsl:value-of select="$type"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="$url"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="method">GET</xsl:attribute>
+                </pfx:link>
+            </pfx:options>
+        </root>
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
     <pd:endType>
@@ -27,163 +150,13 @@
             </xsd:complexType>
         </xsd:element>
     </pd:endType>
-    <pd:endX>450</pd:endX>
-    <pd:endY>64</pd:endY>
+    <pd:endX>305</pd:endX>
+    <pd:endY>101</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1339054285442</pd:targetNamespace>
-    <pd:activity name="all order options">
-        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
-        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-        <pd:x>296</pd:x>
-        <pd:y>64</pd:y>
-        <config>
-            <element>
-                <xsd:element name="root">
-                    <xsd:complexType>
-                        <xsd:sequence>
-                            <xsd:element ref="pfx:options"/>
-                        </xsd:sequence>
-                    </xsd:complexType>
-                </xsd:element>
-            </element>
-        </config>
-        <pd:inputBindings>
-            <xsl:variable name="url" select="if (exists($Start/root/firstname) and $Start/root/firstname!='')&#xA;then concat($_globalVariables/ns5:GlobalVariables/coffee-shop/interface/base-url,'/',$Start/root/firstname)&#xA;else $_globalVariables/ns5:GlobalVariables/coffee-shop/interface/base-url"/>
-            <xsl:variable name="type" select="$_globalVariables/ns5:GlobalVariables/coffee-shop/interface/types/xml"/>
-            <root>
-                <pfx:options>
-                    <pfx:link>
-                        <xsl:attribute name="title">View Order</xsl:attribute>
-                        <xsl:attribute name="rel">view</xsl:attribute>
-                        <xsl:attribute name="type">
-                            <xsl:value-of select="$type"/>
-                        </xsl:attribute>
-                        <xsl:attribute name="href">
-                            <xsl:value-of select="$url"/>
-                        </xsl:attribute>
-                        <xsl:attribute name="method">GET</xsl:attribute>
-                    </pfx:link>
-                    <pfx:link>
-                        <xsl:attribute name="title">Create Order</xsl:attribute>
-                        <xsl:attribute name="rel">create</xsl:attribute>
-                        <xsl:attribute name="type">
-                            <xsl:value-of select="$type"/>
-                        </xsl:attribute>
-                        <xsl:attribute name="href">
-                            <xsl:value-of select="$url"/>
-                        </xsl:attribute>
-                        <xsl:attribute name="method">POST</xsl:attribute>
-                        <pfx:parameter>
-                            <xsl:attribute name="title">Firstname</xsl:attribute>
-                            <xsl:attribute name="name">firstname</xsl:attribute>
-                            <xsl:attribute name="type">text</xsl:attribute>
-                        </pfx:parameter>
-                        <pfx:parameter>
-                            <xsl:attribute name="title">Coffee</xsl:attribute>
-                            <xsl:attribute name="name">coffee</xsl:attribute>
-                            <xsl:attribute name="type">text</xsl:attribute>
-                        </pfx:parameter>
-                        <pfx:parameter>
-                            <xsl:attribute name="title">Sugar</xsl:attribute>
-                            <xsl:attribute name="name">sugar</xsl:attribute>
-                            <xsl:attribute name="type">text</xsl:attribute>
-                        </pfx:parameter>
-                    </pfx:link>
-                    <pfx:link>
-                        <xsl:attribute name="title">Edit Order</xsl:attribute>
-                        <xsl:attribute name="rel">edit</xsl:attribute>
-                        <xsl:attribute name="type">
-                            <xsl:value-of select="$type"/>
-                        </xsl:attribute>
-                        <xsl:attribute name="href">
-                            <xsl:value-of select="$url"/>
-                        </xsl:attribute>
-                        <xsl:attribute name="method">PUT</xsl:attribute>
-                        <pfx:parameter>
-                            <xsl:attribute name="title">Firstname</xsl:attribute>
-                            <xsl:attribute name="name">firstname</xsl:attribute>
-                            <xsl:attribute name="type">text</xsl:attribute>
-                        </pfx:parameter>
-                        <pfx:parameter>
-                            <xsl:attribute name="title">Coffee</xsl:attribute>
-                            <xsl:attribute name="name">coffee</xsl:attribute>
-                            <xsl:attribute name="type">text</xsl:attribute>
-                        </pfx:parameter>
-                        <pfx:parameter>
-                            <xsl:attribute name="title">Sugar</xsl:attribute>
-                            <xsl:attribute name="name">sugar</xsl:attribute>
-                            <xsl:attribute name="type">text</xsl:attribute>
-                        </pfx:parameter>
-                    </pfx:link>
-                    <pfx:link>
-                        <xsl:attribute name="title">Start Making</xsl:attribute>
-                        <xsl:attribute name="rel">start making</xsl:attribute>
-                        <xsl:attribute name="type">
-                            <xsl:value-of select="$type"/>
-                        </xsl:attribute>
-                        <xsl:attribute name="href">
-                            <xsl:value-of select="$url"/>
-                        </xsl:attribute>
-                        <xsl:attribute name="method">POST</xsl:attribute>
-                    </pfx:link>
-                    <pfx:link>
-                        <xsl:attribute name="title">Finish Making</xsl:attribute>
-                        <xsl:attribute name="rel">finish making</xsl:attribute>
-                        <xsl:attribute name="type">
-                            <xsl:value-of select="$type"/>
-                        </xsl:attribute>
-                        <xsl:attribute name="href">
-                            <xsl:value-of select="$url"/>
-                        </xsl:attribute>
-                        <xsl:attribute name="method">POST</xsl:attribute>
-                    </pfx:link>
-                    <pfx:link>
-                        <xsl:attribute name="title">Pickup</xsl:attribute>
-                        <xsl:attribute name="rel">pickup</xsl:attribute>
-                        <xsl:attribute name="type">
-                            <xsl:value-of select="$type"/>
-                        </xsl:attribute>
-                        <xsl:attribute name="href">
-                            <xsl:value-of select="$url"/>
-                        </xsl:attribute>
-                        <xsl:attribute name="method">POST</xsl:attribute>
-                    </pfx:link>
-                    <pfx:link>
-                        <xsl:attribute name="title">Cancel Order</xsl:attribute>
-                        <xsl:attribute name="rel">cancel</xsl:attribute>
-                        <xsl:attribute name="type">
-                            <xsl:value-of select="$type"/>
-                        </xsl:attribute>
-                        <xsl:attribute name="href">
-                            <xsl:value-of select="$url"/>
-                        </xsl:attribute>
-                        <xsl:attribute name="method">DELETE</xsl:attribute>
-                    </pfx:link>
-                    <pfx:link>
-                        <xsl:attribute name="title">List Orders</xsl:attribute>
-                        <xsl:attribute name="rel">list</xsl:attribute>
-                        <xsl:attribute name="type">
-                            <xsl:value-of select="$type"/>
-                        </xsl:attribute>
-                        <xsl:attribute name="href">
-                            <xsl:value-of select="$url"/>
-                        </xsl:attribute>
-                        <xsl:attribute name="method">GET</xsl:attribute>
-                    </pfx:link>
-                </pfx:options>
-            </root>
-        </pd:inputBindings>
-    </pd:activity>
     <pd:transition>
         <pd:from>Start</pd:from>
-        <pd:to>all order options</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>all order options</pd:from>
         <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>

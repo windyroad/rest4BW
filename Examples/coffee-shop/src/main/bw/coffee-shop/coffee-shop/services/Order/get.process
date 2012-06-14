@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx1="http://windyroad.org/bwunit-abstract/installLicense2Impl" xmlns:ns5="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:ns6="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns31="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:ns7="http://windyroad.org/wr-http.xsd" xmlns:pfx="http://windyroad.org/rest4BW.xsd" xmlns:ns11="http://windyroad.org/bwunit-0.0.0.xsd" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns4="http://windyroad.org/bwunit-abstract" xmlns:ns3="http://xmlns.tibco.com/encodings/mime" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx4="http://windyroad.org/coffee-shop" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.tibco.com/schemas/coffee-shop/coffee-shop/shared variables/Schema.xsd" xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:pfx21="http://windyroad.org/bwunit-concrete" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx6="http://windyroad.org/coffee-shop-interface">
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx1="http://windyroad.org/bwunit-abstract/installLicense2Impl" xmlns:ns5="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:ns6="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns31="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:ns7="http://windyroad.org/wr-http.xsd" xmlns:pfx="http://windyroad.org/rest4BW.xsd" xmlns:ns11="http://windyroad.org/bwunit-0.0.0.xsd" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns4="http://windyroad.org/bwunit-abstract" xmlns:ns3="http://xmlns.tibco.com/encodings/mime" xmlns:pfx5="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://windyroad.org/coffee-shop" xmlns:pfx3="http://www.tibco.com/schemas/coffee-shop/coffee-shop/shared variables/Schema.xsd" xmlns:pfx21="http://windyroad.org/bwunit-concrete" xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:pfx6="http://windyroad.org/coffee-shop-interface" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Private/Schemas/rest4BW.xsd"/>
     <xsd:import namespace="http://windyroad.org/rest-delegate.xsd"/>
     <xsd:import namespace="http://www.tibco.com/schemas/coffee-shop/coffee-shop/shared variables/Schema.xsd" schemaLocation="/coffee-shop/shared variables/Schema.xsd"/>
@@ -22,14 +22,14 @@
     <pd:returnBindings>
         <pfx:response xsi:type="ns5:sc-200_OK">
             <pfx:text-content>
-                <xsl:value-of select="$de-multiplex/*"/>
+                <xsl:value-of select="($Render-Order/xmlString | $Render-List/xmlString)[1]"/>
             </pfx:text-content>
         </pfx:response>
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
     <pd:endType ref="pfx:response"/>
-    <pd:endX>1059</pd:endX>
-    <pd:endY>188</pd:endY>
+    <pd:endX>801</pd:endX>
+    <pd:endY>194</pd:endY>
     <pd:errorSchemas>
         <HTTP-Error ref="pfx:error"/>
     </pd:errorSchemas>
@@ -38,8 +38,8 @@
     <pd:group name="Group">
         <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
         <pd:resourceType>ae.process.group</pd:resourceType>
-        <pd:x>597</pd:x>
-        <pd:y>109</pd:y>
+        <pd:x>436</pd:x>
+        <pd:y>108</pd:y>
         <pd:width>152</pd:width>
         <pd:height>152</pd:height>
         <pd:collapsedWidth>57</pd:collapsedWidth>
@@ -75,8 +75,8 @@
         <pd:activity name="build list of orders">
             <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
             <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-            <pd:x>670</pd:x>
-            <pd:y>193</pd:y>
+            <pd:x>509</pd:x>
+            <pd:y>192</pd:y>
             <config>
                 <element ref="pfx6:hypermedia-coffee-order"/>
             </config>
@@ -117,8 +117,8 @@
     <pd:activity name="404">
         <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
         <pd:resourceType>ae.activities.throw</pd:resourceType>
-        <pd:x>371</pd:x>
-        <pd:y>315</pd:y>
+        <pd:x>223</pd:x>
+        <pd:y>318</pd:y>
         <config>
             <faultName>HTTP-Error</faultName>
         </config>
@@ -137,7 +137,7 @@
     <pd:activity name="all order options">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>496</pd:x>
+        <pd:x>352</pd:x>
         <pd:y>189</pd:y>
         <config>
             <processName>/coffee-shop/services/Order/Private/all order options.process</processName>
@@ -149,8 +149,8 @@
     <pd:activity name="build order options">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>662</pd:x>
-        <pd:y>54</pd:y>
+        <pd:x>505</pd:x>
+        <pd:y>59</pd:y>
         <config>
             <processName>/coffee-shop/services/Order/Private/build options for order.process</processName>
         </config>
@@ -165,36 +165,11 @@
             </root>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="de-multiplex">
-        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
-        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-        <pd:x>944</pd:x>
-        <pd:y>189</pd:y>
-        <config>
-            <element>
-                <xsd:element name="text-content" type="xsd:string"/>
-            </element>
-        </config>
-        <pd:inputBindings>
-            <xsl:choose>
-                <xsl:when test="$Render-Order/*">
-                    <text-content>
-                        <xsl:value-of select="$Render-Order/*"/>
-                    </text-content>
-                </xsl:when>
-                <xsl:otherwise>
-                    <text-content>
-                        <xsl:value-of select="$Render-List/*"/>
-                    </text-content>
-                </xsl:otherwise>
-            </xsl:choose>
-        </pd:inputBindings>
-    </pd:activity>
     <pd:activity name="get">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>366</pd:x>
-        <pd:y>49</pd:y>
+        <pd:x>223</pd:x>
+        <pd:y>52</pd:y>
         <config>
             <processName>/coffee-shop/persistence/get.process</processName>
         </config>
@@ -207,26 +182,18 @@
     <pd:activity name="getAll">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>374</pd:x>
+        <pd:x>223</pd:x>
         <pd:y>189</pd:y>
         <config>
             <processName>/coffee-shop/persistence/getAll.process</processName>
         </config>
         <pd:inputBindings/>
     </pd:activity>
-    <pd:activity name="Null-1">
-        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
-        <pd:resourceType>ae.activities.null</pd:resourceType>
-        <pd:x>209</pd:x>
-        <pd:y>189</pd:y>
-        <config/>
-        <pd:inputBindings/>
-    </pd:activity>
     <pd:activity name="Render List">
         <pd:type>com.tibco.plugin.xml.XMLRendererActivity</pd:type>
         <pd:resourceType>ae.activities.XMLRendererActivity</pd:resourceType>
-        <pd:x>824</pd:x>
-        <pd:y>189</pd:y>
+        <pd:x>667</pd:x>
+        <pd:y>194</pd:y>
         <config>
             <renderAsText>text</renderAsText>
             <validateInput>true</validateInput>
@@ -243,8 +210,8 @@
     <pd:activity name="Render Order">
         <pd:type>com.tibco.plugin.xml.XMLRendererActivity</pd:type>
         <pd:resourceType>ae.activities.XMLRendererActivity</pd:resourceType>
-        <pd:x>815</pd:x>
-        <pd:y>51</pd:y>
+        <pd:x>658</pd:x>
+        <pd:y>52</pd:y>
         <config>
             <renderAsText>text</renderAsText>
             <validateInput>true</validateInput>
@@ -260,35 +227,12 @@
     </pd:activity>
     <pd:transition>
         <pd:from>Start</pd:from>
-        <pd:to>Null-1</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Null-1</pd:from>
         <pd:to>getAll</pd:to>
-        <pd:xpathDescription>coffee-shop?</pd:xpathDescription>
+        <pd:xpathDescription>coffee shop?</pd:xpathDescription>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>xpath</pd:conditionType>
         <pd:xpath>$Start/root/pfx:request/pfx:command=$_globalVariables/pfx5:GlobalVariables/coffee-shop/interface/base-url</pd:xpath>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Null-1</pd:from>
-        <pd:to>get</pd:to>
-        <pd:xpathDescription>firstname?</pd:xpathDescription>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>xpath</pd:conditionType>
-        <pd:xpath>$Start/root/firstname</pd:xpath>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Null-1</pd:from>
-        <pd:to>404</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>otherwise</pd:conditionType>
     </pd:transition>
     <pd:transition>
         <pd:from>get</pd:from>
@@ -312,13 +256,6 @@
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>de-multiplex</pd:from>
-        <pd:to>End</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
         <pd:from>Group</pd:from>
         <pd:to>Render List</pd:to>
         <pd:lineType>Default</pd:lineType>
@@ -334,16 +271,32 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Render Order</pd:from>
-        <pd:to>de-multiplex</pd:to>
+        <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
         <pd:from>Render List</pd:from>
-        <pd:to>de-multiplex</pd:to>
+        <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>get</pd:to>
+        <pd:xpathDescription>firstname?</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/root/firstname</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>404</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
     </pd:transition>
 </pd:ProcessDefinition>
