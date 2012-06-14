@@ -28,7 +28,7 @@
         <pd:inputBindings>
             <ns:ActivityInput>
                 <message>
-                    <xsl:value-of select="'some message'"/>
+                    some message
                 </message>
             </ns:ActivityInput>
         </pd:inputBindings>

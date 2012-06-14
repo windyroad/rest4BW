@@ -37,7 +37,7 @@
         <pd:inputBindings>
             <ns:ActivityInput>
                 <message>
-                    <xsl:value-of select="'Not implemented'"/>
+                    Not implemented
                 </message>
             </ns:ActivityInput>
         </pd:inputBindings>

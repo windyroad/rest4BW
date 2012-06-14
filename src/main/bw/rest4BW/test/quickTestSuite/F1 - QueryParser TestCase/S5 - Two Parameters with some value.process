@@ -44,15 +44,15 @@
                     <ns1:query>
                         <ns1:item>
                             <xsl:attribute name="name">
-                                <xsl:value-of select="'thisisatest'"/>
+                                thisisatest
                             </xsl:attribute>
                             <xsl:attribute name="value">
-                                <xsl:value-of select="'hello'"/>
+                                hello
                             </xsl:attribute>
                         </ns1:item>
                         <ns1:item>
                             <xsl:attribute name="name">
-                                <xsl:value-of select="'arg2'"/>
+                                arg2
                             </xsl:attribute>
                         </ns1:item>
                     </ns1:query>
