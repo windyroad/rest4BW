@@ -48,7 +48,7 @@ content-length: 500</pfx:Header>
                     <pfx:Connection>keep-alive</pfx:Connection>
                     <pfx:host>localhost:8123</pfx:host>
                     <pfx:ETag>
-                        <xsl:value-of select="'ETAG9876'"/>
+                        ETAG9876
                     </pfx:ETag>
                 </pfx:Headers>
                 <pfx:mimeEnvelopeElement>

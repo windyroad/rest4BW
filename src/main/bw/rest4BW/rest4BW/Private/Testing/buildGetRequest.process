@@ -46,7 +46,7 @@ if-modified-since: 2012-05-30T10:59:38.79+10:00</pfx:Header>
                     <pfx:host>localhost:8123</pfx:host>
                     <pfx:If-Modified-Since>2012-05-30T10:59:38.79+10:00</pfx:If-Modified-Since>
                     <pfx:ETag>
-                        <xsl:value-of select="'ETAG4321'"/>
+                        ETAG4321
                     </pfx:ETag>
                 </pfx:Headers>
                 <pfx:Context>

@@ -34,7 +34,7 @@
                             <ns1:meta name="name" value="firstname"/>
                             <ns1:meta name="firstname">
                                 <xsl:attribute name="value">
-                                    <xsl:value-of select="''"/>
+                                    
                                 </xsl:attribute>
                             </ns1:meta>
                             <ns1:text-content/>

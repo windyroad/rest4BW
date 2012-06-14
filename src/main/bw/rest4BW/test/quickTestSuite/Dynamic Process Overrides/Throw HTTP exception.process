@@ -38,7 +38,7 @@
                     <pfx:error xsi:type="ns:sc-405_Method_Not_Allowed">
                         <pfx:headers>
                             <xsl:attribute name="allow">
-                                <xsl:value-of select="'these, methods, are, allowed, for the requested resource'"/>
+                                these, methods, are, allowed, for the requested resource
                             </xsl:attribute>
                         </pfx:headers>
                     </pfx:error>
