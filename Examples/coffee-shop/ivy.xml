@@ -10,6 +10,6 @@ xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
         <conf name="test"/>
     </configurations>
     <dependencies>
-        <dependency org="org.windyroad" name="bwunit" rev="6" transitive="false" conf="test"/>
+        <dependency org="org.windyroad" name="bwunit" rev="7" transitive="false" conf="test"/>
     </dependencies>
 </ivy-module>

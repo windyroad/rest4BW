@@ -17,7 +17,7 @@
 -->
 	</publications>
 	<dependencies>
-        <dependency org="org.windyroad" name="bwunit" rev="6" transitive="false" conf="default"/>
+        <dependency org="org.windyroad" name="bwunit" rev="7" transitive="false" conf="default"/>
         <dependency org="org.apache.ant" name="ant-jsch" rev="1.8.2"  transitive="false" conf="dist"/>
     </dependencies>
 </ivy-module>
