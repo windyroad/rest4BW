@@ -397,7 +397,7 @@ To Releases Version: ${releases.new.revision}</echo>
 				<arg value='POST' />
 				<arg value='-H' />
 				<arg value='Accept: application/xml' />
-				<arg value='https://www.assembla.com/spaces/rest-tib-lib/milestones' />
+				<arg value='https://www.assembla.com/spaces/rest4BW/milestones' />
 				<arg value='-F' />
 				<arg value='milestone[title]=v@{version}' />
 				<arg value='-o' />
@@ -452,7 +452,7 @@ To Releases Version: ${releases.new.revision}</echo>
 			<tstamp>
 				<format property="milestone[due_date]" pattern="yyyy/MM/dd" />
 			</tstamp>
-			<echo file="build/release-notes-@{version}.txt">[[url:https://www.assembla.com/spaces/rest-tib-lib/tickets/custom_report/28347|Closed Defects and Implemented Features]]
+			<echo file="build/release-notes-@{version}.txt">[[url:https://www.assembla.com/spaces/rest4BW/tickets/custom_report/28347|Closed Defects and Implemented Features]]
 Source Code Revision ${mercurial.revision}</echo>
 			<loadfile property="milestone.@{version}.releasenotes" srcfile="build/release-notes-@{version}.txt" />
 			<exec executable="curl" dir="." failonerror="true">
@@ -463,7 +463,7 @@ Source Code Revision ${mercurial.revision}</echo>
 				<arg value='PUT' />
 				<arg value='-H' />
 				<arg value='Accept: application/xml' />
-				<arg value='http://www.assembla.com/spaces/rest-tib-lib/milestones/${milestone.@{version}.id}' />
+				<arg value='http://www.assembla.com/spaces/rest4BW/milestones/${milestone.@{version}.id}' />
 				<arg value='-F' />
 				<arg value='milestone[is_completed]=1' />
 				<arg value='-F' />
@@ -489,7 +489,7 @@ Source Code Revision ${mercurial.revision}</echo>
                 <arg value='DELETE' />
                 <arg value='-H' />
                 <arg value='Accept: application/xml' />
-                <arg value='http://www.assembla.com/spaces/rest-tib-lib/milestones/@{id}' />
+                <arg value='http://www.assembla.com/spaces/rest4BW/milestones/@{id}' />
                 <arg value='-o' />
                 <arg value='build/delete-milestone-@{id}.xml' />
             </exec>
@@ -526,7 +526,7 @@ Source Code Revision ${mercurial.revision}</echo>
                         <arg value='document[attachable_type]=Milestone' />
                         <arg value='-F' />
                         <arg value='document[file]=@${upload.basename}' />
-                        <arg value='https://www.assembla.com/spaces/rest-tib-lib/documents' />
+                        <arg value='https://www.assembla.com/spaces/rest4BW/documents' />
                     </exec>
                     <var name="upload.basename" unset="true" />
                 </sequential>
@@ -581,7 +581,7 @@ Source Code Revision ${mercurial.revision}</echo>
                 <arg value='GET' />
                 <arg value='-H' />
                 <arg value='Accept: application/xml' />
-                <arg value='https://www.assembla.com/spaces/rest-tib-lib/tickets/custom_report/167263' />
+                <arg value='https://www.assembla.com/spaces/rest4BW/tickets/custom_report/167263' />
                 <arg value='-o' />
                 <arg value='build/tickets.xml' />
             </exec>
@@ -609,7 +609,7 @@ Source Code Revision ${mercurial.revision}</echo>
                         <arg value='PUT' />
                         <arg value='-H' />
                         <arg value='Accept: application/xml' />
-                        <arg value='http://www.assembla.com/spaces/rest-tib-lib/tickets/${ticket.@{ticket-file}.number}' />
+                        <arg value='http://www.assembla.com/spaces/rest4BW/tickets/${ticket.@{ticket-file}.number}' />
                         <arg value='-F' />
                         <arg value='ticket[milestone_id]=${milestone.@{version}.id}' />
                         <arg value='-o' />
