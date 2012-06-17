@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	 xmlns:http1.1="http://windyroad.org/HTTP1.1-StatusCodeDefinitions"
 	 xmlns:rest="http://windyroad.org/rest4BW.xsd"
+	 xmlns:scd="http://windyroad.org/HTTP1.1-StatusCodeDefinitions"
 	 targetNamespace="http://windyroad.org/HTTP1.1-StatusCodeDefinitions"
 	 elementFormDefault="qualified"
 	 attributeFormDefault="unqualified">
-	<xs:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="rest4BW.xsd"/>
+	<xs:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="../../Schemas/rest4BW.xsd"/>
 	<xs:complexType name="statusCodeDefTyp" abstract="true">
 		<xs:sequence>
 			<xs:choice minOccurs="0">
@@ -18,212 +18,212 @@
 	</xs:complexType>
 	<xs:complexType name="sc-100_Continue">
 		<xs:complexContent>
-			<xs:extension base="http1.1:statusCodeDefTyp"/>
+			<xs:extension base="scd:statusCodeDefTyp"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-101_Switching_Protocols">
 		<xs:complexContent>
-			<xs:extension base="http1.1:statusCodeDefTyp"/>
+			<xs:extension base="scd:statusCodeDefTyp"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-200_OK">
 		<xs:complexContent>
-			<xs:extension base="http1.1:statusCodeDefTyp"/>
+			<xs:extension base="scd:statusCodeDefTyp"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-201_Created">
 		<xs:complexContent>
-			<xs:extension base="http1.1:statusCodeDefTyp"/>
+			<xs:extension base="scd:statusCodeDefTyp"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-202_Accepted">
 		<xs:complexContent>
-			<xs:extension base="http1.1:statusCodeDefTyp"/>
+			<xs:extension base="scd:statusCodeDefTyp"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-203_Non-Authoritative_Information">
 		<xs:complexContent>
-			<xs:extension base="http1.1:statusCodeDefTyp"/>
+			<xs:extension base="scd:statusCodeDefTyp"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-204_No_Content">
 		<xs:complexContent>
-			<xs:extension base="http1.1:statusCodeDefTyp"/>
+			<xs:extension base="scd:statusCodeDefTyp"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-205_Reset_Content">
 		<xs:complexContent>
-			<xs:extension base="http1.1:statusCodeDefTyp"/>
+			<xs:extension base="scd:statusCodeDefTyp"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-206_Partial_Content">
 		<xs:complexContent>
-			<xs:extension base="http1.1:statusCodeDefTyp"/>
+			<xs:extension base="scd:statusCodeDefTyp"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-300_Multiple_Choices">
 		<xs:complexContent>
-			<xs:extension base="http1.1:statusCodeDefTyp"/>
+			<xs:extension base="scd:statusCodeDefTyp"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-301_Moved_Permanently">
 		<xs:complexContent>
-			<xs:extension base="http1.1:statusCodeDefTyp"/>
+			<xs:extension base="scd:statusCodeDefTyp"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-302_Found">
 		<xs:complexContent>
-			<xs:extension base="http1.1:statusCodeDefTyp"/>
+			<xs:extension base="scd:statusCodeDefTyp"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-303_See_Other">
 		<xs:complexContent>
-			<xs:extension base="http1.1:statusCodeDefTyp"/>
+			<xs:extension base="scd:statusCodeDefTyp"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-304_Not_Modified">
 		<xs:complexContent>
-			<xs:extension base="http1.1:statusCodeDefTyp"/>
+			<xs:extension base="scd:statusCodeDefTyp"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-305_Use_Proxy">
 		<xs:complexContent>
-			<xs:extension base="http1.1:statusCodeDefTyp"/>
+			<xs:extension base="scd:statusCodeDefTyp"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-306_Unused">
 		<xs:complexContent>
-			<xs:extension base="http1.1:statusCodeDefTyp"/>
+			<xs:extension base="scd:statusCodeDefTyp"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-307_Temporary_Redirect">
 		<xs:complexContent>
-			<xs:extension base="http1.1:statusCodeDefTyp"/>
+			<xs:extension base="scd:statusCodeDefTyp"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-400_Bad_Request">
 		<xs:complexContent>
-			<xs:extension base="http1.1:StatusCodeErrorDefType"/>
+			<xs:extension base="scd:StatusCodeErrorDefType"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-401_Unauthorized">
 		<xs:complexContent>
-			<xs:extension base="http1.1:StatusCodeErrorDefType"/>
+			<xs:extension base="scd:StatusCodeErrorDefType"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-402_Payment_Required">
 		<xs:complexContent>
-			<xs:extension base="http1.1:StatusCodeErrorDefType"/>
+			<xs:extension base="scd:StatusCodeErrorDefType"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-403_Forbidden">
 		<xs:complexContent>
-			<xs:extension base="http1.1:StatusCodeErrorDefType"/>
+			<xs:extension base="scd:StatusCodeErrorDefType"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-404_Not_Found">
 		<xs:complexContent>
-			<xs:extension base="http1.1:StatusCodeErrorDefType"/>
+			<xs:extension base="scd:StatusCodeErrorDefType"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-405_Method_Not_Allowed">
 		<xs:complexContent>
-			<xs:extension base="http1.1:StatusCodeErrorDefType"/>
+			<xs:extension base="scd:StatusCodeErrorDefType"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-406_Not_Acceptable">
 		<xs:complexContent>
-			<xs:extension base="http1.1:StatusCodeErrorDefType"/>
+			<xs:extension base="scd:StatusCodeErrorDefType"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-407_Proxy_Authentication_Required">
 		<xs:complexContent>
-			<xs:extension base="http1.1:StatusCodeErrorDefType"/>
+			<xs:extension base="scd:StatusCodeErrorDefType"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-408_Request_Timeout">
 		<xs:complexContent>
-			<xs:extension base="http1.1:StatusCodeErrorDefType"/>
+			<xs:extension base="scd:StatusCodeErrorDefType"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-409_Conflict">
 		<xs:complexContent>
-			<xs:extension base="http1.1:StatusCodeErrorDefType"/>
+			<xs:extension base="scd:StatusCodeErrorDefType"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-410_Gone">
 		<xs:complexContent>
-			<xs:extension base="http1.1:StatusCodeErrorDefType"/>
+			<xs:extension base="scd:StatusCodeErrorDefType"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-411_Length_Required">
 		<xs:complexContent>
-			<xs:extension base="http1.1:StatusCodeErrorDefType"/>
+			<xs:extension base="scd:StatusCodeErrorDefType"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-412_Precondition_Failed">
 		<xs:complexContent>
-			<xs:extension base="http1.1:StatusCodeErrorDefType"/>
+			<xs:extension base="scd:StatusCodeErrorDefType"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-413_Request_Entity_Too_Large">
 		<xs:complexContent>
-			<xs:extension base="http1.1:StatusCodeErrorDefType"/>
+			<xs:extension base="scd:StatusCodeErrorDefType"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-414_Request-URI_Too_Long">
 		<xs:complexContent>
-			<xs:extension base="http1.1:StatusCodeErrorDefType"/>
+			<xs:extension base="scd:StatusCodeErrorDefType"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-415_Unsupported_Media_Type">
 		<xs:complexContent>
-			<xs:extension base="http1.1:StatusCodeErrorDefType"/>
+			<xs:extension base="scd:StatusCodeErrorDefType"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-416_Requested_Range_Not_Satisfiable">
 		<xs:complexContent>
-			<xs:extension base="http1.1:StatusCodeErrorDefType"/>
+			<xs:extension base="scd:StatusCodeErrorDefType"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-417_Expectation_Failed">
 		<xs:complexContent>
-			<xs:extension base="http1.1:StatusCodeErrorDefType"/>
+			<xs:extension base="scd:StatusCodeErrorDefType"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-500_Internal_Server_Error">
 		<xs:complexContent>
-			<xs:extension base="http1.1:StatusCodeErrorDefType"/>
+			<xs:extension base="scd:StatusCodeErrorDefType"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-501_Not_Implemented">
 		<xs:complexContent>
-			<xs:extension base="http1.1:StatusCodeErrorDefType"/>
+			<xs:extension base="scd:StatusCodeErrorDefType"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-502_Bad_Gateway">
 		<xs:complexContent>
-			<xs:extension base="http1.1:StatusCodeErrorDefType"/>
+			<xs:extension base="scd:StatusCodeErrorDefType"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-503_Service_Unavailable">
 		<xs:complexContent>
-			<xs:extension base="http1.1:StatusCodeErrorDefType"/>
+			<xs:extension base="scd:StatusCodeErrorDefType"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-504_Gateway_Timeout">
 		<xs:complexContent>
-			<xs:extension base="http1.1:StatusCodeErrorDefType"/>
+			<xs:extension base="scd:StatusCodeErrorDefType"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="sc-505_HTTP_Version_Not_Supported">
 		<xs:complexContent>
-			<xs:extension base="http1.1:StatusCodeErrorDefType"/>
+			<xs:extension base="scd:StatusCodeErrorDefType"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="StatusCodeErrorDefType" abstract="true">
 		<xs:complexContent>
-			<xs:extension base="http1.1:statusCodeDefTyp"/>
+			<xs:extension base="scd:statusCodeDefTyp"/>
 		</xs:complexContent>
 	</xs:complexType>
 </xs:schema>

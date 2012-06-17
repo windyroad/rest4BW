@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://windyroad.org/rest4BW.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns2="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
-    <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Private/Schemas/rest4BW.xsd"/>
-    <pd:name>REST/Private/Common/logging/Shield Exception.process</pd:name>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://windyroad.org/rest4BW.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Schemas/rest4BW.xsd"/>
+    <pd:name>rest4BW/Private/Common/logging/Shield Exception.process</pd:name>
     <pd:description>Wraps the default logger, in case we want to override the default behaviour.</pd:description>
     <pd:startName>Start</pd:startName>
     <pd:startType>
