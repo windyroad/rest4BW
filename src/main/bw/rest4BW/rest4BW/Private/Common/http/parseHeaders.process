@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://windyroad.org/rest4BW.xsd">
-    <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Private/Schemas/rest4BW.xsd"/>
-    <pd:name>REST/Private/Common/http/parseHeaders.process</pd:name>
+    <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Schemas/rest4BW.xsd"/>
+    <pd:name>rest4BW/Private/Common/http/parseHeaders.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType>
         <xsd:element name="root">
@@ -12,8 +12,8 @@
             </xsd:complexType>
         </xsd:element>
     </pd:startType>
-    <pd:startX>218</pd:startX>
-    <pd:startY>129</pd:startY>
+    <pd:startX>69</pd:startX>
+    <pd:startY>115</pd:startY>
     <pd:returnBindings>
         <root>
             <xsl:copy-of select="$output/AccumulatedOutput/root/pfx:header"/>
@@ -29,16 +29,16 @@
             </xsd:complexType>
         </xsd:element>
     </pd:endType>
-    <pd:endX>900</pd:endX>
-    <pd:endY>126</pd:endY>
+    <pd:endX>751</pd:endX>
+    <pd:endY>112</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1334885020743</pd:targetNamespace>
     <pd:group name="iterate over headers">
         <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
         <pd:resourceType>ae.process.group</pd:resourceType>
-        <pd:x>369</pd:x>
-        <pd:y>41</pd:y>
+        <pd:x>220</pd:x>
+        <pd:y>28</pd:y>
         <pd:width>396</pd:width>
         <pd:height>163</pd:height>
         <pd:collapsedWidth>57</pd:collapsedWidth>
@@ -81,8 +81,8 @@
         <pd:activity name="Split accept">
             <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
             <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-            <pd:x>643</pd:x>
-            <pd:y>128</pd:y>
+            <pd:x>494</pd:x>
+            <pd:y>114</pd:y>
             <config>
                 <element>
                     <xsd:element name="root">
@@ -134,8 +134,8 @@
         <pd:activity name="Simple Split">
             <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
             <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-            <pd:x>496</pd:x>
-            <pd:y>129</pd:y>
+            <pd:x>347</pd:x>
+            <pd:y>115</pd:y>
             <config>
                 <element>
                     <xsd:element name="root">

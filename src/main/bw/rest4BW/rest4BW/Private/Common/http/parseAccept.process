@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://windyroad.org/rest4BW.xsd">
-    <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Private/Schemas/rest4BW.xsd"/>
-    <pd:name>REST/Private/Common/http/parseAccept.process</pd:name>
+    <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Schemas/rest4BW.xsd"/>
+    <pd:name>rest4BW/Private/Common/http/parseAccept.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType>
         <xsd:element name="accept" type="xsd:string"/>
     </pd:startType>
-    <pd:startX>150</pd:startX>
-    <pd:startY>64</pd:startY>
+    <pd:startX>78</pd:startX>
+    <pd:startY>65</pd:startY>
     <pd:returnBindings>
         <pfx:accepts>
             <xsl:for-each select="$Map-Data/pfx:accepts/pfx:accept">
@@ -18,16 +18,16 @@
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
     <pd:endType ref="pfx:accepts"/>
-    <pd:endX>741</pd:endX>
-    <pd:endY>59</pd:endY>
+    <pd:endX>562</pd:endX>
+    <pd:endY>65</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1329808531854</pd:targetNamespace>
     <pd:activity name="Map Data">
         <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
         <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-        <pd:x>569</pd:x>
-        <pd:y>63</pd:y>
+        <pd:x>407</pd:x>
+        <pd:y>65</pd:y>
         <config>
             <element ref="pfx:accepts"/>
         </config>
@@ -59,8 +59,8 @@
     <pd:activity name="ParseHeader">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>360</pd:x>
-        <pd:y>62</pd:y>
+        <pd:x>238</pd:x>
+        <pd:y>65</pd:y>
         <config>
             <processName>/rest4BW/Private/Common/http/parseHeaders.process</processName>
         </config>

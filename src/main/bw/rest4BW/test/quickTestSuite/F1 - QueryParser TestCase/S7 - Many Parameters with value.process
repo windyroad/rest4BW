@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://windyroad.org/rest4BW.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd">
-    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Private/Schemas/rest4BW.xsd"/>
-    <pd:name>quickTestSuite/Feature 1 - QueryParser TestCase/Scenario 7 - Many Parameters with value.process</pd:name>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://windyroad.org/rest4BW.xsd" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Schemas/rest4BW.xsd"/>
+    <pd:name>test/quickTestSuite/F1 - QueryParser TestCase/S7 - Many Parameters with value.process</pd:name>
     <pd:description>@Timeout(60000)</pd:description>
     <pd:startName>Start</pd:startName>
     <pd:startX>150</pd:startX>
@@ -45,36 +45,20 @@
                 <ns:expected>
                     <ns1:query>
                         <ns1:item>
-                            <xsl:attribute name="name">
-                                thisisatest
-                            </xsl:attribute>
-                            <xsl:attribute name="value">
-                                hello
-                            </xsl:attribute>
+                            <xsl:attribute name="name">thisisatest</xsl:attribute>
+                            <xsl:attribute name="value">hello</xsl:attribute>
                         </ns1:item>
                         <ns1:item>
-                            <xsl:attribute name="name">
-                                arg2
-                            </xsl:attribute>
-                            <xsl:attribute name="value">
-                                val2
-                            </xsl:attribute>
+                            <xsl:attribute name="name">arg2</xsl:attribute>
+                            <xsl:attribute name="value">val2</xsl:attribute>
                         </ns1:item>
                         <ns1:item>
-                            <xsl:attribute name="name">
-                                arg3
-                            </xsl:attribute>
-                            <xsl:attribute name="value">
-                                val3
-                            </xsl:attribute>
+                            <xsl:attribute name="name">arg3</xsl:attribute>
+                            <xsl:attribute name="value">val3</xsl:attribute>
                         </ns1:item>
                         <ns1:item>
-                            <xsl:attribute name="name">
-                                arg4
-                            </xsl:attribute>
-                            <xsl:attribute name="value">
-                                val4
-                            </xsl:attribute>
+                            <xsl:attribute name="name">arg4</xsl:attribute>
+                            <xsl:attribute name="value">val4</xsl:attribute>
                         </ns1:item>
                     </ns1:query>
                 </ns:expected>
