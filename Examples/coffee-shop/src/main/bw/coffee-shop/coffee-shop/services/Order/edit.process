@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:ns2="http://windyroad.org/rest4BW.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/coffee-shop" xmlns:ns0="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://windyroad.org/rest4BW.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:ns="http://windyroad.org/coffee-shop" xmlns:ns0="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Private/Schemas/rest4BW.xsd"/>
     <pd:name>coffee-shop/services/Order/edit.process</pd:name>
     <pd:startName>Start</pd:startName>
@@ -29,7 +29,7 @@
     </pd:errorSchemas>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1338659136797</pd:targetNamespace>
-    <pd:activity name="Generate Error">
+    <pd:activity name="403 Forbidden">
         <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
         <pd:resourceType>ae.activities.throw</pd:resourceType>
         <pd:x>325</pd:x>
@@ -119,7 +119,7 @@
     </pd:transition>
     <pd:transition>
         <pd:from>get</pd:from>
-        <pd:to>Generate Error</pd:to>
+        <pd:to>403 Forbidden</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>otherwise</pd:conditionType>
