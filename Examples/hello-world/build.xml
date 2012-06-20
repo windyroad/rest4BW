@@ -28,7 +28,7 @@
 	<property name="bwunit.home" location="../../lib/bwunit" />
 	<import file="${bwunit.home}/util/bwunit.xml" optional="true" />
 
-	<property name="rest4BW.projlib" location="../../build/rest4BW.projlib" />
+	<property name="rest4BW.projlib" location="../rest4BW.projlib" />
 	<fail message="Please build rest4BW or correct the path to rest4BW.projlib, before you try to run the examples">
 		<condition>
 			<available file="${rest4BW.projlib}">
@@ -186,5 +186,9 @@
         <bwunit:convert-to-junit-results file="build/test/results.xml"
                                          tofile="build/test/hello-world-junit.xml" />
 	</target>
+
+	<target name="run-quick-tests" />
+	<target name="run-uat-tests" />
+	<target name="report-uat-tests" />
 
 </project>
