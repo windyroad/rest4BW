@@ -94,7 +94,53 @@
 
 	<target name="check-version" depends="-determine-version" description="" />
 
-	<target name="designer" depends="-load-ant-contrib" description="Launch ${ant.project.name} in TIBCO Designer">
+	<macrodef name="check-dir-exists" description="Checks whether a directory exists.">
+		<attribute name="dir" />
+    <attribute name="reportonly" default="false" />
+		<sequential>
+		  <if>
+		    <not><available file="@{dir}" type="dir"/></not>
+		    <then>
+          <if>
+            <istrue value="@{reportonly}" />
+            <then>
+		          <echo message="WARN: The directory '@{dir}' does not exist!" />
+            </then>
+            <else>
+		          <fail message="ERROR: The directory '@{dir}' does not exist!" />
+            </else>
+          </if>
+		    </then>
+		  </if>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="check-tibco-config" description="Checks whether tibco home directories exist.">
+    <attribute name="reportonly" default="false" />
+    <sequential>
+		  <propertyselector property="tmp_tibco_dirs" match="tibco\.home\.(.*)" select="\1"/>
+		  <for list="${tmp_tibco_dirs}" param="id">
+		  <sequential>
+			  <if>
+			    <not><equals arg1="@{id}" arg2="jre"/></not>
+			    <then>
+				    <check-dir-exists dir="${tibco.home.@{id}}" reportonly="@{reportonly}" />	
+			     </then>
+			  </if>
+		  </sequential>
+		  </for>
+    </sequential>
+	</macrodef>
+
+  <target name="report-tibco-config" depends="-load-ant-contrib" description="Reports whether the tibco.home.* properties have been correctly configured.">
+    <check-tibco-config reportonly="true" /> 
+  </target>
+
+  <target name="-assert-tibco-config" description="Validates whether the tibco.home.* properties have been correctly configured.">
+    <check-tibco-config /> 
+  </target>
+
+	<target name="designer" depends="-load-ant-contrib,-assert-tibco-config" description="Launch ${ant.project.name} in TIBCO Designer">
 		<bwunit:designer dir="src/main/bw" project="rest4BW" create-dtl-file="true" />
 	</target>
 
