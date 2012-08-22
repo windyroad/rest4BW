@@ -58,7 +58,7 @@
 	<target name="-determine-version" depends="-load-ivy,-load-ant-contrib">
 		<if>
 			<equals arg1="${ivy.resolver}" arg2="local" />
-			<then>
+			<then>  
 				<tstamp>
 					<format property="publish.revision" pattern="yyyyMMdd-HHmmss" />
 				</tstamp>
@@ -686,59 +686,60 @@ Source Code Revision ${mercurial.revision}</echo>
     </sequential>
     </macrodef>
     
-    <target name="upload-to-assembla" depends="-load-ant-contrib">
-        <assembla:upload version="${release.version}" />
-        <!-- also need to copy documentation to WR site. assembla:upload already retrieves
-             what needs to be uploaded, so we just need to do the scp -->
+    <target name="upload-docs-to-website" depends="-load-ant-contrib,-init-scp">
+		  <echo>Uploading 'docs' to the public website</echo>
+      <upload-to-website>
+        <files>
+          <fileset dir="docs" />
+        </files>
+      </upload-to-website>
+    </target>
 
-        <!-- TODO: Move into own target -->
+    <target name="upload-projlib-to-website" depends="-load-ant-contrib,-init-scp,-determine-version">
+		  <echo>Retrieving latest '${ivy.module}' release...</echo>
+		  <ivy:retrieve organisation="${ivy.organisation}"
+		                module="${ivy.module}"
+		                revision="${releases.revision}"
+		                inline="true"
+		                transitive="false"
+		                conf="default" />
+		  <echo>Uploading 'lib/${ivy.module}-${releases.revision}.projlib' to the public website...</echo>
+      <upload-to-website subdir="releases">
+        <files>
+          <fileset dir="lib" includes="${ivy.module}-${releases.revision}.projlib" />
+        </files>
+      </upload-to-website>
+    </target>
+    
+    <target name="-init-scp" depends="-load-ant-contrib">
         <!-- this crap is to get scp loaded properly -->
         <available property="ant-jsch.present" file="${ant.home}/lib/ant-jsch.jar" />
         <fail if="ant-jsch.present"
               message="Please remove ant-jsch.jar from ${ant.home}/lib see [http://ant.apache.org/faq.html#delegating-classloader]" />
-
         <taskdef name="scp" classname="org.apache.tools.ant.taskdefs.optional.ssh.Scp">
             <classpath>
-                <fileset dir=".">
-                        <include name="lib/*.jar" />
-                </fileset>
+                <fileset dir="lib" includes="*.jar" />
             </classpath>
         </taskdef>
-
-        <!-- yay. here we finally do the scp -->
-        <scp localFile="build/upload/${ant.project.name}-User-Guide-v${release.version}.html"
-             remoteTofile="${wr.site.username}@s25627.gridserver.com:${wr.site.path}/static/${ant.project.name}-User-Guide.html"
-             password="${wr.site.password}"
-             trust="true"
-             failonerror="true" />
+        <property name="scp.initialised" value="true" />
     </target>
-    
-    <target name="upload-docs-to-website" depends="-load-ant-contrib">
+
+    <macrodef name="upload-to-website" description="" >
+      <attribute name="subdir" default="" description="" />
+      <element name="files" description="" />
+      <sequential>
+        <fail unless="scp.initialised" message="'-init-scp' target must be invoked first!" />
         <fail unless="wr.site.username" message="Property 'wr.site.username' must be specified!" />
         <fail unless="wr.site.password" message="Property 'wr.site.password' must be specified!" />
         <fail unless="wr.site.path" message="Property 'wr.site.path' must be specified!" />
-
-        <!-- this crap is to get scp loaded properly -->
-        <available property="ant-jsch.present" file="${ant.home}/lib/ant-jsch.jar" />
-        <fail if="ant-jsch.present"
-              message="Please remove ant-jsch.jar from ${ant.home}/lib see [http://ant.apache.org/faq.html#delegating-classloader]" />
-
-        <taskdef name="scp" classname="org.apache.tools.ant.taskdefs.optional.ssh.Scp">
-            <classpath>
-                <fileset dir=".">
-                        <include name="lib/*.jar" />
-                </fileset>
-            </classpath>
-        </taskdef>
-
-        <!-- yay. here we finally do the scp -->
-        <scp todir="${wr.site.username}@s25627.gridserver.com:${wr.site.path}/static/"
+        <scp todir="${wr.site.username}@s25627.gridserver.com:${wr.site.path}/static/@{subdir}"
              password="${wr.site.password}"
              trust="true"
              failonerror="true">
-          <fileset dir="${basedir}/docs"/>
+          <files />
         </scp>
-    </target>
+      </sequential>
+    </macrodef>
     
     <target name="close-assembla-milestone" depends="-load-ant-contrib">
     <mkdir dir="build" />
