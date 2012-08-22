@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
-    <info
-        organisation="org.windyroad"
-        module="rest4BW"
-        status="release"/>
-    <configurations defaultconf="default" defaultconfmapping="default->default;test->default;dist->default">
-        <conf name="default"/>
-        <conf name="test"/>
-        <conf name="dist"/>
-    </configurations>
-	<publications>
-		<artifact name="rest4BW" type="projlib" conf="default"/>
-<!--
-		<artifact name="rest4BW-lib-User-Guide" type="html" />
--->
-	</publications>
-	<dependencies>
-        <dependency org="org.windyroad" name="bwunit" rev="8" transitive="false" conf="default"/>
-        <dependency org="org.apache.ant" name="ant-jsch" rev="1.8.2"  transitive="false" conf="dist"/>
-    </dependencies>
+  <info
+    organisation="org.windyroad"
+    module="rest4BW"
+    status="release"/>
+  <configurations defaultconf="default" defaultconfmapping="default->default;test->default;dist->default">
+    <conf name="default"/>
+    <conf name="test"/>
+    <conf name="dist"/>
+  </configurations>
+  <publications>
+    <artifact name="rest4BW" type="projlib" conf="default"/>
+    <!--
+    <artifact name="rest4BW-lib-User-Guide" type="html" />
+    -->
+  </publications>
+  <dependencies>
+    <dependency org="org.windyroad" name="bwunit" rev="8" transitive="false" conf="default"/>
+    <dependency org="org.apache.ant" name="ant-jsch" rev="1.8.2" transitive="false" conf="dist"/>
+    <dependency org="com.jcraft" name="jsch" rev="0.1.48" transitive="false" conf="dist"/>
+  </dependencies>
 </ivy-module>
