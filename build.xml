@@ -96,10 +96,10 @@
 
 	<macrodef name="check-dir-exists" description="Checks whether a directory exists.">
 		<attribute name="dir" />
-    <attribute name="reportonly" default="false" />
+                <attribute name="reportonly" default="false" />
 		<sequential>
 		  <if>
-		    <not><available file="@{dir}" type="dir"/></not>
+                    <not><available file="@{dir}"/></not>
 		    <then>
           <if>
             <istrue value="@{reportonly}" />
@@ -711,6 +711,33 @@ Source Code Revision ${mercurial.revision}</echo>
              password="${wr.site.password}"
              trust="true"
              failonerror="true" />
+    </target>
+    
+    <target name="upload-docs-to-website" depends="-load-ant-contrib">
+        <fail unless="wr.site.username" message="Property 'wr.site.username' must be specified!" />
+        <fail unless="wr.site.password" message="Property 'wr.site.password' must be specified!" />
+        <fail unless="wr.site.path" message="Property 'wr.site.path' must be specified!" />
+
+        <!-- this crap is to get scp loaded properly -->
+        <available property="ant-jsch.present" file="${ant.home}/lib/ant-jsch.jar" />
+        <fail if="ant-jsch.present"
+              message="Please remove ant-jsch.jar from ${ant.home}/lib see [http://ant.apache.org/faq.html#delegating-classloader]" />
+
+        <taskdef name="scp" classname="org.apache.tools.ant.taskdefs.optional.ssh.Scp">
+            <classpath>
+                <fileset dir=".">
+                        <include name="lib/*.jar" />
+                </fileset>
+            </classpath>
+        </taskdef>
+
+        <!-- yay. here we finally do the scp -->
+        <scp todir="${wr.site.username}@s25627.gridserver.com:${wr.site.path}/static/"
+             password="${wr.site.password}"
+             trust="true"
+             failonerror="true">
+          <fileset dir="${basedir}/docs"/>
+        </scp>
     </target>
     
     <target name="close-assembla-milestone" depends="-load-ant-contrib">
