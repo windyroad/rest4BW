@@ -30,8 +30,8 @@ sup {display:none;}
 .title{padding:0px;}
 .subtitle{padding:0px;}
 
-/* TOC - Hide 3rd depth links */
-.c22,.c0 {display:none;}
-.custom_css_to_highlight_elements {border:4px solid red;}
+/* TOC - Hide 3rd + 4th depth links */
+#toc .c0  {display:none;}
+#toc .c22 {display:none;}
 /* Highlight code blocks */
 .c15 {background-color:#FFFF88;}
