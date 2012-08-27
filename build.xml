@@ -700,6 +700,7 @@ Source Code Revision ${mercurial.revision}</echo>
       <upload-to-website subdir="releases">
         <files>
           <fileset dir="build" includes="${ivy.module}-bin-v${releases.revision}.zip" />
+          <fileset dir="build" includes="${ivy.module}-src-v${releases.revision}.zip" />
         </files>
       </upload-to-website>
     </target>
