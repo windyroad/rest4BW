@@ -695,7 +695,38 @@ Source Code Revision ${mercurial.revision}</echo>
       </upload-to-website>
     </target>
 
-    <target name="upload-projlib-to-website" depends="-load-ant-contrib,-init-scp,-determine-version">
+    <target name="upload-artifacts-to-website" depends="-init-scp,-determine-version,build-dist,build-src">
+		  <echo>Uploading 'build/${ivy.module}-bin-v${releases.revision}.zip' to the public website...</echo>
+      <upload-to-website subdir="releases">
+        <files>
+          <fileset dir="build" includes="${ivy.module}-bin-v${releases.revision}.zip" />
+        </files>
+      </upload-to-website>
+    </target>
+
+    <target name="build-src" depends="-determine-version">
+      <delete file="build/${ivy.module}-src-v${releases.revision}.zip" />
+      <zip destfile="build/${ivy.module}-src-v${releases.revision}.zip">
+        <zipfileset dir="docs" prefix="docs" />
+        <zipfileset dir="config" prefix="config" includes="default.properties,ivysettings.xml" />
+        <zipfileset dir="examples/coffee-shop" prefix="examples/coffee-shop" />
+        <zipfileset dir="." includes="LICENSE.txt,build.xml,ivy.xml" />
+        <zipfileset dir="src" prefix="src" />
+      </zip>
+    </target>
+
+    <target name="build-dist" depends="-determine-version,retrieve-latest-release">
+      <delete file="build/${ivy.module}-bin-v${releases.revision}.zip" />
+      <zip destfile="build/${ivy.module}-bin-v${releases.revision}.zip">
+        <zipfileset dir="docs" prefix="docs" />
+        <zipfileset dir="config" prefix="config" includes="default.properties,ivysettings.xml" />
+        <zipfileset dir="examples/coffee-shop" prefix="examples/coffee-shop" />
+        <zipfileset dir="." includes="LICENSE.txt,build.xml,ivy.xml" />
+        <zipfileset dir="lib" fullpath="${ivy.module}.projlib" includes="${ivy.module}-${releases.revision}.projlib" />
+      </zip>
+    </target>
+
+    <target name="retrieve-latest-release" depends="-determine-version">
 		  <echo>Retrieving latest '${ivy.module}' release...</echo>
 		  <ivy:retrieve organisation="${ivy.organisation}"
 		                module="${ivy.module}"
@@ -703,12 +734,6 @@ Source Code Revision ${mercurial.revision}</echo>
 		                inline="true"
 		                transitive="false"
 		                conf="default" />
-		  <echo>Uploading 'lib/${ivy.module}-${releases.revision}.projlib' to the public website...</echo>
-      <upload-to-website subdir="releases">
-        <files>
-          <fileset dir="lib" includes="${ivy.module}-${releases.revision}.projlib" />
-        </files>
-      </upload-to-website>
     </target>
     
     <target name="-init-scp" depends="-load-ant-contrib">
