@@ -240,27 +240,54 @@ instructions on obtaining the source code.</p>
 <p>To make use of the automated build scripts, you will need to install <a
 href="http://ant.apache.org/">Apache Ant™</a>.</p>
 
-<p>Once the source code is checked out, the following projects can be opened
-from within TIBCO Designer.</p>
+<p>Once the source code is checked out, the following projects are
+available.</p>
 
 <table>
   <tbody>
     <tr>
-      <th>Resource</th>
       <th>Project Name</th>
+      <th>Root Path</th>
+      <th>Source Path</th>
     </tr>
     <tr>
-      <td>/src/main/bw/rest4BW</td>
       <td>rest4BW</td>
+      <td>/</td>
+      <td>/src/main/bw/rest4BW</td>
     </tr>
     <tr>
-      <td>/Examples/coffee-shop/src/main/bw/coffee-shop</td>
       <td>coffee-shop</td>
+      <td>/examples/coffee-shop</td>
+      <td>/examples/coffee-shop/src/main/bw/coffee-shop</td>
     </tr>
   </tbody>
 </table>
 
-<p></p>
+<h2>Ant Scripts</h2>
+
+<h3>Configuration</h3>
+
+<p>To configure the Ant scripts:</p>
+<ol>
+  <li>Copy the file <code>/config/default.properties</code> to <code>${<a
+    href="http://docs.oracle.com/javase/tutorial/essential/environment/sysprop.html"
+    title="See 'Java System Properties'">user.home</a>}/build.properties</code></li>
+  <li>Modify <code>${user.home}/build.properties</code> to reflect the paths
+    for your local TIBCO environment</li>
+</ol>
+
+<p>Once configured, you can now open the projects in TIBCO Designer, by
+executing the following commands from the project's Root Path:</p>
+<ol>
+  <li><code>ant retrieve</code> (Only required on initial setup)</li>
+  <li><code>ant designer</code></li>
+</ol>
+
+<p>Please check the Ant console output for any errors related to misconfigured
+files. </p>
+
+<p>When the build completes successfully the project will be opened in TIBCO
+Designer, with all dependencies automatically configured.</p>
 
 <h2>Coffee Shop Example</h2>
 
