@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/coffee-shop">
+    <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/coffee-shop/model/CoffeeShop.xsd"/>
+    <pd:name>test/uatTestSuite/steps/Given an order with state (start state) and firstname (firstname).process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="initial-state" type="xsd:string"/>
+                    <xsd:element name="firstname" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>86</pd:startX>
+    <pd:startY>92</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$save/*"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx:coffee-order"/>
+    <pd:endX>516</pd:endX>
+    <pd:endY>94</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1338635071359</pd:targetNamespace>
+    <pd:activity name="save">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>371</pd:x>
+        <pd:y>96</pd:y>
+        <config>
+            <processName>/coffee-shop/persistence/save.process</processName>
+        </config>
+        <pd:inputBindings>
+            <pfx:coffee-order>
+                <pfx:firstname>
+                    <xsl:value-of select="$Start/root/firstname"/>
+                </pfx:firstname>
+                <pfx:coffee>
+                    <xsl:value-of select="$buildOrder/pfx:coffee-order/pfx:coffee"/>
+                </pfx:coffee>
+                <pfx:sugar>
+                    <xsl:value-of select="$buildOrder/pfx:coffee-order/pfx:sugar"/>
+                </pfx:sugar>
+                <pfx:state>
+                    <xsl:value-of select="$Start/root/initial-state"/>
+                </pfx:state>
+                <pfx:created-datetime>
+                    <xsl:value-of select="$buildOrder/pfx:coffee-order/pfx:created-datetime"/>
+                </pfx:created-datetime>
+            </pfx:coffee-order>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="buildOrder">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>218</pd:x>
+        <pd:y>96</pd:y>
+        <config>
+            <processName>/test/uatTestSuite/util/buildOrder.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <initial-state>
+                    <xsl:value-of select="$Start/root/initial-state"/>
+                </initial-state>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>buildOrder</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>save</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>buildOrder</pd:from>
+        <pd:to>save</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

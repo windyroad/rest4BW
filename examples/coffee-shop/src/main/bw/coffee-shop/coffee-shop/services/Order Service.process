@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:ns3="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/rest4BW.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Private/Schemas/rest4BW.xsd"/>
+    <pd:name>coffee-shop/services/Order Service.process</pd:name>
+    <pd:description/>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx:request"/>
+                    <xsd:element name="firstname" type="xsd:string" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>58</pd:startX>
+    <pd:startY>323</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="($get/pfx:response | $edit/pfx:response | $cancel/pfx:response | $state-machine/pfx:response | $create/pfx:response | $options/pfx:response)[1]"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx:response"/>
+    <pd:endX>484</pd:endX>
+    <pd:endY>325</pd:endY>
+    <pd:errorSchemas>
+        <HTTP-Error ref="pfx:error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1338181537186</pd:targetNamespace>
+    <pd:activity name="405">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>280</pd:x>
+        <pd:y>586</pd:y>
+        <config>
+            <faultName>HTTP-Error</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns3:ActivityInput>
+                <data>
+                    <pfx:error xsi:type="ns:sc-405_Method_Not_Allowed"/>
+                </data>
+            </ns3:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="create">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>280</pd:x>
+        <pd:y>408</pd:y>
+        <config>
+            <processName>/coffee-shop/services/Order/create.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Start/root"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="get">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>280</pd:x>
+        <pd:y>75</pd:y>
+        <config>
+            <processName>/coffee-shop/services/Order/get.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Start/root"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="options">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>280</pd:x>
+        <pd:y>503</pd:y>
+        <config>
+            <processName>/coffee-shop/services/Order/options.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Start/*"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="state machine">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>279</pd:x>
+        <pd:y>324</pd:y>
+        <config>
+            <processName>/coffee-shop/services/Order/state machine.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:copy-of select="$Start/root/pfx:request"/>
+                <firstname>
+                    <xsl:value-of select="$Start/root/firstname"/>
+                </firstname>
+                <transition-action-name>
+                    <xsl:value-of select="$Start/root/pfx:request/pfx:post/pfx:part/pfx:meta[@name=$_globalVariables/ns1:GlobalVariables/coffee-shop/interface/post-params/transition-action]/@value"/>
+                </transition-action-name>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="cancel">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>274</pd:x>
+        <pd:y>243</pd:y>
+        <config>
+            <processName>/coffee-shop/services/Order/state machine.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:copy-of select="$Start/root/pfx:request"/>
+                <firstname>
+                    <xsl:value-of select="$Start/root/firstname"/>
+                </firstname>
+                <transition-action-name>cancel</transition-action-name>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="edit">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>271</pd:x>
+        <pd:y>163</pd:y>
+        <config>
+            <processName>/coffee-shop/services/Order/edit.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:copy-of select="$Start/root/pfx:request"/>
+                <firstname>
+                    <xsl:value-of select="$Start/root/firstname"/>
+                </firstname>
+                <coffee>
+                    <xsl:value-of select="$Start/root/pfx:request/pfx:post/pfx:part/pfx:meta[@name=$_globalVariables/ns1:GlobalVariables/coffee-shop/interface/post-params/coffee]/@value"/>
+                </coffee>
+                <sugar>
+                    <xsl:value-of select="$Start/root/pfx:request/pfx:post/pfx:part/pfx:meta[@name=$_globalVariables/ns1:GlobalVariables/coffee-shop/interface/post-params/sugar]/@value"/>
+                </sugar>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>options</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>get</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>state machine</pd:to>
+        <pd:xpathDescription>POST</pd:xpathDescription>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/root/pfx:request/pfx:method='POST' and exists($Start/root/firstname)</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>edit</pd:to>
+        <pd:xpathDescription>PUT</pd:xpathDescription>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/root/pfx:request/pfx:method='PUT'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>cancel</pd:to>
+        <pd:xpathDescription>DELETE</pd:xpathDescription>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/root/pfx:request/pfx:method='DELETE'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>get</pd:to>
+        <pd:xpathDescription>GET</pd:xpathDescription>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/root/pfx:request/pfx:method='GET'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>options</pd:to>
+        <pd:xpathDescription>OPTIONS</pd:xpathDescription>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/root/pfx:request/pfx:method='OPTIONS'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>405</pd:to>
+        <pd:lineType>Straight</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>create</pd:to>
+        <pd:xpathDescription>POST</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/root/pfx:request/pfx:method='POST' and not(exists($Start/root/firstname))</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>create</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>state machine</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>cancel</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>edit</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

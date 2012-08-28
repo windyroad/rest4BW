@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:pfx="http://windyroad.org/rest4BW.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="http://windyroad.org/rest-delegate.xsd"/>
+    <xsd:import namespace="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" schemaLocation="/rest4BW/Private/Schemas/StatusCodeDefinitions.xsd"/>
+    <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Schemas/rest4BW.xsd"/>
+    <pd:name>rest4BW/template/REST Delegate.process</pd:name>
+    <pd:description/>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:request"/>
+    <pd:startX>67</pd:startX>
+    <pd:startY>78</pd:startY>
+    <pd:returnBindings>
+        <pfx:response xsi:type="ns:sc-500_Internal_Server_Error">
+            <pfx:text-content>This path should never execute</pfx:text-content>
+        </pfx:response>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx:response"/>
+    <pd:endX>298</pd:endX>
+    <pd:endY>77</pd:endY>
+    <pd:errorSchemas>
+        <Error ref="pfx:error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1338181537186</pd:targetNamespace>
+    <pd:activity name="501 Not Implemented">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>201</pd:x>
+        <pd:y>167</pd:y>
+        <config>
+            <faultName>Error</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <message>No REST Handler</message>
+                <messageCode>
+                    <xsl:value-of select="501"/>
+                </messageCode>
+                <data>
+                    <pfx:error xsi:type="ns:sc-501_Not_Implemented">
+                        <pfx:text-content>No REST Handler</pfx:text-content>
+                        <pfx:headers/>
+                    </pfx:error>
+                </data>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>501 Not Implemented</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>false()</pd:xpath>
+    </pd:transition>
+    <pd:label>
+        <pd:name>Label</pd:name>
+        <pd:description> This is an example implementation of the Delegate Interface.
+ This process is invoked dynamically from the 'REST Interface'.
+ When implementing, it is responsible for handling the REST request, and generating a response.</pd:description>
+        <pd:x>380</pd:x>
+        <pd:y>262</pd:y>
+        <pd:width>631</pd:width>
+        <pd:height>67</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-6697729</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
+</pd:ProcessDefinition>

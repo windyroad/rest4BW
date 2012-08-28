@@ -1,0 +1,37 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<repository xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xmlns = "http://www.tibco.com/xmlns/repo/types/2002">
+	<globalVariables>
+		<globalVariable>
+			<name>coffee</name>
+			<value>coffee</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1339560024403</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>firstname</name>
+			<value>firstname</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1339560024440</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>sugar</name>
+			<value>sugar</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1339560024423</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>transition-action</name>
+			<value>transition-action</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1339560024458</modTime>
+		</globalVariable>
+	</globalVariables>
+</repository>
