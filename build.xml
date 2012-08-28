@@ -152,7 +152,7 @@
 		</delete>
 		<delete dir="working" verbose="true" />
 		<subant target="clean">
-			<fileset dir="Examples" includes="**/build.xml" />
+			<fileset dir="examples" includes="**/build.xml" />
 		</subant>
 	</target>
 
@@ -381,7 +381,7 @@ To Releases Version: ${releases.new.revision}</echo>
 		<bwubuild:run-bwunit-tests phase="quick" />
     <echo message=">>> Invoked bwunit tests" />
 		<subant target="run-quick-tests">
-			<fileset dir="Examples" includes="*/build.xml" />
+			<fileset dir="examples" includes="*/build.xml" />
 		</subant>
     <echo message=">>> Invoked sub project tests" />
 	</target>
@@ -391,14 +391,14 @@ To Releases Version: ${releases.new.revision}</echo>
 	        depends="-load-ant-contrib,build">
 		<bwubuild:report-bwunit-tests phase="quick" />
 		<!--subant target="report-quick-tests">
-			<fileset dir="Examples" includes="*/build.xml" />
+			<fileset dir="examples" includes="*/build.xml" />
 		</subant-->
 	</target>
 
 	<target name="run-uat-tests" description="Run UATs" depends="-load-ant-contrib,build">
 		<bwubuild:run-bwunit-tests phase="uat" />
 		<subant target="run-uat-tests">
-			<fileset dir="Examples" includes="*/build.xml" />
+            <fileset dir="examples" includes="*/build.xml" />
 		</subant>
 	</target>
 
@@ -407,7 +407,7 @@ To Releases Version: ${releases.new.revision}</echo>
 	        depends="-load-ant-contrib,build">
 		<bwubuild:report-bwunit-tests phase="uat" />
 		<subant target="report-uat-tests">
-			<fileset dir="Examples" includes="*/build.xml" />
+			<fileset dir="examples" includes="*/build.xml" />
 		</subant>
 	</target>
 
