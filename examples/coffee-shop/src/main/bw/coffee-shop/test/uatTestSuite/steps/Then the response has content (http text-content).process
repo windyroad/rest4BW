@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://windyroad.org/coffee-shop" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/wr-http.xsd">
+    <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/coffee-shop/model/CoffeeShop.xsd"/>
+    <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/rest4BW/Private/Schemas/HttpConnection.xsd"/>
+    <pd:name>test/uatTestSuite/steps/Then the response has content (http text-content).process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx:response"/>
+                    <xsd:element name="expected-text-content" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>130</pd:startX>
+    <pd:startY>144</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>502</pd:endX>
+    <pd:endY>143</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1338635071359</pd:targetNamespace>
+    <pd:activity name="Assert text-content">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>325</pd:x>
+        <pd:y>151</pd:y>
+        <config>
+            <processName>/BWUnit/Public/Asserts/AssertEqual.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:equal-input>
+                <ns:msg>
+                    <xsl:value-of select="concat('expected=&quot;',$Start/root/expected-text-content,'&quot;, actual=&quot;',$Start/root/pfx:response/pfx:asciiContent,'&quot;')"/>
+                </ns:msg>
+                <ns:expected>
+                    <pfx:asciiContent>
+                        <xsl:value-of select="$Start/root/expected-text-content"/>
+                    </pfx:asciiContent>
+                </ns:expected>
+                <ns:actual>
+                    <xsl:copy-of select="$Start/root/pfx:response/pfx:asciiContent"/>
+                </ns:actual>
+            </ns:equal-input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Assert text-content</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Assert text-content</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

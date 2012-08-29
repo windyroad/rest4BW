@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://windyroad.org/rest4BW.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:ns="http://windyroad.org/coffee-shop" xmlns:ns0="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Private/Schemas/rest4BW.xsd"/>
+    <pd:name>coffee-shop/services/Order/state machine.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="ns2:request"/>
+                    <xsd:element name="firstname" type="xsd:string"/>
+                    <xsd:element name="transition-action-name" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>62</pd:startX>
+    <pd:startY>88</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$get-order-svc/ns2:response"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="ns2:response"/>
+    <pd:endX>705</pd:endX>
+    <pd:endY>88</pd:endY>
+    <pd:errorSchemas>
+        <HTTP-Error ref="ns2:error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1338659136797</pd:targetNamespace>
+    <pd:activity name="403">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>572</pd:x>
+        <pd:y>186</pd:y>
+        <config>
+            <faultName>HTTP-Error</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns0:ActivityInput>
+                <data>
+                    <ns2:error xsi:type="ns1:sc-403_Forbidden">
+                        <ns2:text-content>
+                            <xsl:value-of select="if (exists($message-overrides/root/param[current-state=$get/ns:coffee-order/ns:state and transition-action=$Start/root/transition-action-name]))&#xA;then $message-overrides/root/param[current-state=$get/ns:coffee-order/ns:state and transition-action=$Start/root/transition-action-name]/message[1]&#xA;else concat(&quot;Can't &quot;,$Start/root/transition-action-name,' an order that is ',$get/ns:coffee-order/ns:state)"/>
+                        </ns2:text-content>
+                    </ns2:error>
+                </data>
+            </ns0:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="get">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>172</pd:x>
+        <pd:y>88</pd:y>
+        <config>
+            <processName>/coffee-shop/persistence/get.process</processName>
+        </config>
+        <pd:inputBindings>
+            <firstname>
+                <xsl:value-of select="$Start/root/firstname"/>
+            </firstname>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="get order svc">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>572</pd:x>
+        <pd:y>88</pd:y>
+        <config>
+            <processName>/coffee-shop/services/Order/get.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:copy-of select="$Start/root/ns2:request"/>
+                <firstname>
+                    <xsl:value-of select="$Start/root/firstname"/>
+                </firstname>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="message overrides">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>454</pd:x>
+        <pd:y>186</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="param" minOccurs="0" maxOccurs="unbounded">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="current-state" type="xsd:string"/>
+                                        <xsd:element name="transition-action" type="xsd:string"/>
+                                        <xsd:element name="message" type="xsd:string"/>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <param>
+                    <current-state>being made</current-state>
+                    <transition-action>start making</transition-action>
+                    <message>Can't start making an order that is already being made</message>
+                </param>
+                <param>
+                    <current-state>ready</current-state>
+                    <transition-action>finish making</transition-action>
+                    <message>Can't finish making an order that has already been finished</message>
+                </param>
+                <param>
+                    <current-state>picked up</current-state>
+                    <transition-action>pickup</transition-action>
+                    <message>Can't pickup an order that has already been picked up</message>
+                </param>
+                <param>
+                    <current-state>cancelled</current-state>
+                    <transition-action>cancel</transition-action>
+                    <message>Can't cancel an order that has already been cancelled</message>
+                </param>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="save">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>456</pd:x>
+        <pd:y>88</pd:y>
+        <config>
+            <processName>/coffee-shop/persistence/save.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:coffee-order>
+                <ns:firstname>
+                    <xsl:value-of select="$get/ns:coffee-order/ns:firstname"/>
+                </ns:firstname>
+                <ns:coffee>
+                    <xsl:value-of select="$get/ns:coffee-order/ns:coffee"/>
+                </ns:coffee>
+                <ns:sugar>
+                    <xsl:value-of select="$get/ns:coffee-order/ns:sugar"/>
+                </ns:sugar>
+                <ns:state>
+                    <xsl:value-of select="$valid-state-transitions/root/param[transition-action-name=$Start/root/transition-action-name and from-state=$get/ns:coffee-order/ns:state]/to-state[1]"/>
+                </ns:state>
+                <ns:created-datetime>
+                    <xsl:value-of select="$get/ns:coffee-order/ns:created-datetime"/>
+                </ns:created-datetime>
+            </ns:coffee-order>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="valid state transitions">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>287</pd:x>
+        <pd:y>95</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="param" maxOccurs="unbounded">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="transition-action-name" type="xsd:string"/>
+                                        <xsd:element name="from-state" type="xsd:string"/>
+                                        <xsd:element name="to-state" type="xsd:string"/>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <param>
+                    <transition-action-name>edit</transition-action-name>
+                    <from-state>created</from-state>
+                    <to-state>created</to-state>
+                </param>
+                <param>
+                    <transition-action-name>start making</transition-action-name>
+                    <from-state>created</from-state>
+                    <to-state>being made</to-state>
+                </param>
+                <param>
+                    <transition-action-name>finish making</transition-action-name>
+                    <from-state>being made</from-state>
+                    <to-state>ready</to-state>
+                </param>
+                <param>
+                    <transition-action-name>pickup</transition-action-name>
+                    <from-state>ready</from-state>
+                    <to-state>picked up</to-state>
+                </param>
+                <param>
+                    <transition-action-name>cancel</transition-action-name>
+                    <from-state>created</from-state>
+                    <to-state>cancelled</to-state>
+                </param>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>valid state transitions</pd:from>
+        <pd:to>save</pd:to>
+        <pd:xpathDescription>is valid trans?</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>exists($valid-state-transitions/root/param[transition-action-name=$Start/root/transition-action-name and from-state=$get/ns:coffee-order/ns:state])</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>get</pd:from>
+        <pd:to>valid state transitions</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>message overrides</pd:from>
+        <pd:to>403</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>valid state transitions</pd:from>
+        <pd:to>message overrides</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>get order svc</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>get</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>save</pd:from>
+        <pd:to>get order svc</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>
