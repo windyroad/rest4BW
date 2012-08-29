@@ -285,7 +285,7 @@
 
 	<target name="publish" depends="-determine-version,dist" description="">
 		<echo message="Ivy Resolver - ${ivy.resolver}" />
-		<fail message="Cannot publish directly to releases">
+		<fail message="Cannot publish directly to releases" >
 			<condition>
 				<equals arg1="${ivy.resolver}" arg2="releases" />
 			</condition>
