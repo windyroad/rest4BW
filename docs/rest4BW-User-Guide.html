@@ -432,17 +432,36 @@ is maintained and the first MIME part is presented as the POSTDATA.</p>
 HTTP Receiver process starter when this property is set to <em>true</em>. This
 will cause an error to be thrown.</p>
 
-<p><strong>Example: TIBCO Designer</strong></p>
+<p><strong>Example: Modify TIBCO Designer properties</strong></p>
 <ol>
   <li>Add the following property to your
     <code>&lt;designer_home&gt;/&lt;version&gt;/properties.cfg</code> file
-    (create the file if it doesn't already exist) 
+    (create the file if it doesn't already exist). 
     <ol>
       <li><code>bw.plugin.http.handleAllMimePartsAsAttachment=true</code></li>
     </ol>
   </li>
-  <li>Restart Designer</li>
+  <li>(Re)Start TIBCO Designer.</li>
 </ol>
+
+<p><strong>Example: Custom Test execution configuration, from within TIBCO
+Designer</strong></p>
+<ol>
+  <li>Create a <code>/path/to/custom.properties</code> file, containing the
+    <code>bw.plugin.http.handleAllMimePartsAsAttachment=true</code>
+  property.</li>
+  <li>From within TIBCO Designer, navigate to "<em>Tools &gt; Tester &gt; Start
+    (F9) &gt; Advanced</em>".</li>
+  <li>In the field <em>Test Engine User Args:</em>, enter the following:
+    <code>-p /path/to/custom.properties</code></li>
+  <li>Then Start your Test process as usual.</li>
+</ol>
+
+<p>For more information, please refer to the documentation provided with your
+TIBCO Installation - <a
+href="https://docs.tibco.com/pub/activematrix_businessworks/5.9.3_march_2012/pdf/tib_bw_administration.pdf">TIBCO
+ActiveMatrix BusinessWorks™ Administration</a> (Chapter 8: Custom Engine
+Properties).</p>
 </div>
 
 <div class="footer">
