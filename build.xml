@@ -283,7 +283,7 @@
 		                  version="${releases.new.revision}" />
 	</target>
 
-	<target name="publish" depends="build,-determine-version" description="">
+	<target name="publish" depends="-determine-version,dist" description="">
 		<echo message="Ivy Resolver - ${ivy.resolver}" />
 		<fail message="Cannot publish directly to releases">
 			<condition>
@@ -695,7 +695,7 @@ Source Code Revision ${mercurial.revision}</echo>
       </upload-to-website>
     </target>
 
-    <target name="upload-artifacts-to-website" depends="-init-scp,-determine-version,build-dist,build-src">
+    <target name="upload-artifacts-to-website" depends="-init-scp,-determine-version">
 		  <echo>Uploading 'build/${ivy.module}-bin-v${releases.revision}.zip' to the public website...</echo>
       <upload-to-website subdir="releases">
         <files>
@@ -705,9 +705,12 @@ Source Code Revision ${mercurial.revision}</echo>
       </upload-to-website>
     </target>
 
-    <target name="build-src" depends="-determine-version">
-      <delete file="build/${ivy.module}-src-v${releases.revision}.zip" />
-      <zip destfile="build/${ivy.module}-src-v${releases.revision}.zip">
+    <target name="dist" depends="dist-bin,dist-src" description="creates distributable artifacts for the current build">
+    </target>
+
+    <target name="dist-src" depends="-determine-version">
+      <delete file="build/${ivy.module}-src.zip" />
+      <zip destfile="build/${ivy.module}-src.zip">
         <zipfileset dir="docs" prefix="docs" />
         <zipfileset dir="config" prefix="config" includes="default.properties,ivysettings.xml" />
         <zipfileset dir="examples/coffee-shop" prefix="examples/coffee-shop" />
@@ -716,14 +719,14 @@ Source Code Revision ${mercurial.revision}</echo>
       </zip>
     </target>
 
-    <target name="build-dist" depends="-determine-version,retrieve-latest-release">
-      <delete file="build/${ivy.module}-bin-v${releases.revision}.zip" />
-      <zip destfile="build/${ivy.module}-bin-v${releases.revision}.zip">
+    <target name="dist-bin" depends="-determine-version,build">
+      <delete file="build/${ivy.module}-bin.zip" />
+      <zip destfile="build/${ivy.module}-bin.zip">
         <zipfileset dir="docs" prefix="docs" />
         <zipfileset dir="config" prefix="config" includes="default.properties,ivysettings.xml" />
         <zipfileset dir="examples/coffee-shop" prefix="examples/coffee-shop" />
         <zipfileset dir="." includes="LICENSE.txt,build.xml,ivy.xml" />
-        <zipfileset dir="lib" fullpath="${ivy.module}.projlib" includes="${ivy.module}-${releases.revision}.projlib" />
+        <zipfileset dir="lib" fullpath="${ivy.module}.projlib" includes="${ivy.module}.projlib" />
       </zip>
     </target>
 
