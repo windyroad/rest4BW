@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="help"
+         name="assembla"
+         xmlns="antlib:org.apache.tools.ant"
+         xmlns:assembla="org.windyroad.assembla"
+         xmlns:milestone="org.windyroad.assembla.milestone"
+         xmlns:ticket="org.windyroad.assembla.ticket"
+         xmlns:tibant="org.windyroad.tibant"
+         xmlns:ivy="antlib:org.apache.ivy.ant"
+         >
+	
+	<property name="assembla.loaded" value="true" />
+         
+  <target name="help">
+    <exec executable="${ant.home}/bin/ant">
+      <arg value="-projecthelp"/>
+      <arg value="-buildfile"/>
+      <arg value="${ant.file}"/>
+    </exec>
+  </target>
+
+	<macrodef name="list" uri="org.windyroad.assembla.milestone">
+		<sequential>
+			<exec executable="curl" dir="." failonerror="true">
+				<arg value='--config' />
+				<arg value='${user.home}/.curlrc' />
+				<arg value='-k' />
+				<arg value='-X' />
+				<arg value='GET' />
+				<arg value='-H' />
+				<arg value='Accept: application/xml' />
+				<arg value='https://www.assembla.com/spaces/milestones/all/bwunit' />
+				<arg value='-o' />
+				<arg value='build/milestones.xml' />
+			</exec>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="create" uri="org.windyroad.assembla.milestone">
+		<attribute name="version" />
+		<sequential>
+			<exec executable="curl" dir="." failonerror="true">
+				<arg value='--config' />
+				<arg value='${user.home}/.curlrc' />
+				<arg value='-k' />
+				<arg value='-X' />
+				<arg value='POST' />
+				<arg value='-H' />
+				<arg value='Accept: application/xml' />
+				<arg value='https://www.assembla.com/spaces/rest4BW/milestones' />
+				<arg value='-F' />
+				<arg value='milestone[title]=v@{version}' />
+				<arg value='-o' />
+				<arg value='build/milestone-@{version}.xml' />
+			</exec>
+			<xmlproperty file="build/milestone-@{version}.xml" keepRoot="false" prefix="milestone.@{version}" />
+			<echoproperties prefix="milestone.@{version}">
+			</echoproperties>
+			<echo>Milestone '@{version}' id: ${milestone.@{version}.id}</echo>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="get" uri="org.windyroad.assembla.milestone">
+		<attribute name="version" />
+		<sequential>
+			<!--
+            Assembla doesn't provide an option to get a milestone by it's title, so we get them all
+            and pick out the one we want. 
+            -->
+			<milestone:list />
+			<tibant:xslt in="build/milestones.xml"
+			             out="build/milestone-@{version}.xml"
+			             style="util/xslt/get-milestone.xslt"
+			             classpath="${saxon.jar.path}">
+				<arg value="title=v@{version}" />
+			</tibant:xslt>
+			<xmlproperty file="build/milestone-@{version}.xml" keepRoot="false" prefix="milestone.@{version}" />
+			<echoproperties prefix="milestone.@{version}">
+			</echoproperties>
+			<echo>Milestone '@{version}' id: ${milestone.@{version}.id}</echo>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="get-create" uri="org.windyroad.assembla.milestone">
+		<attribute name="version" />
+		<sequential>
+			<milestone:get version="@{version}" />
+			<if>
+				<not>
+					<isset property="milestone.@{version}.id" />
+				</not>
+				<then>
+					<milestone:create version="@{version}" />
+				</then>
+			</if>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="close" uri="org.windyroad.assembla.milestone">
+		<attribute name="version" />
+		<sequential>
+			<tstamp>
+				<format property="milestone[due_date]" pattern="yyyy/MM/dd" />
+			</tstamp>
+			<echo file="build/release-notes-@{version}.txt">[[url:https://www.assembla.com/spaces/rest4BW/tickets/custom_report/28347|Closed Defects and Implemented Features]]
+Source Code Revision ${mercurial.revision}</echo>
+			<loadfile property="milestone.@{version}.releasenotes" srcfile="build/release-notes-@{version}.txt" />
+			<exec executable="curl" dir="." failonerror="true">
+				<arg value='--config' />
+				<arg value='${user.home}/.curlrc' />
+				<arg value='-k' />
+				<arg value='-X' />
+				<arg value='PUT' />
+				<arg value='-H' />
+				<arg value='Accept: application/xml' />
+				<arg value='http://www.assembla.com/spaces/rest4BW/milestones/${milestone.@{version}.id}' />
+				<arg value='-F' />
+				<arg value='milestone[is_completed]=1' />
+				<arg value='-F' />
+				<arg value='milestone[due_date]=${milestone[due_date]}' />
+				<arg value='-F' />
+				<arg value='"milestone[release_level]=3' />
+                <arg value='-F' />
+                <arg value='milestone[release_notes]=${milestone.@{version}.releasenotes}' />
+                <arg value='-o' />
+                <arg value='build/close-milestone-@{version}.xml' />
+            </exec>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="delete" uri="org.windyroad.assembla.milestone">
+        <attribute name="id" />
+        <sequential>
+            <exec executable="curl" dir="." failonerror="true">
+                <arg value='--config' />
+                <arg value='${user.home}/.curlrc' />
+                <arg value='-k' />
+                <arg value='-X' />
+                <arg value='DELETE' />
+                <arg value='-H' />
+                <arg value='Accept: application/xml' />
+                <arg value='http://www.assembla.com/spaces/rest4BW/milestones/@{id}' />
+                <arg value='-o' />
+                <arg value='build/delete-milestone-@{id}.xml' />
+            </exec>
+        </sequential>
+    </macrodef>
+    
+    <macrodef name="ivy-retrieve">
+        <attribute name="version" />
+        <sequential>
+            <ivy:retrieve organisation="${ivy.organisation}"
+                          module="${ivy.module}"
+                          revision="@{version}"
+                          inline="true"
+                          transitive="false"
+                          sync="true"
+                          pattern="build/upload/[artifact]-v[revision].[ext]" />
+        </sequential>
+    </macrodef>
+
+    <macrodef name="attach" uri="org.windyroad.assembla.milestone">
+        <attribute name="version" />
+        <sequential>
+            <milestone:ivy-retrieve />
+            <milestone:get-create version="@{version}" />
+            <for param="file">
+                <fileset dir="build/upload" includes="*" />
+                <sequential>
+                    <basename file="@{file}" property="upload.basename" />
+                    <exec executable="curl" dir="build/upload" failonerror="true">
+                        <arg value='--config' />
+                        <arg value='${user.home}/.curlrc' />
+                        <arg value='-k' />
+                        <arg value='-X' />
+                        <arg value='POST' />
+                        <arg value='-H' />
+                        <arg value='Accept: application/xml' />
+                        <arg value='-F' />
+                        <arg value='document[attachable_id]=${milestone.@{version}.id}' />
+                        <arg value='-F' />
+                        <arg value='document[attachable_type]=Milestone' />
+                        <arg value='-F' />
+                        <arg value='document[file]=@${upload.basename}' />
+                        <arg value='https://www.assembla.com/spaces/rest4BW/documents' />
+                    </exec>
+                    <var name="upload.basename" unset="true" />
+                </sequential>
+            </for>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="get-closed-no-milestone" uri="org.windyroad.assembla.ticket">
+        <sequential>
+            <exec executable="curl" dir="." failonerror="true">
+                <arg value='--config' />
+                <arg value='${user.home}/.curlrc' />
+                <arg value='-k' />
+                <arg value='-X' />
+                <arg value='GET' />
+                <arg value='-H' />
+                <arg value='Accept: application/xml' />
+                <arg value='https://www.assembla.com/spaces/rest4BW/tickets/custom_report/167263' />
+                <arg value='-o' />
+                <arg value='build/tickets.xml' />
+            </exec>
+        </sequential>
+    </macrodef>
+    
+    <macrodef name="assign-to-milestone" uri="org.windyroad.assembla.ticket">
+        <attribute name="tickets" default="build/tickets.xml" />
+        <attribute name="version" />
+        <sequential>
+            <tibant:xslt in="@{tickets}"
+                         out="build/tickets-shell.xml"
+                         style="util/xslt/split-tickets.xslt"
+                         classpath="${saxon.jar.path}">
+            </tibant:xslt>
+            <for param="ticket-file">
+                <fileset dir="build" includes="ticket-*.xml" />
+                <sequential>
+                    <xmlproperty file="@{ticket-file}" keepRoot="false" prefix="ticket.@{ticket-file}" />
+                    <exec executable="curl" dir="." failonerror="true">
+                        <arg value='--config' />
+                        <arg value='${user.home}/.curlrc' />
+                        <arg value='-k' />
+                        <arg value='-X' />
+                        <arg value='PUT' />
+                        <arg value='-H' />
+                        <arg value='Accept: application/xml' />
+                        <arg value='http://www.assembla.com/spaces/rest4BW/tickets/${ticket.@{ticket-file}.number}' />
+                        <arg value='-F' />
+                        <arg value='ticket[milestone_id]=${milestone.@{version}.id}' />
+                        <arg value='-o' />
+                        <arg value='build/assign-ticket-${ticket.@{ticket-file}.number}.xml' />
+                    </exec>
+                </sequential>
+            </for>
+        </sequential>
+    </macrodef>
+    
+    <macrodef name="upload" uri="org.windyroad.assembla">
+        <attribute name="version" />
+        <sequential>
+            <trycatch property="upload.error">
+                <try>
+                    <milestone:attach version="@{version}" />
+                </try>
+                <catch>
+                    <if>
+                        <isset property="milestone.@{version}.id" />
+                        <then>
+                            <milestone:delete id="${milestone.@{version}.id}" />
+                        </then>
+                    </if>
+                    <fail message="upload failed: ${upload.error}" />
+                </catch>
+            </trycatch>
+        </sequential>
+    </macrodef>
+
+</project>
