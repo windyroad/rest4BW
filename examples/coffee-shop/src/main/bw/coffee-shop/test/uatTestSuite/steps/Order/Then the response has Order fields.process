@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://windyroad.org/coffee-shop-interface" xmlns:ns1="http://windyroad.org/coffee-shop" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://windyroad.org/wr-http.xsd">
+    <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/coffee-shop/model/CoffeeShop.xsd"/>
+    <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/rest4BW/Private/Schemas/HttpConnection.xsd"/>
+    <xsd:import namespace="http://windyroad.org/coffee-shop-interface" schemaLocation="/coffee-shop/interface/Interface.xsd"/>
+    <pd:name>test/uatTestSuite/steps/Order/Then the response has Order fields.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="expected">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="firstname" type="xsd:string"/>
+                                <xsd:element name="coffee" type="xsd:string"/>
+                                <xsd:element name="sugar" type="xsd:string"/>
+                                <xsd:element name="state" type="xsd:string"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="actual">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element ref="ns1:coffee-order"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>125</pd:startX>
+    <pd:startY>186</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>1057</pd:endX>
+    <pd:endY>186</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1338635071359</pd:targetNamespace>
+    <pd:activity name="Then the response has a created-datetime">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>905</pd:x>
+        <pd:y>193</pd:y>
+        <config>
+            <processName>/test/uatTestSuite/steps/Order/Then the response has a created-datetime.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <actual-create-datetime>
+                    <xsl:value-of select="$Start/root/actual/ns1:coffee-order/ns1:created-datetime"/>
+                </actual-create-datetime>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Then the response has coffee (coffee)">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>437</pd:x>
+        <pd:y>200</pd:y>
+        <config>
+            <processName>/test/uatTestSuite/steps/Order/Then the response has coffee (coffee).process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <expected>
+                    <xsl:value-of select="$Start/root/expected/coffee"/>
+                </expected>
+                <actual>
+                    <xsl:value-of select="$Start/root/actual/ns1:coffee-order/ns1:coffee"/>
+                </actual>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Then the response has firstname (firstname)">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>266</pd:x>
+        <pd:y>200</pd:y>
+        <config>
+            <processName>/test/uatTestSuite/steps/Order/Then the response has firstname (firstname).process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <expected>
+                    <xsl:value-of select="$Start/root/expected/firstname"/>
+                </expected>
+                <actual>
+                    <xsl:value-of select="$Start/root/actual/ns1:coffee-order/ns1:firstname"/>
+                </actual>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Then the response has state (state)">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>744</pd:x>
+        <pd:y>193</pd:y>
+        <config>
+            <processName>/test/uatTestSuite/steps/Order/Then the response has state (state).process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <expected>
+                    <xsl:value-of select="$Start/root/expected/state"/>
+                </expected>
+                <actual>
+                    <xsl:value-of select="$Start/root/actual/ns1:coffee-order/ns1:state"/>
+                </actual>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Then the response has sugar (sugar)">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>582</pd:x>
+        <pd:y>193</pd:y>
+        <config>
+            <processName>/test/uatTestSuite/steps/Order/Then the response has sugar (sugar).process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <expected>
+                    <xsl:value-of select="$Start/root/expected/sugar"/>
+                </expected>
+                <actual>
+                    <xsl:value-of select="$Start/root/actual/ns1:coffee-order/ns1:sugar"/>
+                </actual>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Then the response has firstname (firstname)</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Then the response has a created-datetime</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Then the response has coffee (coffee)</pd:from>
+        <pd:to>Then the response has sugar (sugar)</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Then the response has firstname (firstname)</pd:from>
+        <pd:to>Then the response has coffee (coffee)</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Then the response has sugar (sugar)</pd:from>
+        <pd:to>Then the response has state (state)</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Then the response has state (state)</pd:from>
+        <pd:to>Then the response has a created-datetime</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

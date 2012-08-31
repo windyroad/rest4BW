@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="help"
+         name="bwunit"
+         xmlns="antlib:org.apache.tools.ant"
+         xmlns:tibant="org.windyroad.tibant"
+         xmlns:bwunit="org.windyroad.bwunit"
+         xmlns:bwubuild="org.windyroad.bwunit.build"
+         >
+	
+	<property name="bwunit.loaded" value="true" />
+         
+  <target name="help">
+    <exec executable="${ant.home}/bin/ant">
+      <arg value="-projecthelp"/>
+      <arg value="-buildfile"/>
+      <arg value="${ant.file}"/>
+    </exec>
+  </target>
+  
+	<macrodef name="gen-doc"
+	          uri="org.windyroad.bwunit.build"
+	          description="builds a html document from an Apache Ant file">
+		<attribute name="in" description="The Ant file to create documentation for" />
+		<attribute name="out" description="The file to write the documentation to" />
+		<attribute name="version" description="The version number to include in the documentation" default="" />
+		<attribute name="name"
+		           description="The name of the type of document being produced. e.g., `Build Guide`"
+		           default="User Guide" />
+		<attribute name="force"
+		           description="Force creation of the output document, even if the input hasn't changed"
+		           default="false" />
+		<attribute name="validate" description="validate the generated document" default="true" />
+		<attribute name="classpath" default="${saxon.jar.path}" description="the classpath to the saxon jar" />
+		<attribute name="taskname" default="bwubuild:gendoc" />
+		<sequential>
+			<outofdate force="@{force}">
+				<sourcefiles>
+					<pathelement path="@{in}" />
+					<pathelement path="util/xslt/userguide.xslt" />
+				</sourcefiles>
+				<targetfiles path="@{out}" />
+				<sequential>
+					<tibant:xslt in="@{in}" out="@{out}" style="util/xslt/userguide.xslt">
+						<arg value="version=@{version}" />
+						<arg value="doc-name=@{name}" />
+					</tibant:xslt>
+
+				</sequential>
+			</outofdate>
+			<if>
+				<istrue value="@{validate}" />
+				<then>
+					<echo level="info">Validating Result...</echo>
+					<schemavalidate failonerror="true" warn="true">
+						<fileset dir="." includesfile="@{out}">
+						</fileset>
+						<schema namespace="http://www.w3.org/XML/1998/namespace" file="test/antunit/data/xml.xsd" />
+						<schema namespace="http://www.w3.org/1999/xhtml" file="test/antunit/data/xhtml-strict.xsd" />
+						<schema namespace="http://www.w3.org/2001/XMLSchema" file="test/antunit/data/XMLSchema.xsd" />
+						<dtd publicId="-//W3C//DTD XHTML 1.0 Strict//EN"
+						     location="test/antunit/data/xhtml1-strict.dtd" />
+						<dtd publicId="-//W3C//ENTITIES Latin 1 for XHTML//EN"
+						     location="test/antunit/data/xhtml-lat1.ent" />
+						<dtd publicId="-//W3C//ENTITIES Symbols for XHTML//EN"
+						     location="test/antunit/data/xhtml-symbol.ent" />
+						<dtd publicId="-//W3C//ENTITIES Special for XHTML//EN"
+						     location="test/antunit/data/xhtml-special.ent" />
+					</schemavalidate>
+					<echo level="info">...Validated</echo>
+				</then>
+			</if>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="run-bwunit-tests"
+	          uri="org.windyroad.bwunit.build"
+	          description="runs the bwunit tests and by default fails the build on the first error">
+		<attribute name="phase" />
+		<attribute name="failonerror" default="true" />
+		<sequential>
+			<loadfile property="bwunit.license" srcfile="${bwunit.license.file}" />
+			<for param="testsuite">
+				<dirset dir="src/main/bw" includes="**/test/@{phase}TestSuite" id="@{phase}.dirs" />
+				<sequential>
+					<dirname property="@{testsuite}.project.path" file="@{testsuite}/.." />
+					<basename property="@{testsuite}.project.name" file="${@{testsuite}.project.path}" />
+					<mkdir dir="build/@{phase}/${@{testsuite}.project.name}" />
+					<echo message=">>> Found Test Suite - @{testsuite} , ${@{testsuite}.project.path} , ${@{testsuite}.project.name}" />
+					<bwunit:run-tests dir="${@{testsuite}.project.path}/.."
+					                  project="${@{testsuite}.project.name}"
+					                  result-dest-dir="build/@{phase}/${@{testsuite}.project.name}"
+					                  force="${bwunit.force}"
+					                  failonerror="@{failonerror}"
+					                  license="${bwunit.license}"
+					                  create-dtl-file="true"
+					                  scope="test/@{phase}TestSuite/" />
+				</sequential>
+			</for>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="report-bwunit-tests"
+	          uri="org.windyroad.bwunit.build"
+	          description="runs the bwunit tests and reports on all tests passed and failed.">
+		<attribute name="phase" />
+		<sequential>
+			<bwubuild:run-bwunit-tests phase="@{phase}" failonerror="false" />
+			<for param="testsuite">
+				<dirset refid="@{phase}.dirs" />
+				<sequential>
+					<bwunit:convert-to-junit-results file="build/@{phase}/${@{testsuite}.project.name}/results.xml"
+					                                 tofile="build/@{phase}/${@{testsuite}.project.name}.xml" />
+				</sequential>
+			</for>
+		</sequential>
+	</macrodef>
+	
+</project>

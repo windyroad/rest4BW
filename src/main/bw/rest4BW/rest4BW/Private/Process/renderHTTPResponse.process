@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:pfx2="http://windyroad.org/wr-http.xsd" xmlns:pfx="http://windyroad.org/rest4BW.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/rest4BW/Private/Schemas/HttpConnection.xsd"/>
+    <xsd:import namespace="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" schemaLocation="/rest4BW/Private/Schemas/StatusCodeDefinitions.xsd"/>
+    <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Schemas/rest4BW.xsd"/>
+    <pd:name>rest4BW/Private/Process/renderHTTPResponse.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:choice>
+            <xsd:element ref="pfx:response"/>
+            <xsd:element ref="pfx:error"/>
+        </xsd:choice>
+    </pd:startType>
+    <pd:startX>69</pd:startX>
+    <pd:startY>69</pd:startY>
+    <pd:returnBindings>
+        <pfx2:response>
+            <pfx2:binaryContent>
+                <xsl:value-of select="$Start/*/pfx:binary-content"/>
+            </pfx2:binaryContent>
+            <pfx2:asciiContent>
+                <xsl:value-of select="$Start/*/pfx:text-content"/>
+            </pfx2:asciiContent>
+            <pfx2:Headers>
+                <pfx2:Allow>
+                    <xsl:value-of select="$Start/*/pfx:headers/@allow"/>
+                </pfx2:Allow>
+                <pfx2:Cache-Control>
+                    <xsl:value-of select="$Start/*/pfx:headers/@cache-control"/>
+                </pfx2:Cache-Control>
+                <pfx2:Last-Modified>
+                    <xsl:value-of select="$Start/*/pfx:headers/@last-modified"/>
+                </pfx2:Last-Modified>
+                <pfx2:Expires>
+                    <xsl:value-of select="$Start/*/pfx:headers/@expires"/>
+                </pfx2:Expires>
+                <pfx2:StatusLine>
+                    <xsl:value-of select="concat('HTTP/1.1 ',&#xA;&#x9;tib:concat-sequence-format(&#xA;&#x9;&#x9;tib:tokenize(&#xA;&#x9;&#x9;&#x9;substring-after(&#xA;&#x9;&#x9;&#x9;&#x9;local-name-from-QName($Start/*/@xsi:type),&#xA;&#x9;&#x9;&#x9;&#x9;'sc-'),&#xA;&#x9;&#x9;&#x9;'_'),&#xA;&#x9;&#x9;' ')&#xA;&#x9;)"/>
+                </pfx2:StatusLine>
+                <pfx2:Content-Type>
+                    <xsl:value-of select="$Start/*/pfx:headers/@content-type"/>
+                </pfx2:Content-Type>
+                <pfx2:Location>
+                    <xsl:value-of select="$Start/*/pfx:headers/@content-location"/>
+                </pfx2:Location>
+                <pfx2:ETag>
+                    <xsl:value-of select="$Start/*/pfx:headers/@etag"/>
+                </pfx2:ETag>
+            </pfx2:Headers>
+        </pfx2:response>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx2:response"/>
+    <pd:endX>200</pd:endX>
+    <pd:endY>71</pd:endY>
+    <pd:errorSchemas>
+        <HTTP-Error ref="pfx:error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1334632481163</pd:targetNamespace>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

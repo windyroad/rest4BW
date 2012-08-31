@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="help"
+         name="rest4BW"
+         xmlns="antlib:org.apache.tools.ant"
+         xmlns:bwubuild="org.windyroad.bwunit.build"
+         xmlns:bwunit="org.windyroad.bwunit"
+         xmlns:tibant="org.windyroad.tibant"
+         xmlns:ivy="antlib:org.apache.ivy.ant"
+         xmlns:milestone="org.windyroad.assembla.milestone"
+         xmlns:ticket="org.windyroad.assembla.ticket"
+         xmlns:wp="org.windyroad.wordpress">
+
+	<echo>LOADING: ${user.home}/${ant.project.name}.properties</echo>
+	<property file="${user.home}/${ant.project.name}.properties" />
+	<echo>LOADING: ${user.home}/build.properties</echo>
+	<property file="${user.home}/build.properties" />
+	<property name="config.filename" value="${user.name}.properties" />
+	<echo>LOADING: config/${config.filename}</echo>
+	<property file="config/${config.filename}" />
+	<echo>LOADING: config/default.properties</echo>
+	<property file="config/default.properties" />
+
+	<defaultexcludes echo="false" add="**/*.hg" />
+	<defaultexcludes echo="false" add="**/*.hg/**" />
+
+	<property name="ivy.install.version" value="2.2.0" />
+	<property name="ivy.jar.dir" location="${user.home}/.ivy2/jars" />
+	<property name="ivy.jar.file" location="${ivy.jar.dir}/ivy-${ivy.install.version}.jar" />
+
+	<property name="bwunit.home" location="lib/bwunit" />
+	<property name="rest4BW.projlib" location="build/rest4BW.projlib" />
+	
+	<import file="lib/bwunit/util/bwunit.xml" optional="true" />
+	<import file="util/assembla.xml" />
+	<import file="util/wordpress.xml" />
+	<import file="util/bwunit.xml" />
+         
+  <target name="help">
+    <exec executable="${ant.home}/bin/ant">
+      <arg value="-projecthelp"/>
+      <arg value="-buildfile"/>
+      <arg value="${ant.file}"/>
+    </exec>
+  </target>
+
+	<target name="-load-ant-contrib" depends="retrieve" unless="ant-contrib.loaded">
+		<tibant:load-ant-contrib />
+		<property name="ant-contrib.loaded" value="true" />
+	</target>
+
+	<target name="validate" depends="-load-ant-contrib">
+		<bwunit:validate-project dir="src/main/bw" project="rest4BW" max-warnings="0" create-dtl-file="true" />
+	</target>
+
+	<target name="projlib" depends="-load-ant-contrib,validate">
+		<tibant:build-library lib="/Build/rest4BW"
+		                      dir="src/main/bw"
+		                      project="rest4BW"
+		                      out="${rest4BW.projlib}"
+		                      validate="false"
+		                      create-dtl-file="true" />
+	</target>
+
+	<target name="init">
+		<mkdir dir="build" />
+	</target>
+
+	<target name="-determine-version" depends="-load-ivy,-load-ant-contrib">
+		<if>
+			<equals arg1="${ivy.resolver}" arg2="local" />
+			<then>  
+				<tstamp>
+					<format property="publish.revision" pattern="yyyyMMdd-HHmmss" />
+				</tstamp>
+			</then>
+			<else>
+				<echo level="info">Getting Release Version...</echo>
+
+				<property name="default.base.revision" value="1" />
+
+				<ivy:buildnumber organisation="${ivy.organisation}"
+				                 module="${ivy.module}"
+				                 default="${default.base.revision}"
+				                 resolver="releases"
+				                 prefix="releases" />
+
+				<echo level="info">Releases Version: ${releases.new.revision}</echo>
+				<echo level="info">Getting Snapshots Version...</echo>
+				<ivy:buildnumber organisation="${ivy.organisation}"
+				                 module="${ivy.module}"
+				                 revision="${releases.new.revision}"
+				                 resolver="snapshots"
+				                 prefix="snapshots" />
+				<echo level="info">Snapshots Version: ${snapshots.new.revision}</echo>
+				<propertycopy name="publish.revision" from="${ivy.resolver}.new.revision" />
+			</else>
+		</if>
+		<!-- not sure why I'm doing the next line -->
+		<ivy:buildnumber organisation="${ivy.organisation}" module="${ivy.module}" resolver="local" prefix="local" />
+		<propertycopy name="current.publish.revision" from="${ivy.resolver}.revision" silent="true" />
+		<echo>Publish Version: ${publish.revision}</echo>
+		<echo>Currently Published Version: ${current.publish.revision}</echo>
+	</target>
+
+	<target name="check-version" depends="-determine-version" description="" />
+
+	<macrodef name="check-dir-exists" description="Checks whether a directory exists.">
+		<attribute name="dir" />
+                <attribute name="reportonly" default="false" />
+		<sequential>
+		  <if>
+                    <not><available file="@{dir}"/></not>
+		    <then>
+          <if>
+            <istrue value="@{reportonly}" />
+            <then>
+		          <echo message="WARN: The directory '@{dir}' does not exist!" />
+            </then>
+            <else>
+		          <fail message="ERROR: The directory '@{dir}' does not exist!" />
+            </else>
+          </if>
+		    </then>
+		  </if>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="check-tibco-config" description="Checks whether tibco home directories exist.">
+    <attribute name="reportonly" default="false" />
+    <sequential>
+		  <propertyselector property="tmp_tibco_dirs" match="tibco\.home\.(.*)" select="\1"/>
+		  <for list="${tmp_tibco_dirs}" param="id">
+		  <sequential>
+			  <if>
+			    <not><equals arg1="@{id}" arg2="jre"/></not>
+			    <then>
+				    <check-dir-exists dir="${tibco.home.@{id}}" reportonly="@{reportonly}" />	
+			     </then>
+			  </if>
+		  </sequential>
+		  </for>
+    </sequential>
+	</macrodef>
+
+  <target name="report-tibco-config" depends="-load-ant-contrib" description="Reports whether the tibco.home.* properties have been correctly configured.">
+    <check-tibco-config reportonly="true" /> 
+  </target>
+
+  <target name="-assert-tibco-config" description="Validates whether the tibco.home.* properties have been correctly configured.">
+    <check-tibco-config /> 
+  </target>
+
+	<target name="designer" depends="-load-ant-contrib,-assert-tibco-config" description="Launch ${ant.project.name} in TIBCO Designer">
+		<bwunit:designer dir="src/main/bw" project="rest4BW" create-dtl-file="true" />
+	</target>
+
+	<target name="clean" description="">
+		<delete dir="build" verbose="true" />
+		<delete dir="logs" verbose="true" />
+		<delete verbose="true">
+			<fileset dir="src/main/bw" includes="**/.designtimelibs" />
+		</delete>
+		<delete dir="working" verbose="true" />
+		<subant target="clean">
+			<fileset dir="examples" includes="**/build.xml" />
+		</subant>
+	</target>
+
+	<target name="clean-lib" description="">
+		<delete dir="lib" verbose="true" />
+	</target>
+
+	<target name="clean-all" depends="clean,clean-lib" description="" />
+
+	<target name="build" depends="projlib" description="Build binaries" />
+
+	<target name="-download-ivy" unless="ivy.downloaded">
+		<mkdir dir="${ivy.jar.dir}" />
+		<!-- download Ivy from web site so that it can be used even without any special installation -->
+		<echo message="installing ivy..." />
+		<get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"
+		     dest="${ivy.jar.file}"
+		     usetimestamp="true"
+		     verbose="true" />
+	</target>
+
+	<target name="-check-ivy-downloaded">
+		<condition property="ivy.downloaded">
+			<available file="${ivy.jar.file}" />
+		</condition>
+	</target>
+
+	<target name="-load-ivy" depends="-check-ivy-downloaded,-download-ivy" unless="ivy.loaded">
+		<path id="ivy.lib.path">
+			<fileset dir="${ivy.jar.dir}" includes="*.jar" />
+		</path>
+		<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path" />
+		<property name="ivy.report.todir" location="build/ivy" />
+		<ivy:configure file="config/ivysettings.xml" />
+		<ivy:resolve file="${ivy.dep.file}" conf="${ivy.configurations}" />
+		<property name="ivy.loaded" value="true" />
+	</target>
+
+	<target name="-check-bwunit-uptodate" description="retrieve dependancies with ivy" depends="-ivy-retrieve">
+		<condition property="bwunit-outofdate">
+			<or>
+				<not>
+					<isfileselected file="lib/bwunit">
+						<type type="dir" />
+					</isfileselected>
+				</not>
+				<uptodate property="bwunit-uptodate">
+					<srcfiles dir="lib/bwunit" includes="**" />
+					<mapper type="merge" to="${bwunit.BWUnit}" />
+				</uptodate>
+			</or>
+		</condition>
+	</target>
+
+	<target name="-unpack-bwunit"
+	        description="retrieve dependancies with ivy"
+	        depends="-check-bwunit-uptodate"
+	        if="bwunit-outofdate">
+		<unzip dest="lib/bwunit" src="${bwunit.BWUnit}" overwrite="true" />
+	</target>
+
+	<target name="-ivy-retrieve" description="retrieve dependancies with ivy" depends="-load-ivy">
+		<ivy:retrieve />
+		<ivy:artifactproperty name="[module].[artifact]" value="lib/[artifact]-[revision].[ext]" />
+	</target>
+
+	<target name="retrieve" description="retrieve dependancies" depends="-ivy-retrieve,-unpack-bwunit" />
+
+	<target name="doc" description="builds user guide" depends="retrieve,-determine-version">
+		<mkdir dir="build" />
+		<bwubuild:gen-doc in="util/bwunit.xml"
+		                  out="build/${ant.project.name}-User-Guide.html"
+		                  version="${releases.new.revision}" />
+	</target>
+
+	<target name="publish" depends="-determine-version,dist" description="">
+		<echo message="Ivy Resolver - ${ivy.resolver}" />
+		<fail message="Cannot publish directly to releases" >
+			<condition>
+				<equals arg1="${ivy.resolver}" arg2="releases" />
+			</condition>
+		</fail>
+		<echo level="info"
+		      message="publishing ${ant.project.name} to ${ivy.resolver} with version ${publish.revision}..." />
+		<ivy:publish artifactspattern="build/[artifact].[ext]"
+		             resolver="${ivy.resolver}"
+		             pubrevision="${publish.revision}"
+		             status="integration"
+		             overwrite="true"
+		             update="true"
+		             conf="default" />
+		<echo level="info" message="...published" />
+		<echo file="build/pubrevision.properties">version=${publish.revision}</echo>
+	</target>
+
+	<target name="promote" depends="-determine-version" description="">
+		<echo>Promoting Snapshot Version: ${snapshots.revision}
+To Releases Version: ${releases.new.revision}</echo>
+		<ivy:retrieve organisation="${ivy.organisation}"
+		              module="${ivy.module}"
+		              revision="${snapshots.revision}"
+		              inline="true"
+		              transitive="false"
+		              conf="default" />
+		<ivy:publish artifactspattern="lib/[artifact]-${snapshots.revision}.[ext]"
+		             resolver="releases"
+		             pubrevision="${releases.new.revision}"
+		             status="release"
+		             overwrite="false"
+		             update="true"
+		             forcedeliver="true"
+		             delivertarget="-publish-recurse"
+		             conf="default" />
+		<echo file="build/pubrevision.properties">version=${releases.new.revision}</echo>
+	</target>
+
+	<target name="-publish-recurse">
+		<echo>IN -publish-recurse</echo>
+		<echoproperties prefix="dependency" />
+		<fail>Not implemented</fail>
+	</target>
+
+	<target name="validate-projlib" description="Validate the compiled projlib">
+		<tibant:designer dir="src/main/bw" project="rest4BW" expected-errors="0" max-warnings="0" />
+	</target>
+
+	<target name="run-quick-tests" description="Run Quick tests" depends="-load-ant-contrib,build">
+		<bwubuild:run-bwunit-tests phase="quick" />
+    <echo message=">>> Invoked bwunit tests" />
+		<subant target="run-quick-tests">
+			<fileset dir="examples" includes="*/build.xml" />
+		</subant>
+    <echo message=">>> Invoked sub project tests" />
+	</target>
+
+	<target name="report-quick-tests"
+	        description="Run Quick tests and create a JUnit compatible report"
+	        depends="-load-ant-contrib,build">
+		<bwubuild:report-bwunit-tests phase="quick" />
+		<!--subant target="report-quick-tests">
+			<fileset dir="examples" includes="*/build.xml" />
+		</subant-->
+	</target>
+
+	<target name="run-uat-tests" description="Run UATs" depends="-load-ant-contrib,build">
+		<bwubuild:run-bwunit-tests phase="uat" />
+		<subant target="run-uat-tests">
+            <fileset dir="examples" includes="*/build.xml" />
+		</subant>
+	</target>
+
+	<target name="report-uat-tests"
+	        description="Run UATs and create a JUnit compatible report"
+	        depends="-load-ant-contrib,build">
+		<bwubuild:report-bwunit-tests phase="uat" />
+		<subant target="report-uat-tests">
+			<fileset dir="examples" includes="*/build.xml" />
+		</subant>
+	</target>
+
+	<target name="pre-commit" description="Run pre-commit tests" depends="run-quick-tests" />
+
+	<target name="post-commit" description="Run post-commit tests" depends="report-quick-tests" />
+    
+    <target name="upload-docs-to-website" depends="-load-ant-contrib,-init-scp">
+		  <echo>Uploading 'docs' to the public website</echo>
+      <upload-to-website>
+        <files>
+          <fileset dir="docs" />
+        </files>
+      </upload-to-website>
+    </target>
+
+    <target name="upload-artifacts-to-website" depends="-init-scp,-determine-version">
+		  <echo>Uploading 'build/${ivy.module}-bin-v${releases.revision}.zip' to the public website...</echo>
+      <upload-to-website subdir="releases">
+        <files>
+          <fileset dir="build" includes="${ivy.module}-bin-v${releases.revision}.zip" />
+          <fileset dir="build" includes="${ivy.module}-src-v${releases.revision}.zip" />
+        </files>
+      </upload-to-website>
+    </target>
+
+    <target name="dist" depends="dist-bin,dist-src" description="creates distributable artifacts for the current build">
+    </target>
+
+    <target name="dist-src" depends="-determine-version">
+      <delete file="build/${ivy.module}-src.zip" />
+      <zip destfile="build/${ivy.module}-src.zip">
+        <zipfileset dir="docs" prefix="docs" />
+        <zipfileset dir="config" prefix="config" includes="default.properties,ivysettings.xml" />
+        <zipfileset dir="examples/coffee-shop" prefix="examples/coffee-shop" />
+        <zipfileset dir="." includes="LICENSE.txt,build.xml,ivy.xml" />
+        <zipfileset dir="src" prefix="src" />
+      </zip>
+    </target>
+
+    <target name="dist-bin" depends="-determine-version,build">
+      <delete file="build/${ivy.module}-bin.zip" />
+      <zip destfile="build/${ivy.module}-bin.zip">
+        <zipfileset dir="docs" prefix="docs" />
+        <zipfileset dir="config" prefix="config" includes="default.properties,ivysettings.xml" />
+        <zipfileset dir="examples/coffee-shop" prefix="examples/coffee-shop" />
+        <zipfileset dir="." includes="LICENSE.txt,build.xml,ivy.xml" />
+        <zipfileset dir="lib" fullpath="${ivy.module}.projlib" includes="${ivy.module}.projlib" />
+      </zip>
+    </target>
+
+    <target name="retrieve-latest-release" depends="-determine-version">
+		  <echo>Retrieving latest '${ivy.module}' release...</echo>
+		  <ivy:retrieve organisation="${ivy.organisation}"
+		                module="${ivy.module}"
+		                revision="${releases.revision}"
+		                inline="true"
+		                transitive="false"
+		                conf="default" />
+    </target>
+    
+    <target name="-init-scp" depends="-load-ant-contrib">
+        <!-- this crap is to get scp loaded properly -->
+        <available property="ant-jsch.present" file="${ant.home}/lib/ant-jsch.jar" />
+        <fail if="ant-jsch.present"
+              message="Please remove ant-jsch.jar from ${ant.home}/lib see [http://ant.apache.org/faq.html#delegating-classloader]" />
+        <taskdef name="scp" classname="org.apache.tools.ant.taskdefs.optional.ssh.Scp">
+            <classpath>
+                <fileset dir="lib" includes="*.jar" />
+            </classpath>
+        </taskdef>
+        <property name="scp.initialised" value="true" />
+    </target>
+
+    <macrodef name="upload-to-website" description="" >
+      <attribute name="subdir" default="" description="" />
+      <element name="files" description="" />
+      <sequential>
+        <fail unless="scp.initialised" message="'-init-scp' target must be invoked first!" />
+        <fail unless="wr.site.username" message="Property 'wr.site.username' must be specified!" />
+        <fail unless="wr.site.password" message="Property 'wr.site.password' must be specified!" />
+        <fail unless="wr.site.path" message="Property 'wr.site.path' must be specified!" />
+        <scp todir="${wr.site.username}@s25627.gridserver.com:${wr.site.path}/static/@{subdir}"
+             password="${wr.site.password}"
+             trust="true"
+             failonerror="true">
+          <files />
+        </scp>
+      </sequential>
+    </macrodef>
+    
+    <target name="close-assembla-milestone" depends="-load-ant-contrib">
+    <mkdir dir="build" />
+    <ticket:get-closed-no-milestone />
+    <milestone:get-create version="${release.version}" />
+    <ticket:assign-to-milestone version="${release.version}" />
+    <milestone:close version="${release.version}" />
+    </target>
+    
+    <target name="notify-release" depends="-load-ant-contrib">
+        <wp:post version="${release.version}" />
+    </target>
+        	
+
+	<target name="clean-local" description="">
+		<delete dir="${user.home}/.ivy2/local" verbose="true" />
+	</target>
+
+
+</project>

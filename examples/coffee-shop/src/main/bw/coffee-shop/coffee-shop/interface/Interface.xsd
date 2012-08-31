@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns:csi="http://windyroad.org/coffee-shop-interface"
+	 xmlns:cfshp="http://windyroad.org/coffee-shop"
+	 targetNamespace="http://windyroad.org/coffee-shop-interface"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="http://windyroad.org/coffee-shop" schemaLocation="../model/CoffeeShop.xsd"/>
+	<xs:element name="link">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="parameter" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="value" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:attribute name="title" type="xs:string"/>
+									<xs:attribute name="value" type="xs:string"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="title" type="xs:string"/>
+						<xs:attribute name="name" type="xs:string"/>
+						<xs:attribute name="type" type="xs:string"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="title" type="xs:string"/>
+			<xs:attribute name="rel" type="xs:string"/>
+			<xs:attribute name="type" type="xs:string"/>
+			<xs:attribute name="href" type="xs:string"/>
+			<xs:attribute name="method" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="options">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="csi:link" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="hypermedia-coffee-order">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="csi:options"/>
+				<xs:element ref="cfshp:coffee-order"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="coffee-order-list">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="csi:hypermedia-coffee-order" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
