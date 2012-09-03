@@ -323,7 +323,9 @@ To Releases Version: ${releases.new.revision}</echo>
 		</subant>
 	</target>
 
-	<target name="pre-commit" description="Run pre-commit tests" depends="run-quick-tests" />
+    <target name="pre-commit" description="Run pre-commit tests"><!-- depends="run-quick-tests" -->
+        <fail message="Testing notifications" />
+    </target>
 
 	<target name="post-commit" description="Run post-commit tests" depends="report-quick-tests" />
     
