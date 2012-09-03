@@ -327,7 +327,7 @@ To Releases Version: ${releases.new.revision}</echo>
     </target>
 
     <target name="post-commit" description="Run post-commit tests"> <!--depends="report-quick-tests"-->
-        <fail message="Testing notifications" />
+        <fail message="Testing notifications"  />
     </target>
 
     <target name="upload-docs-to-website" depends="-load-ant-contrib,-init-scp">
