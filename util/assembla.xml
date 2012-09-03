@@ -37,7 +37,7 @@
 				<arg value='Content-type: application/xml' />
 				<arg value='-d' />
 				<arg value='@assembla/add_member.xml' />
-				<arg value='https://nickgrealy:h4mmer71me@www.assembla.com/spaces/@{space}/add_member' />
+				<arg value='https://www.assembla.com/spaces/@{space}/add_member' />
 			</exec>
 		</sequential>
 	</macrodef>
