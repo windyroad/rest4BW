@@ -6,6 +6,7 @@
          xmlns:milestone="org.windyroad.assembla.milestone"
          xmlns:ticket="org.windyroad.assembla.ticket"
          xmlns:tibant="org.windyroad.tibant"
+         xmlns:ivy-util="org.windyroad.ivy-util"
          xmlns:ivy="antlib:org.apache.ivy.ant"
          >
 	
@@ -18,8 +19,31 @@
       <arg value="${ant.file}"/>
     </exec>
   </target>
+  
+  <target name="test">
+    <assembla:add_member space="rest4BW" />
+  </target>
+
+	<macrodef name="add_member" uri="org.windyroad.assembla">
+	  <attribute name="space" />
+		<sequential>
+			<exec executable="curl" dir="." failonerror="true">
+				<arg value='--config' />
+				<arg value='${user.home}/.curlrc' />
+				<arg value='-k' />
+				<arg value='-H' />
+				<arg value='Accept: application/xml' />
+				<arg value='-H' />
+				<arg value='Content-type: application/xml' />
+				<arg value='-d' />
+				<arg value='@assembla/add_member.xml' />
+				<arg value='https://nickgrealy:h4mmer71me@www.assembla.com/spaces/@{space}/add_member' />
+			</exec>
+		</sequential>
+	</macrodef>
 
 	<macrodef name="list" uri="org.windyroad.assembla.milestone">
+	  <attribute name="space" />
 		<sequential>
 			<exec executable="curl" dir="." failonerror="true">
 				<arg value='--config' />
@@ -29,7 +53,7 @@
 				<arg value='GET' />
 				<arg value='-H' />
 				<arg value='Accept: application/xml' />
-				<arg value='https://www.assembla.com/spaces/milestones/all/bwunit' />
+				<arg value='https://www.assembla.com/spaces/@{space}/milestones/all' />
 				<arg value='-o' />
 				<arg value='build/milestones.xml' />
 			</exec>
@@ -37,6 +61,7 @@
 	</macrodef>
 
 	<macrodef name="create" uri="org.windyroad.assembla.milestone">
+	  <attribute name="space" />
 		<attribute name="version" />
 		<sequential>
 			<exec executable="curl" dir="." failonerror="true">
@@ -47,7 +72,7 @@
 				<arg value='POST' />
 				<arg value='-H' />
 				<arg value='Accept: application/xml' />
-				<arg value='https://www.assembla.com/spaces/rest4BW/milestones' />
+				<arg value='https://www.assembla.com/spaces/@{space}/milestones' />
 				<arg value='-F' />
 				<arg value='milestone[title]=v@{version}' />
 				<arg value='-o' />
@@ -61,13 +86,14 @@
 	</macrodef>
 
 	<macrodef name="get" uri="org.windyroad.assembla.milestone">
+	  <attribute name="space" />
 		<attribute name="version" />
 		<sequential>
 			<!--
             Assembla doesn't provide an option to get a milestone by it's title, so we get them all
             and pick out the one we want. 
             -->
-			<milestone:list />
+			<milestone:list space="@{space}" />
 			<tibant:xslt in="build/milestones.xml"
 			             out="build/milestone-@{version}.xml"
 			             style="util/xslt/get-milestone.xslt"
@@ -82,27 +108,29 @@
 	</macrodef>
 
 	<macrodef name="get-create" uri="org.windyroad.assembla.milestone">
+	  <attribute name="space" />
 		<attribute name="version" />
 		<sequential>
-			<milestone:get version="@{version}" />
+			<milestone:get version="@{version}" space="@{space}" />
 			<if>
 				<not>
 					<isset property="milestone.@{version}.id" />
 				</not>
 				<then>
-					<milestone:create version="@{version}" />
+					<milestone:create version="@{version}" space="@{space}" />
 				</then>
 			</if>
 		</sequential>
 	</macrodef>
 
 	<macrodef name="close" uri="org.windyroad.assembla.milestone">
+	  <attribute name="space" />
 		<attribute name="version" />
 		<sequential>
 			<tstamp>
 				<format property="milestone[due_date]" pattern="yyyy/MM/dd" />
 			</tstamp>
-			<echo file="build/release-notes-@{version}.txt">[[url:https://www.assembla.com/spaces/rest4BW/tickets/custom_report/28347|Closed Defects and Implemented Features]]
+			<echo file="build/release-notes-@{version}.txt">[[url:https://www.assembla.com/spaces/@{space}/tickets/custom_report/28347|Closed Defects and Implemented Features]]
 Source Code Revision ${mercurial.revision}</echo>
 			<loadfile property="milestone.@{version}.releasenotes" srcfile="build/release-notes-@{version}.txt" />
 			<exec executable="curl" dir="." failonerror="true">
@@ -113,7 +141,7 @@ Source Code Revision ${mercurial.revision}</echo>
 				<arg value='PUT' />
 				<arg value='-H' />
 				<arg value='Accept: application/xml' />
-				<arg value='http://www.assembla.com/spaces/rest4BW/milestones/${milestone.@{version}.id}' />
+				<arg value='http://www.assembla.com/spaces/@{space}/milestones/${milestone.@{version}.id}' />
 				<arg value='-F' />
 				<arg value='milestone[is_completed]=1' />
 				<arg value='-F' />
@@ -129,6 +157,7 @@ Source Code Revision ${mercurial.revision}</echo>
     </macrodef>
 
     <macrodef name="delete" uri="org.windyroad.assembla.milestone">
+	      <attribute name="space" />
         <attribute name="id" />
         <sequential>
             <exec executable="curl" dir="." failonerror="true">
@@ -139,31 +168,19 @@ Source Code Revision ${mercurial.revision}</echo>
                 <arg value='DELETE' />
                 <arg value='-H' />
                 <arg value='Accept: application/xml' />
-                <arg value='http://www.assembla.com/spaces/rest4BW/milestones/@{id}' />
+                <arg value='http://www.assembla.com/spaces/@{space}/milestones/@{id}' />
                 <arg value='-o' />
                 <arg value='build/delete-milestone-@{id}.xml' />
             </exec>
         </sequential>
     </macrodef>
-    
-    <macrodef name="ivy-retrieve">
-        <attribute name="version" />
-        <sequential>
-            <ivy:retrieve organisation="${ivy.organisation}"
-                          module="${ivy.module}"
-                          revision="@{version}"
-                          inline="true"
-                          transitive="false"
-                          sync="true"
-                          pattern="build/upload/[artifact]-v[revision].[ext]" />
-        </sequential>
-    </macrodef>
 
     <macrodef name="attach" uri="org.windyroad.assembla.milestone">
+	      <attribute name="space" />
         <attribute name="version" />
         <sequential>
-            <milestone:ivy-retrieve />
-            <milestone:get-create version="@{version}" />
+            <ivy-util:ivy-retrieve />
+            <milestone:get-create version="@{version}" space="@{space}" />
             <for param="file">
                 <fileset dir="build/upload" includes="*" />
                 <sequential>
@@ -182,7 +199,7 @@ Source Code Revision ${mercurial.revision}</echo>
                         <arg value='document[attachable_type]=Milestone' />
                         <arg value='-F' />
                         <arg value='document[file]=@${upload.basename}' />
-                        <arg value='https://www.assembla.com/spaces/rest4BW/documents' />
+                        <arg value='https://www.assembla.com/spaces/@{space}/documents' />
                     </exec>
                     <var name="upload.basename" unset="true" />
                 </sequential>
@@ -191,6 +208,7 @@ Source Code Revision ${mercurial.revision}</echo>
     </macrodef>
 
     <macrodef name="get-closed-no-milestone" uri="org.windyroad.assembla.ticket">
+	      <attribute name="space" />
         <sequential>
             <exec executable="curl" dir="." failonerror="true">
                 <arg value='--config' />
@@ -200,7 +218,7 @@ Source Code Revision ${mercurial.revision}</echo>
                 <arg value='GET' />
                 <arg value='-H' />
                 <arg value='Accept: application/xml' />
-                <arg value='https://www.assembla.com/spaces/rest4BW/tickets/custom_report/167263' />
+                <arg value='https://www.assembla.com/spaces/@{space}/tickets/custom_report/167263' />
                 <arg value='-o' />
                 <arg value='build/tickets.xml' />
             </exec>
@@ -208,6 +226,7 @@ Source Code Revision ${mercurial.revision}</echo>
     </macrodef>
     
     <macrodef name="assign-to-milestone" uri="org.windyroad.assembla.ticket">
+	      <attribute name="space" />
         <attribute name="tickets" default="build/tickets.xml" />
         <attribute name="version" />
         <sequential>
@@ -228,7 +247,7 @@ Source Code Revision ${mercurial.revision}</echo>
                         <arg value='PUT' />
                         <arg value='-H' />
                         <arg value='Accept: application/xml' />
-                        <arg value='http://www.assembla.com/spaces/rest4BW/tickets/${ticket.@{ticket-file}.number}' />
+                        <arg value='http://www.assembla.com/spaces/@{space}/tickets/${ticket.@{ticket-file}.number}' />
                         <arg value='-F' />
                         <arg value='ticket[milestone_id]=${milestone.@{version}.id}' />
                         <arg value='-o' />
@@ -240,17 +259,18 @@ Source Code Revision ${mercurial.revision}</echo>
     </macrodef>
     
     <macrodef name="upload" uri="org.windyroad.assembla">
+	      <attribute name="space" />
         <attribute name="version" />
         <sequential>
             <trycatch property="upload.error">
                 <try>
-                    <milestone:attach version="@{version}" />
+                    <milestone:attach version="@{version}" space="@{space}" />
                 </try>
                 <catch>
                     <if>
                         <isset property="milestone.@{version}.id" />
                         <then>
-                            <milestone:delete id="${milestone.@{version}.id}" />
+                            <milestone:delete id="${milestone.@{version}.id}" space="@{space}" />
                         </then>
                     </if>
                     <fail message="upload failed: ${upload.error}" />

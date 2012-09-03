@@ -31,6 +31,7 @@
 	<property name="rest4BW.projlib" location="build/rest4BW.projlib" />
 	
 	<import file="lib/bwunit/util/bwunit.xml" optional="true" />
+	<import file="util/ivy-util.xml" />
 	<import file="util/assembla.xml" />
 	<import file="util/wordpress.xml" />
 	<import file="util/bwunit.xml" />
@@ -414,11 +415,11 @@ To Releases Version: ${releases.new.revision}</echo>
     </macrodef>
     
     <target name="close-assembla-milestone" depends="-load-ant-contrib">
-    <mkdir dir="build" />
-    <ticket:get-closed-no-milestone />
-    <milestone:get-create version="${release.version}" />
-    <ticket:assign-to-milestone version="${release.version}" />
-    <milestone:close version="${release.version}" />
+      <mkdir dir="build" />
+      <ticket:get-closed-no-milestone space="rest4BW" />
+      <milestone:get-create version="${release.version}" space="rest4BW" />
+      <ticket:assign-to-milestone version="${release.version}" space="rest4BW" />
+      <milestone:close version="${release.version}" space="rest4BW" />
     </target>
     
     <target name="notify-release" depends="-load-ant-contrib">
