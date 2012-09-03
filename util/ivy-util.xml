@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="help"
+         name="ivy-util"
+         xmlns="antlib:org.apache.tools.ant"
+         xmlns:ivy="antlib:org.apache.ivy.ant"
+         >
+	
+	<property name="ivy-util.loaded" value="true" />
+         
+  <target name="help">
+    <exec executable="${ant.home}/bin/ant">
+      <arg value="-projecthelp"/>
+      <arg value="-buildfile"/>
+      <arg value="${ant.file}"/>
+    </exec>
+  </target>
+    
+    <macrodef name="ivy-retrieve"
+	          uri="org.windyroad.ivy-util">
+        <attribute name="version" />
+        <sequential>
+            <ivy:retrieve organisation="${ivy.organisation}"
+                          module="${ivy.module}"
+                          revision="@{version}"
+                          inline="true"
+                          transitive="false"
+                          sync="true"
+                          pattern="build/upload/[artifact]-v[revision].[ext]" />
+        </sequential>
+    </macrodef>
+
+</project>
