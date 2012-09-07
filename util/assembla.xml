@@ -20,45 +20,181 @@
     </exec>
   </target>
   
-  <target name="test">
-    <assembla:add_member space="rest4BW" />
-  </target>
-
-	<macrodef name="add_member" uri="org.windyroad.assembla">
-	  <attribute name="space" />
-		<sequential>
+  <macrodef name="validate-file-exists">
+    <attribute name="file" />
+    <sequential>
+      <available file="@{file}" property="@{file}.tmp" />
+      <fail unless="@{file}.tmp" message="File '@{file}' could not be found." />
+    </sequential>
+  </macrodef>
+  
+  <macrodef name="rest-api" uri="org.windyroad.assembla">
+    <attribute name="space" />
+    <attribute name="username" />
+    <attribute name="password" />
+    <attribute name="http" default="GET" />
+    <attribute name="baseurl" default="https://www.assembla.com/spaces" />
+    <attribute name="method" />
+    <attribute name="output" />
+    <text name="data" optional="true" />
+    <sequential>
+      <mkdir dir="build" />
+      <validate-file-exists file="${user.home}/.curlrc" />
+      <echo level="debug">curl -X @{http} -H 'Accept: application/xml' -H 'Content-type: application/xml' -d '@{data}' -u '@{username}:@{password}' @{baseurl}/@{space}/@{method}</echo>
 			<exec executable="curl" dir="." failonerror="true">
 				<arg value='--config' />
 				<arg value='${user.home}/.curlrc' />
-				<arg value='-k' />
+				<arg value='-X' />
+				<arg value='@{http}' />
 				<arg value='-H' />
 				<arg value='Accept: application/xml' />
 				<arg value='-H' />
 				<arg value='Content-type: application/xml' />
 				<arg value='-d' />
-				<arg value='@assembla/add_member.xml' />
-				<arg value='https://www.assembla.com/spaces/@{space}/add_member' />
-			</exec>
-		</sequential>
-	</macrodef>
-
-	<macrodef name="list" uri="org.windyroad.assembla.milestone">
-	  <attribute name="space" />
-		<sequential>
-			<exec executable="curl" dir="." failonerror="true">
-				<arg value='--config' />
-				<arg value='${user.home}/.curlrc' />
-				<arg value='-k' />
-				<arg value='-X' />
-				<arg value='GET' />
-				<arg value='-H' />
-				<arg value='Accept: application/xml' />
-				<arg value='https://www.assembla.com/spaces/@{space}/milestones/all' />
+				<arg value='@{data}' />
+				<arg value='-u' />
+				<arg value='@{username}:@{password}' />
+				<arg value='@{baseurl}/@{space}/@{method}' />
 				<arg value='-o' />
-				<arg value='build/milestones.xml' />
+				<arg value='@{output}' />
+			  <!--
+				<arg value='-k' />
+				<arg value='-i' />
+				<arg value='-o' />
+				<arg value='@{output}' />
+			  -->
 			</exec>
-		</sequential>
-	</macrodef>
+    </sequential>
+  </macrodef>
+  
+  <macrodef name="rest-api-user" uri="org.windyroad.assembla">
+    <attribute name="http" default="POST" />
+    <attribute name="space" />
+    <attribute name="username" />
+    <attribute name="password" />
+    <attribute name="memberid" />
+    <attribute name="method" />
+    <sequential>
+      <assembla:rest-api 
+        method="users/@{memberid}/@{method}" 
+        output="build/@{method}.xml"
+        http="@{http}"
+        space="@{space}"
+        username="@{username}"
+        password="@{password}"
+        />
+    </sequential>
+  </macrodef>
+  
+  <macrodef name="rest-api-team" uri="org.windyroad.assembla">
+    <attribute name="http" default="POST" />
+    <attribute name="space" />
+    <attribute name="username" />
+    <attribute name="password" />
+    <attribute name="member" />
+    <attribute name="method" />
+    <attribute name="output" />
+    <sequential>
+      <assembla:rest-api 
+        method="@{method}" 
+        output="@{output}"
+        http="@{http}"
+        space="@{space}"
+        username="@{username}"
+        password="@{password}"
+        >
+        &lt;space&gt;&lt;users&gt;&lt;user&gt;@{member}&lt;/user&gt;&lt;/users&gt;&lt;/space&gt;
+      </assembla:rest-api>
+    </sequential>
+  </macrodef>
+  
+  <!-- Spaces -->
+  
+  <presetdef name="get-members" uri="org.windyroad.assembla">
+    <assembla:rest-api method="users" output="build/get-members.xml" />
+  </presetdef>
+  
+  <presetdef name="promote" uri="org.windyroad.assembla">
+    <assembla:rest-api-user method="promote" />
+  </presetdef>
+  
+  <presetdef name="demote" uri="org.windyroad.assembla">
+    <assembla:rest-api-user method="demote" />
+  </presetdef>
+  
+  <presetdef name="add-member" uri="org.windyroad.assembla">
+    <assembla:rest-api-team method="add_members" output="build/add-member.xml" />
+  </presetdef>
+  
+  <presetdef name="remove-member" uri="org.windyroad.assembla">
+    <assembla:rest-api-team method="remove_members" output="build/remove-member.xml" />
+  </presetdef>
+  
+  <macrodef name="add-watcher" uri="org.windyroad.assembla">
+    <attribute name="space" />
+    <attribute name="username" />
+    <attribute name="password" />
+    <attribute name="member" />
+    <sequential>
+      <assembla:add-member
+        space="@{space}"
+        username="@{username}"
+        password="@{password}"
+        member="@{member}"
+        />
+      <assembla:get-members
+        space="@{space}"
+        username="@{username}"
+        password="@{password}"
+        />
+      <xpath-query query="//user[login='@{member}']/id"
+        xmlFile="build/get-members.xml" 
+        addproperty="memberid"/>
+      <echo>Found memberid='${memberid}'. (WARN: If blank, member could not be located!)</echo>
+      <assembla:demote
+        space="@{space}"
+        username="@{username}"
+        password="@{password}"
+        memberid="${memberid}"
+        />
+    </sequential>
+  </macrodef> 
+  
+  
+    <scriptdef name="xpath-query" language="javascript">
+        <attribute name="query"/>
+        <attribute name="xmlfile"/>
+        <attribute name="addproperty"/>
+
+        <![CDATA[
+            importClass(java.io.FileInputStream);
+            importClass(javax.xml.xpath.XPath);
+            importClass(javax.xml.xpath.XPathConstants);
+            importClass(javax.xml.xpath.XPathFactory);
+            importClass(org.xml.sax.InputSource);
+
+            var exp = attributes.get("query");
+            var filename = attributes.get("xmlfile");
+            var input = new InputSource(new FileInputStream(filename));
+            var xpath = XPathFactory.newInstance().newXPath();
+            var value = xpath.evaluate(exp, input, XPathConstants.STRING);
+
+            self.project.setProperty( attributes.get("addproperty"), value );
+
+        ]]>
+
+    </scriptdef>
+
+  
+  <!-- Milestones -->
+  
+  <presetdef name="list-milestones" uri="org.windyroad.assembla">
+    <assembla:rest-api method="milestones/all" output="build/milestones.xml" />
+  </presetdef>
+  
+  <presetdef name="list" uri="org.windyroad.assembla" description="deprecated">
+    <assembla:rest-api method="milestones/all" output="build/milestones.xml" />
+  </presetdef>
 
 	<macrodef name="create" uri="org.windyroad.assembla.milestone">
 	  <attribute name="space" />

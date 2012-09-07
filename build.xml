@@ -5,6 +5,7 @@
          xmlns:bwubuild="org.windyroad.bwunit.build"
          xmlns:bwunit="org.windyroad.bwunit"
          xmlns:tibant="org.windyroad.tibant"
+         xmlns:assembla="org.windyroad.assembla"
          xmlns:ivy="antlib:org.apache.ivy.ant"
          xmlns:milestone="org.windyroad.assembla.milestone"
          xmlns:ticket="org.windyroad.assembla.ticket"
@@ -430,6 +431,29 @@ To Releases Version: ${releases.new.revision}</echo>
 	<target name="clean-local" description="">
 		<delete dir="${user.home}/.ivy2/local" verbose="true" />
 	</target>
-
+  
+  <target name="add-watcher" description="Adds the given email as a watcher to the project.">
+    <fail unless="assembla.username" message="Property 'assembla.username' must be set." />
+    <fail unless="assembla.password" message="Property 'assembla.password' must be set." />
+    <fail unless="assembla.member" message="Property 'assembla.member' must be set." />
+    <assembla:add-watcher 
+      space="rest4BW" 
+      username="${assembla.username}" 
+      password="${assembla.password}" 
+      member="${assembla.member}"
+      />
+  </target>
+  
+  <target name="remove-watcher" description="Removes the given member (login) from the project.">
+    <fail unless="assembla.username" message="Property 'assembla.username' must be set." />
+    <fail unless="assembla.password" message="Property 'assembla.password' must be set." />
+    <fail unless="assembla.member" message="Property 'assembla.member' must be set." />
+    <assembla:remove-member
+      space="rest4BW" 
+      username="${assembla.username}" 
+      password="${assembla.password}" 
+      member="${assembla.member}"
+      />
+  </target>
 
 </project>
