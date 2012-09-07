@@ -40,7 +40,7 @@
     <sequential>
       <mkdir dir="build" />
       <validate-file-exists file="${user.home}/.curlrc" />
-      <echo level="debug">curl -X @{http} -H 'Accept: application/xml' -H 'Content-type: application/xml' -d '@{data}' -u '@{username}:@{password}' @{baseurl}/@{space}/@{method}</echo>
+      <echo level="debug">curl -X @{http} -H 'Accept: application/xml' -H 'Content-type: application/xml' -d '@{data}' -u '@{username}:***' @{baseurl}/@{space}/@{method}</echo>
 			<exec executable="curl" dir="." failonerror="true">
 				<arg value='--config' />
 				<arg value='${user.home}/.curlrc' />
