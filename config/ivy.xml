@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
+    <info
+    organisation="org.windyroad"
+    module="rest4BW"
+    status="release"/>
+    <configurations defaultconf="default" defaultconfmapping="default->default;dist->default">
+        <conf name="default" visibility="public"/>
+        <conf name="test" visibility="private"/>
+        <conf name="license" visibility="private"/>
+        <conf name="dist" visibility="public"/>
+    </configurations>
+    <publications>
+        <artifact name="rest4BW-src" type="zip" conf="dist" />
+        <artifact name="rest4BW-bin" type="zip" conf="dist" />
+        <artifact name="rest4BW" type="projlib" conf="default" />
+    </publications>
+    <dependencies>
+        <dependency org="org.windyroad" name="bwunit" rev="${bwunit.version}" transitive="false" conf="test->default"/>
+
+        <dependency org="org.apache.ant" name="ant-jsch" rev="1.8.2" transitive="false" conf="default,dist"/>
+        <dependency org="com.jcraft" name="jsch" rev="0.1.48" transitive="false" conf="default,dist"/>
+
+        <dependency org="org.windyroad" name="bwunit" rev="${bwunit.license.version}" transitive="false" conf="test->license"/>
+
+        <conflict org="org.windyroad" module="bwunit" manager="all"/>
+    </dependencies>
+</ivy-module>

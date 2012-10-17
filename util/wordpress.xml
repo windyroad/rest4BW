@@ -4,6 +4,8 @@
          xmlns="antlib:org.apache.tools.ant"
          >
 	
+    <import file="properties.xml" />
+
 	<property name="wordpress.loaded" value="true" />
          
   <target name="help">

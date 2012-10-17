@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="help"
+         name="properties"
+         basedir="..">
+
+    <echo>LOADING: ${user.home}/${ant.project.name}.properties</echo>
+    <property file="${user.home}/${ant.project.name}.properties" />
+    <echo>LOADING: ${user.home}/build.properties</echo>
+    <property file="${user.home}/build.properties" />
+    <property name="config.filename" value="${user.name}.properties" />
+    <echo>LOADING: config/${config.filename}</echo>
+    <property file="config/${config.filename}" />
+    <echo>LOADING: config/developer.properties</echo>
+    <property file="config/developer.properties" />
+    <echo>LOADING: config/default.properties</echo>
+    <property file="config/default.properties" />
+
+</project>
