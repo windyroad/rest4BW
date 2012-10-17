@@ -5,18 +5,56 @@
          xmlns:tibant="org.windyroad.tibant"
          xmlns:bwunit="org.windyroad.bwunit"
          xmlns:bwubuild="org.windyroad.bwunit.build"
-         >
-	
-	<property name="bwunit.loaded" value="true" />
-         
-  <target name="help">
-    <exec executable="${ant.home}/bin/ant">
-      <arg value="-projecthelp"/>
-      <arg value="-buildfile"/>
-      <arg value="${ant.file}"/>
-    </exec>
-  </target>
-  
+         basedir="..">
+
+	<import file="ivy-util.xml" />
+
+	<property name="bwunit.version" value="10" />
+	<!-- we need to load the BWUnit Ant macros In order to use them. We have made to import optional because on the
+	        first run, BWUnit will not have been downloaded and unzipped 
+	        Ideally, we would use the bwunit version number as per the ivy.xml, but that is not know at the time the file
+	        is imported. -->
+	<import file="../lib/bwunit-${bwunit.version}/util/bwunit.xml" optional="true" />
+
+	<!-- to allow developers to change the BWUnit settings, we store theses values
+	        in properties, which are used in the other targets -->
+	<target name="-init-bwunit-properties">
+		<property name="bwunit.home" value="lib/bwunit-${bwunit.version}" />
+	</target>
+
+	<!-- we don't want to unzip BWUnit every time, so we check to see if it's been unzipped -->
+	<target name="-check-bwunit-unpacked"
+	        description="Check if BWUnit has been unzipped"
+	        depends="-init-bwunit-properties,ivy-util.retrieve-test">
+		<condition property="bwunit-unpacked">
+			<isfileselected file="${bwunit.home}">
+				<type type="dir" />
+			</isfileselected>
+		</condition>
+	</target>
+
+	<!-- In order to use BWUnit we must unzip it -->
+	<target name="-unpack-bwunit" description="Unzip BWUnit" depends="-check-bwunit-unpacked" unless="bwunit-unpacked">
+		<unzip dest="${bwunit.home}" src="${dep.bwunit.BWUnit.zip}" overwrite="true" />
+		<property name="bwunit.license.file" location="${dep.bwunit.BWUnit.license}" />
+	</target>
+
+	<!-- In order to have BWUnit unpacked when with retrieve the test dependencies, we overrite the `retrieve-test`
+	 target so that ir retrives the deps and unpacks BWUnit -->
+	<target name="retrieve-test" description="retrieve test dependancies with ivy" depends="-unpack-bwunit" />
+
+	<!-- In order to have BWUnit unpacked when with retrieve the default dependencies, we overrite the `retrieve-test`
+	     target so that ir retrives the deps and unpacks BWUnit -->
+	<target name="retrieve" description="retrieve dependancies with ivy" depends="-unpack-bwunit" />
+
+	<target name="help">
+		<exec executable="${ant.home}/bin/ant">
+			<arg value="-projecthelp" />
+			<arg value="-buildfile" />
+			<arg value="${ant.file}" />
+		</exec>
+	</target>
+
 	<macrodef name="gen-doc"
 	          uri="org.windyroad.bwunit.build"
 	          description="builds a html document from an Apache Ant file">
@@ -36,11 +74,11 @@
 			<outofdate force="@{force}">
 				<sourcefiles>
 					<pathelement path="@{in}" />
-					<pathelement path="util/xslt/userguide.xslt" />
+					<pathelement path="${bwunit.home}/util/xslt/userguide.xslt" />
 				</sourcefiles>
 				<targetfiles path="@{out}" />
 				<sequential>
-					<tibant:xslt in="@{in}" out="@{out}" style="util/xslt/userguide.xslt">
+					<tibant:xslt in="@{in}" out="@{out}" style="${bwunit.home}/util/xslt/userguide.xslt">
 						<arg value="version=@{version}" />
 						<arg value="doc-name=@{name}" />
 					</tibant:xslt>
@@ -76,11 +114,13 @@
 	          uri="org.windyroad.bwunit.build"
 	          description="runs the bwunit tests and by default fails the build on the first error">
 		<attribute name="phase" />
+		<attribute name="srcdir" default="src/main/bw" />
+		<attribute name="aliases-refid" default="_empty-set_" />
 		<attribute name="failonerror" default="true" />
 		<sequential>
 			<loadfile property="bwunit.license" srcfile="${bwunit.license.file}" />
 			<for param="testsuite">
-				<dirset dir="src/main/bw" includes="**/test/@{phase}TestSuite" id="@{phase}.dirs" />
+				<dirset dir="@{srcdir}" includes="**/test/@{phase}TestSuite" id="@{phase}.dirs" />
 				<sequential>
 					<dirname property="@{testsuite}.project.path" file="@{testsuite}/.." />
 					<basename property="@{testsuite}.project.name" file="${@{testsuite}.project.path}" />
@@ -93,6 +133,7 @@
 					                  failonerror="@{failonerror}"
 					                  license="${bwunit.license}"
 					                  create-dtl-file="true"
+					                  aliases-refid="@{aliases-refid}"
 					                  scope="test/@{phase}TestSuite/" />
 				</sequential>
 			</for>
@@ -103,8 +144,13 @@
 	          uri="org.windyroad.bwunit.build"
 	          description="runs the bwunit tests and reports on all tests passed and failed.">
 		<attribute name="phase" />
+		<attribute name="srcdir" default="src/main/bw" />
+		<attribute name="aliases-refid" default="_empty_set_" />
 		<sequential>
-			<bwubuild:run-bwunit-tests phase="@{phase}" failonerror="false" />
+			<bwubuild:run-bwunit-tests phase="@{phase}"
+			                           srcdir="@{srcdir}"
+			                           aliases-refid="@{aliases-refid}"
+			                           failonerror="false" />
 			<for param="testsuite">
 				<dirset refid="@{phase}.dirs" />
 				<sequential>
@@ -114,5 +160,46 @@
 			</for>
 		</sequential>
 	</macrodef>
-	
+
+	<target name="-load-ant-contrib" depends="retrieve" unless="ant-contrib.loaded">
+		<tibant:load-ant-contrib />
+		<property name="ant-contrib.loaded" value="true" />
+	</target>
+
+	<target name="build" />
+
+
+	<target name="run-quick-tests" description="Run Quick tests" depends="-load-ant-contrib,build,retrieve-test">
+		<bwubuild:run-bwunit-tests phase="quick" />
+		<echo message=">>> Invoked bwunit tests" />
+		<subant target="run-quick-tests">
+			<fileset dir="examples" includes="*/build.xml" />
+		</subant>
+		<echo message=">>> Invoked sub project tests" />
+	</target>
+
+	<target name="report-quick-tests"
+	        description="Run Quick tests and create a JUnit compatible report"
+	        depends="-load-ant-contrib,build,retrieve-test">
+		<bwubuild:report-bwunit-tests phase="quick" />
+		<!--subant target="report-quick-tests">
+	            <fileset dir="examples" includes="*/build.xml" />
+	        </subant-->
+	</target>
+
+	<target name="run-uat-tests" description="Run UATs" depends="-load-ant-contrib,build,retrieve-test">
+		<bwubuild:run-bwunit-tests phase="uat" />
+		<subant target="run-uat-tests">
+			<fileset dir="examples" includes="*/build.xml" />
+		</subant>
+	</target>
+
+	<target name="report-uat-tests"
+	        description="Run UATs and create a JUnit compatible report"
+	        depends="-load-ant-contrib,build,retrieve-test">
+		<bwubuild:report-bwunit-tests phase="uat" />
+		<subant target="report-uat-tests">
+			<fileset dir="examples" includes="*/build.xml" />
+		</subant>
+	</target>
 </project>

@@ -9,7 +9,9 @@
          xmlns:ivy-util="org.windyroad.ivy-util"
          xmlns:ivy="antlib:org.apache.ivy.ant"
          >
-	
+
+	<import file="properties.xml" />
+
 	<property name="assembla.loaded" value="true" />
          
   <target name="help">
