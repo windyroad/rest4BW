@@ -38,6 +38,14 @@
                 <ivy pattern="${wr.repo.basepath}/licenses/[organisation]/[module]/${bwunit.license.company}/${bwunit.license.department}/[revision]/[type]s/${bwunit.license.holder}-[artifact]-[revision].[ext]" />
             </url>
         </chain>
+        <url name="releases" m2compatible="false">
+            <artifact pattern="${wr.repo.basepath}/releases/${wr.repo.artifact.pattern}" />
+            <ivy pattern="${wr.repo.basepath}/releases/${wr.repo.ivy.pattern}" />
+        </url>
+        <url name="snapshots" m2compatible="false">
+            <artifact pattern="${wr.repo.basepath}/snapshots/${wr.repo.artifact.pattern}" />
+            <ivy pattern="${wr.repo.basepath}/snapshots/${wr.repo.ivy.pattern}" />
+        </url>
     </resolvers>
     <include url="${ivy.default.settings.dir}/ivysettings-shared.xml"/>
     <include url="${ivy.default.settings.dir}/ivysettings-local.xml"/>
