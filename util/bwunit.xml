@@ -145,7 +145,7 @@
 	          description="runs the bwunit tests and reports on all tests passed and failed.">
 		<attribute name="phase" />
 		<attribute name="srcdir" default="src/main/bw" />
-		<attribute name="aliases-refid" default="_empty_set_" />
+		<attribute name="aliases-refid" default="_empty-set_" />
 		<sequential>
 			<bwubuild:run-bwunit-tests phase="@{phase}"
 			                           srcdir="@{srcdir}"
