@@ -15,8 +15,6 @@
 	<defaultexcludes echo="false" add="**/*.hg" />
 	<defaultexcludes echo="false" add="**/*.hg/**" />
 
-	<property name="rest4BW.projlib" location="build/rest4BW.projlib" />
-
 	<import file="util/assembla.xml" />
 	<import file="util/wordpress.xml" />
 	<import file="util/bwunit.xml" />
