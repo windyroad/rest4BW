@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="hello-world"
+         xmlns="antlib:org.apache.tools.ant"
+         xmlns:bwubuild="org.windyroad.bwunit.build"
+         xmlns:bwunit="org.windyroad.bwunit"
+         xmlns:tibant="org.windyroad.tibant"
+         xmlns:ivy="antlib:org.apache.ivy.ant"
+    basedir="../..">
+
+    <import file="../../util/bwunit.xml"/>
+    
+    <defaultexcludes echo="false" add="**/*.hg" />
+    <defaultexcludes echo="false" add="**/*.hg/**" />
+
+    <property name="rest4BW.projlib" location="rest4BW.projlib" />
+
+    <propertyset id="bw.aliases">
+        <propertyref name="rest4BW.projlib" />
+    </propertyset>
+
+    <target name="init">
+        <mkdir dir="build" />
+    </target>
+
+    <target name="designer" depends="-load-ant-contrib" description="Launch BWUnit in TIBCO Designer">
+        <bwunit:designer dir="examples/${ant.project.name}/src/main/bw"
+                         project="${ant.project.name}"
+                         aliases-refid="bw.aliases"
+                         create-dtl-file="true" />
+    </target>
+
+    <target name="clean" description="">
+        <delete dir="build" verbose="true" />
+        <delete dir="logs" verbose="true" />
+        <delete verbose="true">
+            <fileset dir="examples/${ant.project.name}/src/main/bw" includes="**/.designtimelibs" />
+        </delete>
+        <delete dir="working" verbose="true" />
+    </target>
+
+    <target name="clean-lib" description="">
+        <delete dir="lib" verbose="true" />
+    </target>
+
+    <target name="clean-all" depends="clean,clean-lib" description="" />
+
+    <target name="run-quick-tests" description="Run Quick tests" depends="-load-ant-contrib,retrieve-test">
+        <bwubuild:run-bwunit-tests phase="quick" srcdir="examples/${ant.project.name}/src/main/bw" />
+    </target>
+
+    <target name="report-quick-tests"
+            description="Run Quick tests and create a JUnit compatible report"
+            depends="-load-ant-contrib,retrieve-test">
+        <bwubuild:report-bwunit-tests phase="quick" srcdir="examples/${ant.project.name}/src/main/bw" aliases-refid="bw.aliases" />
+    </target>
+
+    <target name="run-uat-tests" description="Run UATs" depends="-load-ant-contrib,retrieve-test">
+        <bwubuild:run-bwunit-tests phase="uat" srcdir="examples/${ant.project.name}/src/main/bw" aliases-refid="bw.aliases"/>
+    </target>
+
+    <target name="report-uat-tests"
+            description="Run UATs and create a JUnit compatible report"
+            depends="-load-ant-contrib,retrieve-test">
+        <bwubuild:report-bwunit-tests phase="uat" srcdir="examples/${ant.project.name}/src/main/bw"/>
+    </target>
+
+    <target name="pre-commit" description="Run pre-commit tests" depends="run-quick-tests" />
+
+    <target name="post-commit" description="Run post-commit tests" depends="report-quick-tests" />
+
+</project>

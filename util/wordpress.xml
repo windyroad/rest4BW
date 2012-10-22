@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="help"
+         name="wordpress"
+         xmlns="antlib:org.apache.tools.ant"
+         >
+	
+    <import file="properties.xml" />
+
+	<property name="wordpress.loaded" value="true" />
+         
+  <target name="help">
+    <exec executable="${ant.home}/bin/ant">
+      <arg value="-projecthelp"/>
+      <arg value="-buildfile"/>
+      <arg value="${ant.file}"/>
+    </exec>
+  </target>
+
+    <macrodef name="post" uri="org.windyroad.wordpress">
+        <attribute name="version" />
+        <sequential>
+            <echo file="build/post.xml">&lt;?xml version="1.0"?&gt;
+&lt;entry xmlns="http://www.w3.org/2005/Atom" xmlns:app="http://www.w3.org/2007/app"&gt;
+    &lt;title&gt;${ant.project.name}™ v@{version} Released&lt;/title&gt;
+    &lt;id /&gt;
+    &lt;updated /&gt;
+    &lt;author /&gt;
+    &lt;app:control&gt;
+        &lt;app:draft&gt;no&lt;/app:draft&gt;
+    &lt;/app:control&gt;
+    &lt;content type="xhtml" xml:lang="en"&gt;
+        &lt;p xmlns="http://www.w3.org/1999/xhtml"&gt;
+            &lt;a href="https://windyroad.assembla.com/spaces/rest4BW/milestones/${milestone.@{version}.id}"&gt;${ant.project.name} v@{version}&lt;/a&gt; has been released. For details, please see the &lt;a href="https://windyroad.assembla.com/spaces/rest4BW/tickets/custom_report/28347"&gt;Closed Defects and Implemented Features List&lt;/a&gt;.&lt;/p&gt;
+    &lt;/content&gt;
+    &lt;category scheme="http://windyroad.org" term="News" /&gt;
+    &lt;category scheme="http://windyroad.org" term="Software Releases" /&gt;
+    &lt;category scheme="http://windyroad.org" term="TIBCO" /&gt;
+&lt;/entry&gt;</echo>
+            <exec executable="curl" dir="." failonerror="true">
+                <arg value='--config' />
+                <arg value='${user.home}/.curlrc' />
+                <arg value='-k' />
+                <arg value='-X' />
+                <arg value='POST' />
+                <arg value='-H' />
+                <arg value='Accept: application/xml' />
+                <arg value='-H' />
+                <arg value='Content-Type: application/atom+xml' />
+                <arg value='-d' />
+                <arg value='@build/post.xml' />
+                <arg value='http://windyroad.org/core/wp-app.php/posts' />
+            </exec>
+        </sequential>
+    </macrodef>
+
+</project>

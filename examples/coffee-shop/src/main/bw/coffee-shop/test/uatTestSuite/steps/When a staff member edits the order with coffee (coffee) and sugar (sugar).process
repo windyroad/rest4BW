@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="http://windyroad.org/wr-http.xsd" xmlns:pfx="http://windyroad.org/coffee-shop">
+    <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/coffee-shop/model/CoffeeShop.xsd"/>
+    <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/rest4BW/Private/Schemas/HttpConnection.xsd"/>
+    <pd:name>test/uatTestSuite/steps/When a staff member edits the order with coffee (coffee) and sugar (sugar).process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="firstname" type="xsd:string"/>
+                    <xsd:element name="edit-values">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="coffee" type="xsd:string"/>
+                                <xsd:element name="sugar" type="xsd:string"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>101</pd:startX>
+    <pd:startY>86</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$edit/pfx2:response"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx2:response"/>
+    <pd:endX>507</pd:endX>
+    <pd:endY>86</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1338635071359</pd:targetNamespace>
+    <pd:activity name="edit">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>297</pd:x>
+        <pd:y>88</pd:y>
+        <config>
+            <processName>/test/uatTestSuite/actions/coffee-order-interfaces/edit.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <pfx:coffee-order>
+                    <pfx:firstname>
+                        <xsl:value-of select="$Start/root/firstname"/>
+                    </pfx:firstname>
+                    <pfx:coffee>
+                        <xsl:value-of select="$Start/root/edit-values/coffee"/>
+                    </pfx:coffee>
+                    <pfx:sugar>
+                        <xsl:value-of select="$Start/root/edit-values/sugar"/>
+                    </pfx:sugar>
+                    <pfx:state>some invalid state</pfx:state>
+                    <pfx:created-datetime>
+                        <xsl:value-of select="current-dateTime()"/>
+                    </pfx:created-datetime>
+                </pfx:coffee-order>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>edit</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>edit</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

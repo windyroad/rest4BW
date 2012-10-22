@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BWSharedResource>
+    <name>Event Store Connection</name>
+    <resourceType>ae.shared.JDBCSharedResource</resourceType>
+    <config>
+        <driver>%%rest4BW/RSS/Store/RDMS/driver%%</driver>
+        <maxConnections>%%rest4BW/RSS/Store/RDMS/connections%%</maxConnections>
+        <loginTimeout>%%rest4BW/RSS/Store/RDMS/login-timeout%%</loginTimeout>
+        <connectionType>JDBC</connectionType>
+        <UseSharedJndiConfig>false</UseSharedJndiConfig>
+        <location>%%rest4BW/RSS/Store/RDMS/url%%</location>
+        <password>%%rest4BW/RSS/Store/RDMS/password%%</password>
+        <user>%%rest4BW/RSS/Store/RDMS/username%%</user>
+    </config>
+</BWSharedResource>

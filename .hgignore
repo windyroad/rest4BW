@@ -1,0 +1,25 @@
+# use glob syntax.
+syntax:glob
+
+# Ignore sys files
+*~
+lib/*~
+
+# Ignore downloaded dependencies
+lib/*
+
+# Ignore generated files/folders
+build
+src/main/bw/.designtimelibs
+src/main/bw/rest4BW/.designtimelibs
+
+# Ignore custom properties files
+**/nickgrealy.properties
+
+syntax: regexp
+^Examples/coffee-shop/src/main/bw/coffee-shop/coffee-shop/\.designtimelibs$
+syntax: regexp
+^Examples/coffee-shop/src/main/bw/coffee-shop/\.designtimelibs$
+
+syntax: regexp
+^examples/coffee-shop/src/main/bw/coffee-shop/\.designtimelibs$

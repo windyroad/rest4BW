@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="help"
+         name="ivy-util"
+         xmlns="antlib:org.apache.tools.ant"
+         xmlns:ivy="antlib:org.apache.ivy.ant"
+         xmlns:wrivy="org.windyroad.ivy-util"
+         basedir="..">
+
+	<import file="properties.xml" />
+
+	<property name="ivy.install.version" value="2.2.0" />
+	<property name="ivy.jar.dir" location="${user.home}/.ivy2/jars" />
+	<property name="ivy.jar.file" location="${ivy.jar.dir}/ivy-${ivy.install.version}.jar" />
+
+	<property name="ivy-util.loaded" value="true" />
+
+	<target name="help">
+		<exec executable="${ant.home}/bin/ant">
+			<arg value="-projecthelp" />
+			<arg value="-buildfile" />
+			<arg value="${ant.file}" />
+		</exec>
+	</target>
+
+	<!-- to allow developers to change the Ivy version and location of the various files, we store theses values
+    in properties, which are used in the other targets -->
+	<target name="-init-ivy-properties">
+		<property name="ivy.install.version" value="2.2.0" />
+		<property name="ivy.jar.dir" location="${user.home}/.ivy2/jars" />
+		<property name="ivy.jar.file" location="${ivy.jar.dir}/ivy-${ivy.install.version}.jar" />
+		<property name="ivy.settings.file" location="config/ivysettings.xml" />
+		<property name="ivy.dep.file" location="config/ivy.xml" />
+	</target>
+
+	<!-- we do not assume the developer has Ivy installed, so we use this target to download Ivy from the
+    Windy Road repository, which proxies the Maven Central Repository. Ideally this should be changed to an Enterprise
+    Repository (also know as a Definitive Media Library), to ensure the revisions of software we use are always
+    available -->
+	<target name="-download-ivy" unless="ivy.downloaded" depends="-init-ivy-properties">
+		<mkdir dir="${ivy.jar.dir}" />
+		<echo message="installing ivy..." />
+		<fail message="`wr.repo.username` is not set. Please set your `wr.repo.username` in ${user.home}/build.properties">
+			<condition>
+				<not>
+					<isset property="wr.repo.username" />
+				</not>
+			</condition>
+		</fail>
+		<fail message="`wr.repo.password` is not set. Please set your `wr.repo.password` in ${user.home}/build.properties">
+			<condition>
+				<not>
+					<isset property="wr.repo.password" />
+				</not>
+			</condition>
+		</fail>
+		<get src="http://${wr.repo.username}:${wr.repo.password}@windyroad.artifactoryonline.com/windyroad/mavenCentral-cache/org/apache/ivy/ivy/2.2.0/ivy-2.2.0.jar"
+		     dest="${ivy.jar.file}"
+		     usetimestamp="true"
+		     verbose="true" />
+	</target>
+
+	<!-- we don't want to download Ivy every time, so this target is used to see if it has already been downloaded -->
+	<target name="-check-ivy-downloaded" depends="-init-ivy-properties">
+		<condition property="ivy.downloaded">
+			<available file="${ivy.jar.file}" />
+		</condition>
+	</target>
+
+	<!-- In order to make Ivy available for use, it needs to be loaded and configured -->
+	<target name="-load-ivy" depends="-check-ivy-downloaded,-download-ivy" unless="ivy.loaded">
+		<path id="ivy.lib.path">
+			<fileset dir="${ivy.jar.dir}" includes="*.jar" />
+		</path>
+		<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path" />
+		<ivy:configure />
+		<!--ivy:resolve conf="${ivy.configurations}" /-->
+		<property name="ivy.loaded" value="true" />
+	</target>
+
+	<!-- So that developers don't have manually download their dependencies, we use Ivy to retrieve them.
+    The dependencies are specified in ${ivy.dep.file} -->
+	<target name="retrieve" description="retrieve dependancies with ivy" depends="-load-ivy">
+		<wrivy:retrieve />
+	</target>
+
+	<target name="retrieve-test" description="retrieve test dependancies with ivy" depends="-load-ivy">
+		<wrivy:retrieve conf="test" />
+	</target>
+
+	<macrodef name="retrieve" uri="org.windyroad.ivy-util">
+		<attribute name="conf" default="default" />
+		<sequential>
+			<ivy:resolve conf="@{conf}" />
+			<ivy:retrieve />
+			<!-- in order to make the locations of the dependencies and their revisions available to other targets 
+        we set properties using the following tasks -->
+			<ivy:artifactproperty name="dep.[module].[artifact].[ext]" value="${basedir}/lib/[artifact]-[revision].[ext]" />
+			<ivy:artifactproperty name="dep.[module].revision" value="[revision]" />
+		</sequential>
+	</macrodef>
+
+	<macrodef name="ivy-retrieve" uri="org.windyroad.ivy-util">
+		<attribute name="version" />
+		<sequential>
+			<ivy:retrieve organisation="${ivy.organisation}"
+			              module="${ivy.module}"
+			              revision="@{version}"
+			              inline="true"
+			              transitive="false"
+			              sync="true"
+			              pattern="build/upload/[artifact]-v[revision].[ext]" />
+		</sequential>
+	</macrodef>
+
+	<target name="dist" />
+
+	<target name="publish" depends="-determine-version,dist" description="">
+		<echo message="Ivy Resolver - ${ivy.resolver}" />
+		<fail message="Cannot publish directly to releases">
+			<condition>
+				<equals arg1="${ivy.resolver}" arg2="releases" />
+			</condition>
+		</fail>
+		<echo level="info"
+		      message="publishing ${ant.project.name} to ${ivy.resolver} with version ${publish.revision}..." />
+		<ivy:publish artifactspattern="build/[artifact].[ext]"
+		             resolver="${ivy.resolver}"
+		             pubrevision="${publish.revision}"
+		             status="integration"
+		             overwrite="true"
+		             update="true"
+		             conf="default" />
+		<echo level="info" message="...published" />
+		<echo file="build/pubrevision.properties">version=${publish.revision}</echo>
+	</target>
+
+	<target name="-check-resolver" depends="-load-ivy">
+		<condition property="ivy.resolver.islocal">
+			<equals arg1="${ivy.resolver}" arg2="local" />
+		</condition>
+	</target>
+
+	<target name="-determine-version-local" depends="-check-resolver" if="ivy.resolver.islocal">
+		<tstamp>
+			<format property="publish.revision" pattern="yyyyMMdd-HHmmss" />
+		</tstamp>
+	</target>
+
+	<target name="-determine-version-remote" depends="-check-resolver" unless="ivy.resolver.islocal">
+		<echo level="info">Getting Release Version...</echo>
+
+		<property name="default.base.revision" value="1" />
+
+		<ivy:buildnumber organisation="${ivy.organisation}"
+		                 module="${ivy.module}"
+		                 default="${default.base.revision}"
+		                 resolver="releases"
+		                 prefix="releases" />
+
+		<echo level="info">Releases Version: ${releases.new.revision}</echo>
+		<echo level="info">Getting Snapshots Version...</echo>
+		<ivy:buildnumber organisation="${ivy.organisation}"
+		                 module="${ivy.module}"
+		                 revision="${releases.new.revision}"
+		                 resolver="snapshots"
+		                 prefix="snapshots" />
+		<echo level="info">Snapshots Version: ${snapshots.new.revision}</echo>
+		<propertycopy name="publish.revision" from="${ivy.resolver}.new.revision" />
+	</target>
+
+	<macrodef name="propertycopy" uri="org.windyroad.ivy-util">
+		<attribute name="name" />
+		<attribute name="from" />
+		<sequential>
+			<property name="@{name}" value="${@{from}}" />
+		</sequential>
+	</macrodef>
+
+	<target name="-determine-version" depends="-load-ivy,-determine-version-local,-determine-version-remote">
+		<!-- not sure why I'm doing the next line -->
+		<ivy:buildnumber organisation="${ivy.organisation}" module="${ivy.module}" resolver="local" prefix="local" />
+		<wrivy:propertycopy name="current.publish.revision" from="${ivy.resolver}.revision" />
+		<echo>Publish Version: ${publish.revision}</echo>
+		<echo>Currently Published Version: ${current.publish.revision}</echo>
+	</target>
+
+	<target name="promote" depends="-determine-version" description="">
+		<echo>Promoting Snapshot Version: ${snapshots.revision}
+	To Releases Version: ${releases.new.revision}</echo>
+		<ivy:retrieve organisation="${ivy.organisation}"
+		              module="${ivy.module}"
+		              revision="${snapshots.revision}"
+		              inline="true"
+		              transitive="false"
+		              conf="default" />
+		<ivy:publish artifactspattern="lib/[artifact]-${snapshots.revision}.[ext]"
+		             resolver="releases"
+		             pubrevision="${releases.new.revision}"
+		             status="release"
+		             overwrite="false"
+		             update="true"
+		             forcedeliver="true"
+		             delivertarget="-publish-recurse"
+		             conf="default" />
+		<echo file="build/pubrevision.properties">version=${releases.new.revision}</echo>
+	</target>
+
+	<target name="-publish-recurse">
+		<echo>IN -publish-recurse</echo>
+		<echoproperties prefix="dependency" />
+		<fail>Not implemented</fail>
+	</target>
+
+	<target name="clean-local" description="">
+		<delete dir="${user.home}/.ivy2/local" verbose="true" />
+	</target>
+
+
+
+</project>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://windyroad.org/rest4BW.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:ns="http://windyroad.org/coffee-shop" xmlns:ns0="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Private/Schemas/rest4BW.xsd"/>
+    <pd:name>coffee-shop/services/Order/edit.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="ns2:request"/>
+                    <xsd:element name="firstname" type="xsd:string"/>
+                    <xsd:element name="coffee" type="xsd:string"/>
+                    <xsd:element name="sugar" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>63</pd:startX>
+    <pd:startY>94</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$get-order-svc/ns2:response"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="ns2:response"/>
+    <pd:endX>567</pd:endX>
+    <pd:endY>94</pd:endY>
+    <pd:errorSchemas>
+        <HTTP-Error ref="ns2:error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1338659136797</pd:targetNamespace>
+    <pd:activity name="403 Forbidden">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>325</pd:x>
+        <pd:y>199</pd:y>
+        <config>
+            <faultName>HTTP-Error</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns0:ActivityInput>
+                <data>
+                    <ns2:error xsi:type="ns1:sc-403_Forbidden">
+                        <ns2:text-content>
+                            <xsl:value-of select="concat(&quot;Can't edit an order that is &quot;, $get/ns:coffee-order/ns:state)"/>
+                        </ns2:text-content>
+                    </ns2:error>
+                </data>
+            </ns0:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="get">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>182</pd:x>
+        <pd:y>94</pd:y>
+        <config>
+            <processName>/coffee-shop/persistence/get.process</processName>
+        </config>
+        <pd:inputBindings>
+            <firstname>
+                <xsl:value-of select="$Start/root/firstname"/>
+            </firstname>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="get order svc">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>447</pd:x>
+        <pd:y>94</pd:y>
+        <config>
+            <processName>/coffee-shop/services/Order/get.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:copy-of select="$Start/root/ns2:request"/>
+                <firstname>
+                    <xsl:value-of select="$Start/root/firstname"/>
+                </firstname>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="save">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>330</pd:x>
+        <pd:y>94</pd:y>
+        <config>
+            <processName>/coffee-shop/persistence/save.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:coffee-order>
+                <ns:firstname>
+                    <xsl:value-of select="$Start/root/firstname"/>
+                </ns:firstname>
+                <ns:coffee>
+                    <xsl:value-of select="$Start/root/coffee"/>
+                </ns:coffee>
+                <ns:sugar>
+                    <xsl:value-of select="$Start/root/sugar"/>
+                </ns:sugar>
+                <ns:state>
+                    <xsl:value-of select="$get/ns:coffee-order/ns:state"/>
+                </ns:state>
+                <ns:created-datetime>
+                    <xsl:value-of select="$get/ns:coffee-order/ns:created-datetime"/>
+                </ns:created-datetime>
+            </ns:coffee-order>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>get</pd:from>
+        <pd:to>save</pd:to>
+        <pd:xpathDescription>valid?</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$get/ns:coffee-order/ns:state='created'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>get</pd:from>
+        <pd:to>403 Forbidden</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>get order svc</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>get</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>save</pd:from>
+        <pd:to>get order svc</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

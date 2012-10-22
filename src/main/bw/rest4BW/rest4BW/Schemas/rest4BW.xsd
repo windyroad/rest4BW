@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns:rest="http://windyroad.org/rest4BW.xsd"
+	 xmlns:scd="http://windyroad.org/HTTP1.1-StatusCodeDefinitions"
+	 targetNamespace="http://windyroad.org/rest4BW.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" schemaLocation="../Private/Schemas/StatusCodeDefinitions.xsd"/>
+	<xs:element name="query">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="item" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:attribute name="name" type="xs:string" use="required"/>
+						<xs:attribute name="value" type="xs:string"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="request">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="method" type="xs:string"/>
+				<xs:element name="command" type="xs:string"/>
+				<xs:element ref="rest:post"/>
+				<xs:element ref="rest:query"/>
+				<xs:element name="host" type="xs:string"/>
+				<xs:element ref="rest:accepts"/>
+				<xs:element name="etag" type="xs:string"/>
+			</xs:sequence>
+			<xs:attribute name="if-modified-since" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="response" type="scd:statusCodeDefTyp"/>
+	<xs:element name="text-content" type="xs:string"/>
+	<xs:element name="binary-content" type="xs:base64Binary"/>
+	<xs:element name="post">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="rest:part" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="error" type="scd:StatusCodeErrorDefType"/>
+	<xs:element name="headers">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="rest:header" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="allow" type="xs:string"/>
+			<xs:attribute name="content-type" type="xs:string"/>
+			<xs:attribute name="cache-control" type="xs:string"/>
+			<xs:attribute name="last-modified" type="xs:dateTime"/>
+			<xs:attribute name="etag" type="xs:string"/>
+			<xs:attribute name="expires" type="xs:dateTime"/>
+			<xs:attribute name="content-location" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="accepts">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="accept" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="rest:meta" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+						<xs:attribute name="type" type="xs:string"/>
+						<xs:attribute name="q" type="xs:string"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:simpleType name="accept">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:element name="header">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="rest:key" minOccurs="0"/>
+				<xs:element ref="rest:entries" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="entry">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="rest:key"/>
+				<xs:element ref="rest:value" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="key" type="xs:string"/>
+	<xs:element name="value" type="xs:string"/>
+	<xs:element name="entries">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="rest:entry" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="meta">
+		<xs:complexType>
+			<xs:attribute name="name" type="xs:string"/>
+			<xs:attribute name="value" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="part">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="rest:meta" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:choice>
+					<xs:element ref="rest:binary-content"/>
+					<xs:element ref="rest:text-content"/>
+					<xs:element ref="rest:file-name"/>
+				</xs:choice>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="file-name" type="xs:string"/>
+	<xs:element name="location" type="xs:string"/>
+	<xs:element name="response-choice">
+		<xs:complexType>
+			<xs:choice minOccurs="0">
+				<xs:element ref="rest:response"/>
+				<xs:element ref="rest:error"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

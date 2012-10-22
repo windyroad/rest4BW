@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx3="http://windyroad.org/wr-http.xsd" xmlns:pfx2="http://windyroad.org/rest4BW.xsd" xmlns:pfx="http://windyroad.org/coffee-shop">
+    <xsd:import namespace="http://windyroad.org/coffee-shop" schemaLocation="/coffee-shop/model/CoffeeShop.xsd"/>
+    <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/rest4BW/Private/Schemas/HttpConnection.xsd"/>
+    <pd:name>test/uatTestSuite/actions/coffee-order-interfaces/finish making.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx:coffee-order"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$Invoke-REST-Interface/root/pfx3:response"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx3:response"/>
+    <pd:endX>447</pd:endX>
+    <pd:endY>66</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1338645339939</pd:targetNamespace>
+    <pd:activity name="Invoke REST Interface">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>309</pd:x>
+        <pd:y>71</pd:y>
+        <config>
+            <processName>/test/uatTestSuite/actions/Invoke REST Interface.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <pfx3:request>
+                    <pfx3:Method>POST</pfx3:Method>
+                    <pfx3:Command>
+                        <xsl:value-of select="concat($_globalVariables/ns1:GlobalVariables/coffee-shop/interface/base-url,'/',$Start/root/pfx:coffee-order/pfx:firstname)"/>
+                    </pfx3:Command>
+                    <pfx3:Headers>
+                        <pfx3:Accept>text/html</pfx3:Accept>
+                        <pfx3:Accept-Encoding>utf-8</pfx3:Accept-Encoding>
+                    </pfx3:Headers>
+                    <pfx3:mimeEnvelopeElement>
+                        <pfx3:mimePart>
+                            <pfx3:mimeHeaders>
+                                <pfx3:content-disposition>
+                                    <xsl:value-of select="concat('form-data; name=&quot;',$_globalVariables/ns1:GlobalVariables/coffee-shop/interface/post-params/transition-action,'&quot;')"/>
+                                </pfx3:content-disposition>
+                                <pfx3:content-type>text/plain</pfx3:content-type>
+                            </pfx3:mimeHeaders>
+                            <pfx3:textContent>finish making</pfx3:textContent>
+                        </pfx3:mimePart>
+                    </pfx3:mimeEnvelopeElement>
+                    <pfx3:Context>
+                        <pfx3:RemoteAddress>127.0.0.1</pfx3:RemoteAddress>
+                    </pfx3:Context>
+                </pfx3:request>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Invoke REST Interface</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Invoke REST Interface</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

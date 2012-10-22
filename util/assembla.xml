@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="help"
+         name="assembla"
+         xmlns="antlib:org.apache.tools.ant"
+         xmlns:assembla="org.windyroad.assembla"
+         xmlns:milestone="org.windyroad.assembla.milestone"
+         xmlns:ticket="org.windyroad.assembla.ticket"
+         xmlns:tibant="org.windyroad.tibant"
+         xmlns:ivy-util="org.windyroad.ivy-util"
+         xmlns:ivy="antlib:org.apache.ivy.ant"
+         >
+
+	<import file="properties.xml" />
+
+	<property name="assembla.loaded" value="true" />
+         
+  <target name="help">
+    <exec executable="${ant.home}/bin/ant">
+      <arg value="-projecthelp"/>
+      <arg value="-buildfile"/>
+      <arg value="${ant.file}"/>
+    </exec>
+  </target>
+  
+  <macrodef name="validate-file-exists">
+    <attribute name="file" />
+    <sequential>
+      <available file="@{file}" property="@{file}.tmp" />
+      <fail unless="@{file}.tmp" message="File '@{file}' could not be found." />
+    </sequential>
+  </macrodef>
+  
+  <macrodef name="rest-api" uri="org.windyroad.assembla">
+    <attribute name="space" />
+    <attribute name="username" />
+    <attribute name="password" />
+    <attribute name="http" default="GET" />
+    <attribute name="baseurl" default="https://www.assembla.com/spaces" />
+    <attribute name="method" />
+    <attribute name="output" />
+    <text name="data" optional="true" />
+    <sequential>
+      <mkdir dir="build" />
+      <validate-file-exists file="${user.home}/.curlrc" />
+      <echo level="debug">curl -X @{http} -H 'Accept: application/xml' -H 'Content-type: application/xml' -d '@{data}' -u '@{username}:***' @{baseurl}/@{space}/@{method}</echo>
+			<exec executable="curl" dir="." failonerror="true">
+				<arg value='--config' />
+				<arg value='${user.home}/.curlrc' />
+				<arg value='-X' />
+				<arg value='@{http}' />
+				<arg value='-H' />
+				<arg value='Accept: application/xml' />
+				<arg value='-H' />
+				<arg value='Content-type: application/xml' />
+				<arg value='-d' />
+				<arg value='@{data}' />
+				<arg value='-u' />
+				<arg value='@{username}:@{password}' />
+				<arg value='@{baseurl}/@{space}/@{method}' />
+				<arg value='-o' />
+				<arg value='@{output}' />
+			  <!--
+				<arg value='-k' />
+				<arg value='-i' />
+				<arg value='-o' />
+				<arg value='@{output}' />
+			  -->
+			</exec>
+    </sequential>
+  </macrodef>
+  
+  <macrodef name="rest-api-user" uri="org.windyroad.assembla">
+    <attribute name="http" default="POST" />
+    <attribute name="space" />
+    <attribute name="username" />
+    <attribute name="password" />
+    <attribute name="memberid" />
+    <attribute name="method" />
+    <sequential>
+      <assembla:rest-api 
+        method="users/@{memberid}/@{method}" 
+        output="build/@{method}.xml"
+        http="@{http}"
+        space="@{space}"
+        username="@{username}"
+        password="@{password}"
+        />
+    </sequential>
+  </macrodef>
+  
+  <macrodef name="rest-api-team" uri="org.windyroad.assembla">
+    <attribute name="http" default="POST" />
+    <attribute name="space" />
+    <attribute name="username" />
+    <attribute name="password" />
+    <attribute name="member" />
+    <attribute name="method" />
+    <attribute name="output" />
+    <sequential>
+      <assembla:rest-api 
+        method="@{method}" 
+        output="@{output}"
+        http="@{http}"
+        space="@{space}"
+        username="@{username}"
+        password="@{password}"
+        >
+        &lt;space&gt;&lt;users&gt;&lt;user&gt;@{member}&lt;/user&gt;&lt;/users&gt;&lt;/space&gt;
+      </assembla:rest-api>
+    </sequential>
+  </macrodef>
+  
+  <!-- Spaces -->
+  
+  <presetdef name="get-members" uri="org.windyroad.assembla">
+    <assembla:rest-api method="users" output="build/get-members.xml" />
+  </presetdef>
+  
+  <presetdef name="promote" uri="org.windyroad.assembla">
+    <assembla:rest-api-user method="promote" />
+  </presetdef>
+  
+  <presetdef name="demote" uri="org.windyroad.assembla">
+    <assembla:rest-api-user method="demote" />
+  </presetdef>
+  
+  <presetdef name="add-member" uri="org.windyroad.assembla">
+    <assembla:rest-api-team method="add_members" output="build/add-member.xml" />
+  </presetdef>
+  
+  <presetdef name="remove-member" uri="org.windyroad.assembla">
+    <assembla:rest-api-team method="remove_members" output="build/remove-member.xml" />
+  </presetdef>
+  
+  <macrodef name="add-watcher" uri="org.windyroad.assembla">
+    <attribute name="space" />
+    <attribute name="username" />
+    <attribute name="password" />
+    <attribute name="member" />
+    <sequential>
+      <assembla:add-member
+        space="@{space}"
+        username="@{username}"
+        password="@{password}"
+        member="@{member}"
+        />
+      <assembla:get-members
+        space="@{space}"
+        username="@{username}"
+        password="@{password}"
+        />
+      <xpath-query query="//user[login='@{member}']/id"
+        xmlFile="build/get-members.xml" 
+        addproperty="memberid"/>
+      <echo>Found memberid='${memberid}'. (WARN: If blank, member could not be located!)</echo>
+      <assembla:demote
+        space="@{space}"
+        username="@{username}"
+        password="@{password}"
+        memberid="${memberid}"
+        />
+    </sequential>
+  </macrodef> 
+  
+  
+    <scriptdef name="xpath-query" language="javascript">
+        <attribute name="query"/>
+        <attribute name="xmlfile"/>
+        <attribute name="addproperty"/>
+
+        <![CDATA[
+            importClass(java.io.FileInputStream);
+            importClass(javax.xml.xpath.XPath);
+            importClass(javax.xml.xpath.XPathConstants);
+            importClass(javax.xml.xpath.XPathFactory);
+            importClass(org.xml.sax.InputSource);
+
+            var exp = attributes.get("query");
+            var filename = attributes.get("xmlfile");
+            var input = new InputSource(new FileInputStream(filename));
+            var xpath = XPathFactory.newInstance().newXPath();
+            var value = xpath.evaluate(exp, input, XPathConstants.STRING);
+
+            self.project.setProperty( attributes.get("addproperty"), value );
+
+        ]]>
+
+    </scriptdef>
+
+  
+  <!-- Milestones -->
+  
+  <presetdef name="list-milestones" uri="org.windyroad.assembla">
+    <assembla:rest-api method="milestones/all" output="build/milestones.xml" />
+  </presetdef>
+  
+  <presetdef name="list" uri="org.windyroad.assembla" description="deprecated">
+    <assembla:rest-api method="milestones/all" output="build/milestones.xml" />
+  </presetdef>
+
+	<macrodef name="create" uri="org.windyroad.assembla.milestone">
+	  <attribute name="space" />
+		<attribute name="version" />
+		<sequential>
+			<exec executable="curl" dir="." failonerror="true">
+				<arg value='--config' />
+				<arg value='${user.home}/.curlrc' />
+				<arg value='-k' />
+				<arg value='-X' />
+				<arg value='POST' />
+				<arg value='-H' />
+				<arg value='Accept: application/xml' />
+				<arg value='https://www.assembla.com/spaces/@{space}/milestones' />
+				<arg value='-F' />
+				<arg value='milestone[title]=v@{version}' />
+				<arg value='-o' />
+				<arg value='build/milestone-@{version}.xml' />
+			</exec>
+			<xmlproperty file="build/milestone-@{version}.xml" keepRoot="false" prefix="milestone.@{version}" />
+			<echoproperties prefix="milestone.@{version}">
+			</echoproperties>
+			<echo>Milestone '@{version}' id: ${milestone.@{version}.id}</echo>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="get" uri="org.windyroad.assembla.milestone">
+	  <attribute name="space" />
+		<attribute name="version" />
+		<sequential>
+			<!--
+            Assembla doesn't provide an option to get a milestone by it's title, so we get them all
+            and pick out the one we want. 
+            -->
+			<milestone:list space="@{space}" />
+			<tibant:xslt in="build/milestones.xml"
+			             out="build/milestone-@{version}.xml"
+			             style="util/xslt/get-milestone.xslt"
+			             classpath="${saxon.jar.path}">
+				<arg value="title=v@{version}" />
+			</tibant:xslt>
+			<xmlproperty file="build/milestone-@{version}.xml" keepRoot="false" prefix="milestone.@{version}" />
+			<echoproperties prefix="milestone.@{version}">
+			</echoproperties>
+			<echo>Milestone '@{version}' id: ${milestone.@{version}.id}</echo>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="get-create" uri="org.windyroad.assembla.milestone">
+	  <attribute name="space" />
+		<attribute name="version" />
+		<sequential>
+			<milestone:get version="@{version}" space="@{space}" />
+			<if>
+				<not>
+					<isset property="milestone.@{version}.id" />
+				</not>
+				<then>
+					<milestone:create version="@{version}" space="@{space}" />
+				</then>
+			</if>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="close" uri="org.windyroad.assembla.milestone">
+	  <attribute name="space" />
+		<attribute name="version" />
+		<sequential>
+			<tstamp>
+				<format property="milestone[due_date]" pattern="yyyy/MM/dd" />
+			</tstamp>
+			<echo file="build/release-notes-@{version}.txt">[[url:https://www.assembla.com/spaces/@{space}/tickets/custom_report/28347|Closed Defects and Implemented Features]]
+Source Code Revision ${mercurial.revision}</echo>
+			<loadfile property="milestone.@{version}.releasenotes" srcfile="build/release-notes-@{version}.txt" />
+			<exec executable="curl" dir="." failonerror="true">
+				<arg value='--config' />
+				<arg value='${user.home}/.curlrc' />
+				<arg value='-k' />
+				<arg value='-X' />
+				<arg value='PUT' />
+				<arg value='-H' />
+				<arg value='Accept: application/xml' />
+				<arg value='http://www.assembla.com/spaces/@{space}/milestones/${milestone.@{version}.id}' />
+				<arg value='-F' />
+				<arg value='milestone[is_completed]=1' />
+				<arg value='-F' />
+				<arg value='milestone[due_date]=${milestone[due_date]}' />
+				<arg value='-F' />
+				<arg value='"milestone[release_level]=3' />
+                <arg value='-F' />
+                <arg value='milestone[release_notes]=${milestone.@{version}.releasenotes}' />
+                <arg value='-o' />
+                <arg value='build/close-milestone-@{version}.xml' />
+            </exec>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="delete" uri="org.windyroad.assembla.milestone">
+	      <attribute name="space" />
+        <attribute name="id" />
+        <sequential>
+            <exec executable="curl" dir="." failonerror="true">
+                <arg value='--config' />
+                <arg value='${user.home}/.curlrc' />
+                <arg value='-k' />
+                <arg value='-X' />
+                <arg value='DELETE' />
+                <arg value='-H' />
+                <arg value='Accept: application/xml' />
+                <arg value='http://www.assembla.com/spaces/@{space}/milestones/@{id}' />
+                <arg value='-o' />
+                <arg value='build/delete-milestone-@{id}.xml' />
+            </exec>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="attach" uri="org.windyroad.assembla.milestone">
+	      <attribute name="space" />
+        <attribute name="version" />
+        <sequential>
+            <ivy-util:ivy-retrieve />
+            <milestone:get-create version="@{version}" space="@{space}" />
+            <for param="file">
+                <fileset dir="build/upload" includes="*" />
+                <sequential>
+                    <basename file="@{file}" property="upload.basename" />
+                    <exec executable="curl" dir="build/upload" failonerror="true">
+                        <arg value='--config' />
+                        <arg value='${user.home}/.curlrc' />
+                        <arg value='-k' />
+                        <arg value='-X' />
+                        <arg value='POST' />
+                        <arg value='-H' />
+                        <arg value='Accept: application/xml' />
+                        <arg value='-F' />
+                        <arg value='document[attachable_id]=${milestone.@{version}.id}' />
+                        <arg value='-F' />
+                        <arg value='document[attachable_type]=Milestone' />
+                        <arg value='-F' />
+                        <arg value='document[file]=@${upload.basename}' />
+                        <arg value='https://www.assembla.com/spaces/@{space}/documents' />
+                    </exec>
+                    <var name="upload.basename" unset="true" />
+                </sequential>
+            </for>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="get-closed-no-milestone" uri="org.windyroad.assembla.ticket">
+	      <attribute name="space" />
+        <sequential>
+            <exec executable="curl" dir="." failonerror="true">
+                <arg value='--config' />
+                <arg value='${user.home}/.curlrc' />
+                <arg value='-k' />
+                <arg value='-X' />
+                <arg value='GET' />
+                <arg value='-H' />
+                <arg value='Accept: application/xml' />
+                <arg value='https://www.assembla.com/spaces/@{space}/tickets/custom_report/167263' />
+                <arg value='-o' />
+                <arg value='build/tickets.xml' />
+            </exec>
+        </sequential>
+    </macrodef>
+    
+    <macrodef name="assign-to-milestone" uri="org.windyroad.assembla.ticket">
+	      <attribute name="space" />
+        <attribute name="tickets" default="build/tickets.xml" />
+        <attribute name="version" />
+        <sequential>
+            <tibant:xslt in="@{tickets}"
+                         out="build/tickets-shell.xml"
+                         style="util/xslt/split-tickets.xslt"
+                         classpath="${saxon.jar.path}">
+            </tibant:xslt>
+            <for param="ticket-file">
+                <fileset dir="build" includes="ticket-*.xml" />
+                <sequential>
+                    <xmlproperty file="@{ticket-file}" keepRoot="false" prefix="ticket.@{ticket-file}" />
+                    <exec executable="curl" dir="." failonerror="true">
+                        <arg value='--config' />
+                        <arg value='${user.home}/.curlrc' />
+                        <arg value='-k' />
+                        <arg value='-X' />
+                        <arg value='PUT' />
+                        <arg value='-H' />
+                        <arg value='Accept: application/xml' />
+                        <arg value='http://www.assembla.com/spaces/@{space}/tickets/${ticket.@{ticket-file}.number}' />
+                        <arg value='-F' />
+                        <arg value='ticket[milestone_id]=${milestone.@{version}.id}' />
+                        <arg value='-o' />
+                        <arg value='build/assign-ticket-${ticket.@{ticket-file}.number}.xml' />
+                    </exec>
+                </sequential>
+            </for>
+        </sequential>
+    </macrodef>
+    
+    <macrodef name="upload" uri="org.windyroad.assembla">
+	      <attribute name="space" />
+        <attribute name="version" />
+        <sequential>
+            <trycatch property="upload.error">
+                <try>
+                    <milestone:attach version="@{version}" space="@{space}" />
+                </try>
+                <catch>
+                    <if>
+                        <isset property="milestone.@{version}.id" />
+                        <then>
+                            <milestone:delete id="${milestone.@{version}.id}" space="@{space}" />
+                        </then>
+                    </if>
+                    <fail message="upload failed: ${upload.error}" />
+                </catch>
+            </trycatch>
+        </sequential>
+    </macrodef>
+
+</project>
