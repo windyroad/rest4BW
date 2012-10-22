@@ -12,8 +12,6 @@
 	<defaultexcludes echo="false" add="**/*.hg" />
 	<defaultexcludes echo="false" add="**/*.hg/**" />
 
-	<property name="rest4BW.projlib" location="rest4BW.projlib" />
-
 	<propertyset id="bw.aliases">
 		<propertyref name="rest4BW.projlib" />
 	</propertyset>

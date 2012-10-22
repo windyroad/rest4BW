@@ -15,8 +15,6 @@
 	<defaultexcludes echo="false" add="**/*.hg" />
 	<defaultexcludes echo="false" add="**/*.hg/**" />
 
-	<property name="rest4BW.projlib" location="build/rest4BW.projlib" />
-
 	<import file="util/assembla.xml" />
 	<import file="util/wordpress.xml" />
 	<import file="util/bwunit.xml" />
@@ -106,10 +104,7 @@
 	<target name="designer"
 	        depends="-load-ant-contrib,-assert-tibco-config"
 	        description="Launch ${ant.project.name} in TIBCO Designer">
-		<bwunit:designer dir="src/main/bw"
-		                 project="rest4BW"
-		                 create-dtl-file="true"
-		                 custom-cp-ext="%EXISTING-VALUE%${path.separator}${dep.h2.h2.jar}" />
+		<bwunit:designer dir="src/main/bw" project="rest4BW" create-dtl-file="true" />
 	</target>
 
 	<target name="clean" description="">
@@ -142,11 +137,7 @@
 
 
 	<target name="validate-projlib" description="Validate the compiled projlib">
-		<tibant:validate dir="src/main/bw"
-		                 project="rest4BW"
-		                 expected-errors="0"
-		                 max-warnings="0"
-		                 custom-cp-ext="%EXISTING-VALUE%${path.separator}${dep.xxx.jar}" />
+		<tibant:designer dir="src/main/bw" project="rest4BW" expected-errors="0" max-warnings="0" />
 	</target>
 
 

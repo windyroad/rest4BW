@@ -118,7 +118,7 @@
 		<attribute name="aliases-refid" default="_empty-set_" />
 		<attribute name="failonerror" default="true" />
 		<sequential>
-			<loadfile property="bwunit.license" srcfile="${bwunit.license.file}" />
+			<loadfile property="bwunit.license" srcfile="${dep.bwunit.BWUnit.license}" />
 			<for param="testsuite">
 				<dirset dir="@{srcdir}" includes="**/test/@{phase}TestSuite" id="@{phase}.dirs" />
 				<sequential>
