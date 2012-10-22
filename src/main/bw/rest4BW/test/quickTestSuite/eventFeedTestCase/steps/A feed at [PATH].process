@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:r4bw="http://windyroad.org/rest4BW.xsd" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/rest4BW/RSS/Feed Mapping.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
+    <xsd:import namespace="http://www.w3.org/1999/XSL/Transform" schemaLocation="/rest4BW/RSS/schema-for-xslt20.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/rest4BW/RSS/Feed Mapping.xsd" schemaLocation="/rest4BW/RSS/Feed Mapping.xsd"/>
+    <pd:name>test/quickTestSuite/eventFeedTestCase/steps/A feed at [PATH].process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:feed"/>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$Start/feed"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx:feed"/>
+    <pd:endX>411</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1350505462311</pd:targetNamespace>
+    <pd:activity name="SetVariable">
+        <pd:type>com.tibco.pe.core.SetSharedVariableActivity</pd:type>
+        <pd:resourceType>ae.activities.setSharedVariable</pd:resourceType>
+        <pd:x>274</pd:x>
+        <pd:y>62</pd:y>
+        <config>
+            <variableConfig>/rest4BW/RSS/Feed Mapper.sharedvariable</variableConfig>
+        </config>
+        <pd:inputBindings>
+            <mappings>
+                <xsl:copy-of select="$Start/feed"/>
+            </mappings>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SetVariable</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetVariable</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

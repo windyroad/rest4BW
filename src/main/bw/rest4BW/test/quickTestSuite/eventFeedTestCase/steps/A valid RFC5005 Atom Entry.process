@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pfx2="http://windyroad.org/wr-http.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://windyroad.org/rest4BW.xsd" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
+    <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Schemas/rest4BW.xsd"/>
+    <xsd:import namespace="http://www.w3.org/2005/Atom" schemaLocation="/rest4BW/RSS/atom.xsd"/>
+    <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/rest4BW/Private/Schemas/HttpConnection.xsd"/>
+    <pd:name>test/quickTestSuite/eventFeedTestCase/steps/A valid RFC5005 Atom Entry.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="atom:entry"/>
+    <pd:startX>150</pd:startX>
+    <pd:startY>58</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$Start/atom:entry"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="atom:entry"/>
+    <pd:endX>870</pd:endX>
+    <pd:endY>288</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1350505462311</pd:targetNamespace>
+    <pd:activity name="MUST NOT contain more than one content">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>287</pd:x>
+        <pd:y>75</pd:y>
+        <config>
+            <processName>/BWUnit/Public/Asserts/AssertDoesNotExist.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:exists-input>
+                <ns:content>
+                    <xsl:copy-of select="$Start/atom:entry/atom:content[position() > 1]"/>
+                </ns:content>
+            </ns:exists-input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="entry MUST contain exactly one id">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>443</pd:x>
+        <pd:y>67</pd:y>
+        <config>
+            <processName>/BWUnit/Public/Asserts/AssertSingleExists.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:exists-input>
+                <ns:content>
+                    <xsl:copy-of select="$Start/atom:entry/atom:id"/>
+                </ns:content>
+            </ns:exists-input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MUST contain at least one link">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>602</pd:x>
+        <pd:y>67</pd:y>
+        <config>
+            <processName>/BWUnit/Public/Asserts/AssertExists.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:exists-input>
+                <ns:content>
+                    <xsl:copy-of select="$Start/atom:entry/atom:link[@rel='attribute']"/>
+                </ns:content>
+            </ns:exists-input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MUST NOT contain more than one published">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>296</pd:x>
+        <pd:y>194</pd:y>
+        <config>
+            <processName>/BWUnit/Public/Asserts/AssertDoesNotExist.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:exists-input>
+                <ns:content>
+                    <xsl:copy-of select="$Start/atom:entry/atom:published[position() > 1]"/>
+                </ns:content>
+            </ns:exists-input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MUST NOT contain more than one rights">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>453</pd:x>
+        <pd:y>194</pd:y>
+        <config>
+            <processName>/BWUnit/Public/Asserts/AssertDoesNotExist.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:exists-input>
+                <ns:content>
+                    <xsl:copy-of select="$Start/atom:entry/atom:rights[position() > 1]"/>
+                </ns:content>
+            </ns:exists-input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MUST NOT contain more than one source">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>601</pd:x>
+        <pd:y>193</pd:y>
+        <config>
+            <processName>/BWUnit/Public/Asserts/AssertDoesNotExist.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:exists-input>
+                <ns:content>
+                    <xsl:copy-of select="$Start/atom:entry/atom:source[position() > 1]"/>
+                </ns:content>
+            </ns:exists-input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MUST contain a summary">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>296</pd:x>
+        <pd:y>301</pd:y>
+        <config>
+            <processName>/BWUnit/Public/Asserts/AssertExists.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:exists-input>
+                <ns:content>
+                    <xsl:copy-of select="$Start/atom:entry/atom:summary"/>
+                </ns:content>
+            </ns:exists-input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MUST NOT contain more than one summary">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>462</pd:x>
+        <pd:y>306</pd:y>
+        <config>
+            <processName>/BWUnit/Public/Asserts/AssertDoesNotExist.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:exists-input>
+                <ns:content>
+                    <xsl:copy-of select="$Start/atom:entry/atom:summary[position()>1]"/>
+                </ns:content>
+            </ns:exists-input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MUST contain exactly one title">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>605</pd:x>
+        <pd:y>299</pd:y>
+        <config>
+            <processName>/BWUnit/Public/Asserts/AssertSingleExists.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:exists-input>
+                <ns:content>
+                    <xsl:copy-of select="$Start/atom:entry/atom:title"/>
+                </ns:content>
+            </ns:exists-input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MUST contain exactly one updated">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>737</pd:x>
+        <pd:y>304</pd:y>
+        <config>
+            <processName>/BWUnit/Public/Asserts/AssertSingleExists.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:exists-input>
+                <ns:content>
+                    <xsl:copy-of select="$Start/atom:entry/atom:updated"/>
+                </ns:content>
+            </ns:exists-input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>MUST NOT contain more than one content</pd:from>
+        <pd:to>entry MUST contain exactly one id</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>entry MUST contain exactly one id</pd:from>
+        <pd:to>MUST contain at least one link</pd:to>
+        <pd:xpathDescription>No Content</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>empty($Start/atom:entry/atom:content)</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>MUST NOT contain more than one content</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MUST contain at least one link</pd:from>
+        <pd:to>MUST NOT contain more than one published</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>entry MUST contain exactly one id</pd:from>
+        <pd:to>MUST NOT contain more than one published</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MUST NOT contain more than one published</pd:from>
+        <pd:to>MUST NOT contain more than one rights</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MUST NOT contain more than one rights</pd:from>
+        <pd:to>MUST NOT contain more than one source</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MUST NOT contain more than one source</pd:from>
+        <pd:to>MUST contain a summary</pd:to>
+        <pd:xpathDescription>No Readable Content</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>exists($Start/atom:entry/atom:content/@src) 
+or (
+	exists($Start/atom:entry/atom:content[1]/@type[1]) and
+	not(starts-with($Start/atom:entry/atom:content[1]/@type[1], "text/")) and
+	tib:last-index-of($Start/atom:entry/atom:content[1]/@type[1], "/xml") = -1 and
+	tib:last-index-of($Start/atom:entry/atom:content[1]/@type[1], "+xml") = -1
+)</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MUST NOT contain more than one source</pd:from>
+        <pd:to>MUST NOT contain more than one summary</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MUST contain a summary</pd:from>
+        <pd:to>MUST NOT contain more than one summary</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MUST NOT contain more than one summary</pd:from>
+        <pd:to>MUST contain exactly one title</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MUST contain exactly one title</pd:from>
+        <pd:to>MUST contain exactly one updated</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MUST contain exactly one updated</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

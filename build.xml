@@ -106,7 +106,10 @@
 	<target name="designer"
 	        depends="-load-ant-contrib,-assert-tibco-config"
 	        description="Launch ${ant.project.name} in TIBCO Designer">
-		<bwunit:designer dir="src/main/bw" project="rest4BW" create-dtl-file="true" />
+		<bwunit:designer dir="src/main/bw"
+		                 project="rest4BW"
+		                 create-dtl-file="true"
+		                 custom-cp-ext="%EXISTING-VALUE%${path.separator}${dep.h2.h2.jar}" />
 	</target>
 
 	<target name="clean" description="">
@@ -139,7 +142,11 @@
 
 
 	<target name="validate-projlib" description="Validate the compiled projlib">
-		<tibant:designer dir="src/main/bw" project="rest4BW" expected-errors="0" max-warnings="0" />
+		<tibant:validate dir="src/main/bw"
+		                 project="rest4BW"
+		                 expected-errors="0"
+		                 max-warnings="0"
+		                 custom-cp-ext="%EXISTING-VALUE%${path.separator}${dep.xxx.jar}" />
 	</target>
 
 

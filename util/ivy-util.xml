@@ -94,7 +94,7 @@
 			<ivy:retrieve />
 			<!-- in order to make the locations of the dependencies and their revisions available to other targets 
         we set properties using the following tasks -->
-			<ivy:artifactproperty name="dep.[module].[artifact].[ext]" value="lib/[artifact]-[revision].[ext]" />
+			<ivy:artifactproperty name="dep.[module].[artifact].[ext]" value="${basedir}/lib/[artifact]-[revision].[ext]" />
 			<ivy:artifactproperty name="dep.[module].revision" value="[revision]" />
 		</sequential>
 	</macrodef>

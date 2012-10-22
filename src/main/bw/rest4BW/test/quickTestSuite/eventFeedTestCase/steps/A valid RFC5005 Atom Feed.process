@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pfx2="http://windyroad.org/wr-http.xsd" xmlns:pfx="http://windyroad.org/rest4BW.xsd" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
+    <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Schemas/rest4BW.xsd"/>
+    <xsd:import namespace="http://www.w3.org/2005/Atom" schemaLocation="/rest4BW/RSS/atom.xsd"/>
+    <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/rest4BW/Private/Schemas/HttpConnection.xsd"/>
+    <pd:name>test/quickTestSuite/eventFeedTestCase/steps/A valid RFC5005 Atom Feed.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx2:response"/>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$Parse-Feed/atom:feed"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="atom:feed"/>
+    <pd:endX>903</pd:endX>
+    <pd:endY>494</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1350505462311</pd:targetNamespace>
+    <pd:activity name="Parse Feed">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>518</pd:x>
+        <pd:y>64</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="atom:feed"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$Start/pfx2:response/pfx2:asciiContent"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Check Status Code">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>249</pd:x>
+        <pd:y>64</pd:y>
+        <config>
+            <processName>/BWUnit/Public/Asserts/AssertEqual.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:equal-input>
+                <ns:expected>
+                    <el>HTTP/1.1 200 OK</el>
+                </ns:expected>
+                <ns:actual>
+                    <el>
+                        <xsl:value-of select="$Start/pfx2:response/pfx2:Headers/pfx2:StatusLine"/>
+                    </el>
+                </ns:actual>
+            </ns:equal-input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Check Content Type">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>370</pd:x>
+        <pd:y>63</pd:y>
+        <config>
+            <processName>/BWUnit/Public/Asserts/AssertEqual.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:equal-input>
+                <ns:expected>
+                    <pfx2:Content-Type>application/atom+xml</pfx2:Content-Type>
+                </ns:expected>
+                <ns:actual>
+                    <xsl:copy-of select="$Start/pfx2:response/pfx2:Headers/pfx2:Content-Type"/>
+                </ns:actual>
+            </ns:equal-input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MUST contain one or more author elements">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>654</pd:x>
+        <pd:y>78</pd:y>
+        <config>
+            <processName>/BWUnit/Public/Asserts/AssertExists.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:exists-input>
+                <ns:content>
+                    <xsl:choose>
+                        <xsl:when test="exists($Parse-Feed/atom:feed/atom:entry[empty(atom:author)])">
+                            <xsl:copy-of select="$Parse-Feed/atom:feed/atom:author"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:copy-of select="$Parse-Feed/atom:feed"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </ns:content>
+            </ns:exists-input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MUST NOT contain more than one generator">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>140</pd:x>
+        <pd:y>215</pd:y>
+        <config>
+            <processName>/BWUnit/Public/Asserts/AssertDoesNotExist.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:exists-input>
+                <ns:content>
+                    <xsl:copy-of select="$Parse-Feed/atom:feed/atom:generator[position()>1]"/>
+                </ns:content>
+            </ns:exists-input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MUST NOT contain more than one icon">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>302</pd:x>
+        <pd:y>208</pd:y>
+        <config>
+            <processName>/BWUnit/Public/Asserts/AssertDoesNotExist.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:exists-input>
+                <ns:content>
+                    <xsl:copy-of select="$Parse-Feed/atom:feed/atom:icon[position()>1]"/>
+                </ns:content>
+            </ns:exists-input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MUST NOT contain more than one logo">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>452</pd:x>
+        <pd:y>207</pd:y>
+        <config>
+            <processName>/BWUnit/Public/Asserts/AssertDoesNotExist.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:exists-input>
+                <ns:content>
+                    <xsl:copy-of select="$Parse-Feed/atom:feed/atom:logo[position()>1]"/>
+                </ns:content>
+            </ns:exists-input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MUST contain exactly one id">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>605</pd:x>
+        <pd:y>207</pd:y>
+        <config>
+            <processName>/BWUnit/Public/Asserts/AssertExists.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns1:exists-input xmlns:ns1="http://windyroad.org/bwunit-asserts-0.0.0.xsd">
+                <ns1:content>
+                    <xsl:copy-of select="$Parse-Feed/atom:feed/atom:id"/>
+                </ns1:content>
+            </ns1:exists-input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SHOULD contain one link element with a rel attribute value of self">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>731</pd:x>
+        <pd:y>221</pd:y>
+        <config>
+            <processName>/BWUnit/Public/Asserts/AssertSingleExists.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:exists-input>
+                <ns:msg>feed SHOULD contain one link element with a rel attribute value of self</ns:msg>
+                <ns:content>
+                    <xsl:copy-of select="$Parse-Feed/atom:feed/atom:link[@rel='self']"/>
+                </ns:content>
+            </ns:exists-input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MUST NOT contain more than one rights">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>131</pd:x>
+        <pd:y>335</pd:y>
+        <config>
+            <processName>/BWUnit/Public/Asserts/AssertDoesNotExist.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:exists-input>
+                <ns:msg>atom:feed elements MUST NOT contain more than one atom:rights element.</ns:msg>
+                <ns:content>
+                    <xsl:copy-of select="$Parse-Feed/atom:feed/atom:rights[position() > 1]"/>
+                </ns:content>
+            </ns:exists-input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MUST NOT contain more than one subtitle">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>300</pd:x>
+        <pd:y>336</pd:y>
+        <config>
+            <processName>/BWUnit/Public/Asserts/AssertDoesNotExist.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:exists-input>
+                <ns:msg>atom:feed elements MUST NOT contain more than one atom:subtitle element.</ns:msg>
+                <ns:content>
+                    <xsl:copy-of select="$Parse-Feed/atom:feed/atom:subtitle[position() > 1]"/>
+                </ns:content>
+            </ns:exists-input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MUST contain exactly one title">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>445</pd:x>
+        <pd:y>327</pd:y>
+        <config>
+            <processName>/BWUnit/Public/Asserts/AssertSingleExists.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:exists-input>
+                <ns:msg>atom:feed elements MUST contain exactly one atom:title element.</ns:msg>
+                <ns:content>
+                    <xsl:copy-of select="$Parse-Feed/atom:feed/atom:title"/>
+                </ns:content>
+            </ns:exists-input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MUST contain exactly one updated">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>598</pd:x>
+        <pd:y>334</pd:y>
+        <config>
+            <processName>/BWUnit/Public/Asserts/AssertSingleExists.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:exists-input>
+                <ns:msg>atom:feed elements MUST contain exactly one atom:updated element.</ns:msg>
+                <ns:content>
+                    <xsl:copy-of select="$Parse-Feed/atom:feed/atom:updated"/>
+                </ns:content>
+            </ns:exists-input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>460</pd:x>
+        <pd:y>402</pd:y>
+        <pd:width>285</pd:width>
+        <pd:height>193</pd:height>
+        <pd:collapsedWidth>52</pd:collapsedWidth>
+        <pd:collapsedHeight>69</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$Parse-Feed/atom:feed/atom:entry</pd:over>
+            <pd:iterationElementSlot>entry</pd:iterationElementSlot>
+            <pd:indexSlot>i</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>A valid RFC5005 Atom Entry</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>A valid RFC5005 Atom Entry</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="A valid RFC5005 Atom Entry">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>602</pd:x>
+            <pd:y>512</pd:y>
+            <config>
+                <processName>/test/quickTestSuite/eventFeedTestCase/steps/A valid RFC5005 Atom Entry.process</processName>
+            </config>
+            <pd:inputBindings>
+                <xsl:copy-of select="$entry/atom:entry"/>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Check Status Code</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Check Status Code</pd:from>
+        <pd:to>Check Content Type</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Check Content Type</pd:from>
+        <pd:to>Parse Feed</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse Feed</pd:from>
+        <pd:to>MUST contain one or more author elements</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MUST contain one or more author elements</pd:from>
+        <pd:to>MUST NOT contain more than one generator</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MUST NOT contain more than one generator</pd:from>
+        <pd:to>MUST NOT contain more than one icon</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MUST NOT contain more than one icon</pd:from>
+        <pd:to>MUST NOT contain more than one logo</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MUST NOT contain more than one logo</pd:from>
+        <pd:to>MUST contain exactly one id</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MUST contain exactly one id</pd:from>
+        <pd:to>SHOULD contain one link element with a rel attribute value of self</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SHOULD contain one link element with a rel attribute value of self</pd:from>
+        <pd:to>MUST NOT contain more than one rights</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MUST NOT contain more than one rights</pd:from>
+        <pd:to>MUST NOT contain more than one subtitle</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MUST NOT contain more than one subtitle</pd:from>
+        <pd:to>MUST contain exactly one title</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MUST contain exactly one title</pd:from>
+        <pd:to>MUST contain exactly one updated</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MUST contain exactly one updated</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -20,3 +20,6 @@ syntax: regexp
 ^Examples/coffee-shop/src/main/bw/coffee-shop/coffee-shop/\.designtimelibs$
 syntax: regexp
 ^Examples/coffee-shop/src/main/bw/coffee-shop/\.designtimelibs$
+
+syntax: regexp
+^examples/coffee-shop/src/main/bw/coffee-shop/\.designtimelibs$
