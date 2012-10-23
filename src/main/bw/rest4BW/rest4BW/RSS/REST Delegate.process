@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://windyroad.org/rest4BW.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:ns2="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
+<pd:ProcessDefinition xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx="http://windyroad.org/rest4BW.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns2="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
     <xsd:import namespace="http://windyroad.org/rest-delegate.xsd"/>
     <xsd:import namespace="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" schemaLocation="/rest4BW/Private/Schemas/StatusCodeDefinitions.xsd"/>
     <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Schemas/rest4BW.xsd"/>
@@ -56,18 +56,18 @@
             <faultName>Error</faultName>
         </config>
         <pd:inputBindings>
-            <ns1:ActivityInput xmlns:ns1="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema">
+            <ns2:ActivityInput>
                 <message>Not Found</message>
                 <messageCode>
-                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="404"/>
+                    <xsl:value-of select="404"/>
                 </messageCode>
                 <data>
-                    <ns2:error xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns2="http://windyroad.org/rest4BW.xsd" xsi:type="ns:sc-404_Not_Found">
-                        <ns2:text-content>Not Found</ns2:text-content>
-                        <ns2:headers/>
-                    </ns2:error>
+                    <pfx:error xsi:type="ns:sc-404_Not_Found">
+                        <pfx:text-content>Not Found</pfx:text-content>
+                        <pfx:headers/>
+                    </pfx:error>
                 </data>
-            </ns1:ActivityInput>
+            </ns2:ActivityInput>
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>

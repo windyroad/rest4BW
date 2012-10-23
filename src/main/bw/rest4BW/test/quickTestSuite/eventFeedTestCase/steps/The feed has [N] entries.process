@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:r4bw="http://windyroad.org/rest4BW.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/rest4BW/RSS/Feed Mapping.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
-    <xsd:import namespace="http://www.w3.org/1999/XSL/Transform" schemaLocation="/rest4BW/RSS/schema-for-xslt20.xsd"/>
     <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/rest4BW/RSS/Feed Mapping.xsd" schemaLocation="/rest4BW/RSS/Feed Mapping.xsd"/>
+    <xsd:import namespace="http://www.w3.org/1999/XSL/Transform"/>
     <pd:name>test/quickTestSuite/eventFeedTestCase/steps/The feed has [N] entries.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType>
@@ -85,7 +85,7 @@
                             <xsl:value-of select="@id"/>
                         </id>
                         <title>
-                            <xsl:value-of select="title"/>
+                            <xsl:value-of select="@title"/>
                         </title>
                         <content>
                             <xsl:value-of select="content"/>

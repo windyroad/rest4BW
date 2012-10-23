@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:r4bw="http://windyroad.org/rest4BW.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/rest4BW/RSS/Feed Mapping.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
-    <xsd:import namespace="http://www.w3.org/1999/XSL/Transform" schemaLocation="/rest4BW/RSS/schema-for-xslt20.xsd"/>
     <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/rest4BW/RSS/Feed Mapping.xsd" schemaLocation="/rest4BW/RSS/Feed Mapping.xsd"/>
+    <xsd:import namespace="http://www.w3.org/1999/XSL/Transform"/>
     <pd:name>test/quickTestSuite/eventFeedTestCase/steps/An Empty Data Store.process</pd:name>
     <pd:startName>Start</pd:startName>
-    <pd:startType/>
     <pd:startX>150</pd:startX>
     <pd:startY>64</pd:startY>
     <pd:returnBindings>
@@ -13,7 +12,6 @@
         </entries>
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
-    <pd:endType/>
     <pd:endX>597</pd:endX>
     <pd:endY>62</pd:endY>
     <pd:errorSchemas/>
