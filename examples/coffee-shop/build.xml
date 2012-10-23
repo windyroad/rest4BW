@@ -15,7 +15,7 @@
 	<propertyset id="bw.aliases">
 		<propertyref name="rest4BW.projlib" />
 	</propertyset>
-
+	
 	<target name="init">
 		<mkdir dir="build" />
 	</target>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project default="help"
-         name="properties"
+<project name="properties"
          basedir="..">
 
     <echo>LOADING: ${user.home}/${ant.project.name}.properties</echo>
@@ -15,4 +14,5 @@
     <echo>LOADING: config/default.properties</echo>
     <property file="config/default.properties" />
 
+	<echo>${rest4BW.projlib}</echo>
 </project>
