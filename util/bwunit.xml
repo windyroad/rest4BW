@@ -119,27 +119,17 @@
 		<attribute name="failonerror" default="true" />
 		<sequential>
 			<loadfile property="bwunit.license" srcfile="${dep.bwunit.BWUnit.license}" />
-			<for param="testsuite">
-				<dirset dir="@{srcdir}" includes="**/test/@{phase}TestSuite" id="@{phase}.dirs" />
-				<sequential>
-					<dirname property="@{testsuite}.project.path" file="@{testsuite}/.." />
-					<basename property="@{testsuite}.project.name" file="${@{testsuite}.project.path}" />
-					<mkdir dir="build/@{phase}/${@{testsuite}.project.name}" />
-					<echo message=">>> Found Test Suite - @{testsuite} , ${@{testsuite}.project.path} , ${@{testsuite}.project.name}" />
-		            <echo>Aliases(@{aliases-refid}):
-${ant.refid:@{aliases-refid}}</echo>
-					<bwunit:run-tests dir="${@{testsuite}.project.path}/.."
-					                  project="${@{testsuite}.project.name}"
-					                  result-dest-dir="build/@{phase}/${@{testsuite}.project.name}"
-					                  force="${bwunit.force}"
-					                  failonerror="@{failonerror}"
-					                  license="${bwunit.license}"
-					                  create-dtl-file="true"
-					                  custom-cp-ext-prepend="%EXISTING-VALUE%${path.separator}${dep.h2.h2.jar}"
-					                  aliases-refid="@{aliases-refid}"
-					                  scope="test/@{phase}TestSuite/" />
-				</sequential>
-			</for>
+			<mkdir dir="build/@{phase}/${ant.project.name}" />
+			<bwunit:run-tests dir="src/main/bw"
+			                  project="${ant.project.name}"
+			                  result-dest-dir="build/@{phase}/${ant.project.name}"
+			                  force="${bwunit.force}"
+			                  failonerror="@{failonerror}"
+			                  license="${bwunit.license}"
+			                  create-dtl-file="true"
+			                  custom-cp-ext-prepend="%EXISTING-VALUE%${path.separator}${dep.h2.h2.jar}"
+			                  aliases-refid="@{aliases-refid}"
+			                  scope="test/@{phase}TestSuite/" />
 		</sequential>
 	</macrodef>
 
@@ -154,13 +144,8 @@ ${ant.refid:@{aliases-refid}}</echo>
 			                           srcdir="@{srcdir}"
 			                           aliases-refid="@{aliases-refid}"
 			                           failonerror="false" />
-			<for param="testsuite">
-				<dirset refid="@{phase}.dirs" />
-				<sequential>
-					<bwunit:convert-to-junit-results file="build/@{phase}/${@{testsuite}.project.name}/results.xml"
-					                                 tofile="build/@{phase}/${@{testsuite}.project.name}.xml" />
-				</sequential>
-			</for>
+			<bwunit:convert-to-junit-results file="build/@{phase}/${ant.project.name}/results.xml"
+			                                 tofile="build/@{phase}/${ant.project.name}.xml" />
 		</sequential>
 	</macrodef>
 
