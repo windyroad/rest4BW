@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:pfx2="http://windyroad.org/wr-http.xsd" xmlns:pfx="http://windyroad.org/rest4BW.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
     <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Schemas/rest4BW.xsd"/>
-    <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/rest4BW/Private/Schemas/HttpConnection.xsd"/>
+    <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/rest4BW/Schemas/HttpConnection.xsd"/>
     <pd:name>test/quickTestSuite/eventFeedTestCase/steps/[PATH] is requested.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType ref="pfx2:request"/>

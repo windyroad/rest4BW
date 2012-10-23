@@ -5,10 +5,10 @@
          xmlns:bwunit="org.windyroad.bwunit"
          xmlns:tibant="org.windyroad.tibant"
          xmlns:ivy="antlib:org.apache.ivy.ant"
-	basedir="../..">
+         basedir="../..">
 
-	<import file="../../util/bwunit.xml"/>
-	
+	<import file="../../util/bwunit.xml" />
+
 	<defaultexcludes echo="false" add="**/*.hg" />
 	<defaultexcludes echo="false" add="**/*.hg/**" />
 
@@ -26,6 +26,15 @@
 		                 aliases-refid="bw.aliases"
 		                 create-dtl-file="true" />
 	</target>
+
+	<target name="validate" depends="-load-ant-contrib">
+		<bwunit:validate-project dir="examples/${ant.project.name}/src/main/bw"
+		                         project="${ant.project.name}"
+		                         aliases-refid="bw.aliases"
+		                         max-warnings="0"
+		                         create-dtl-file="true" />
+	</target>
+
 
 	<target name="clean" description="">
 		<delete dir="build" verbose="true" />
@@ -49,17 +58,21 @@
 	<target name="report-quick-tests"
 	        description="Run Quick tests and create a JUnit compatible report"
 	        depends="-load-ant-contrib,retrieve-test">
-		<bwubuild:report-bwunit-tests phase="quick" srcdir="examples/${ant.project.name}/src/main/bw" aliases-refid="bw.aliases" />
+		<bwubuild:report-bwunit-tests phase="quick"
+		                              srcdir="examples/${ant.project.name}/src/main/bw"
+		                              aliases-refid="bw.aliases" />
 	</target>
 
 	<target name="run-uat-tests" description="Run UATs" depends="-load-ant-contrib,retrieve-test">
-		<bwubuild:run-bwunit-tests phase="uat" srcdir="examples/${ant.project.name}/src/main/bw" aliases-refid="bw.aliases"/>
+		<bwubuild:run-bwunit-tests phase="uat"
+		                           srcdir="examples/${ant.project.name}/src/main/bw"
+		                           aliases-refid="bw.aliases" />
 	</target>
 
 	<target name="report-uat-tests"
 	        description="Run UATs and create a JUnit compatible report"
 	        depends="-load-ant-contrib,retrieve-test">
-		<bwubuild:report-bwunit-tests phase="uat" srcdir="examples/${ant.project.name}/src/main/bw"/>
+		<bwubuild:report-bwunit-tests phase="uat" srcdir="examples/${ant.project.name}/src/main/bw" />
 	</target>
 
 	<target name="pre-commit" description="Run pre-commit tests" depends="run-quick-tests" />

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx3="http://www.w3.org/2005/Atom" xmlns:pfx5="www.tibco.com/plugin/java/JavaMethodActivityInput" xmlns:pfx="http://windyroad.org/rest4BW.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:pfx4="http://www.tibco.com/ns/no_namespace_schema_location/rest4BW/RSS/Feed Mapping.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns2="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
     <xsd:import namespace="http://windyroad.org/rest-delegate.xsd"/>
-    <xsd:import namespace="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" schemaLocation="/rest4BW/Private/Schemas/StatusCodeDefinitions.xsd"/>
+    <xsd:import namespace="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" schemaLocation="/rest4BW/Schemas/StatusCodeDefinitions.xsd"/>
     <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Schemas/rest4BW.xsd"/>
     <xsd:import namespace="http://www.w3.org/2005/Atom" schemaLocation="/rest4BW/RSS/atom.xsd"/>
     <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/rest4BW/RSS/Feed Mapping.xsd" schemaLocation="/rest4BW/RSS/Feed Mapping.xsd"/>
