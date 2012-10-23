@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx="http://windyroad.org/rest4BW.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns2="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
+<pd:ProcessDefinition xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://windyroad.org/rest4BW.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:ns2="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
     <xsd:import namespace="http://windyroad.org/rest-delegate.xsd"/>
     <xsd:import namespace="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" schemaLocation="/rest4BW/Private/Schemas/StatusCodeDefinitions.xsd"/>
     <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Schemas/rest4BW.xsd"/>
@@ -10,7 +10,7 @@
     <pd:startX>67</pd:startX>
     <pd:startY>78</pd:startY>
     <pd:returnBindings>
-        <xsl:copy-of select="$feed/pfx:response"/>
+        <xsl:copy-of select="$Get-Feed/pfx:response"/>
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
     <pd:endType ref="pfx:response"/>
@@ -21,13 +21,13 @@
     </pd:errorSchemas>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1338181537186</pd:targetNamespace>
-    <pd:activity name="feed">
+    <pd:activity name="Get Feed">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>369</pd:x>
-        <pd:y>73</pd:y>
+        <pd:x>353</pd:x>
+        <pd:y>77</pd:y>
         <config>
-            <processName>/rest4BW/RSS/feed.process</processName>
+            <processName>/rest4BW/RSS/GetFeed.process</processName>
             <processNameXPath/>
         </config>
         <pd:inputBindings>
@@ -71,7 +71,7 @@
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>
-        <pd:from>feed</pd:from>
+        <pd:from>Get Feed</pd:from>
         <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
@@ -86,7 +86,7 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Get Mappings</pd:from>
-        <pd:to>feed</pd:to>
+        <pd:to>Get Feed</pd:to>
         <pd:xpathDescription>Feed at Path?</pd:xpathDescription>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>

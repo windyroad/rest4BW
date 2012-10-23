@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx3="http://www.w3.org/2005/Atom" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://windyroad.org/rest4BW.xsd" xmlns:pfx5="www.tibco.com/plugin/java/JavaMethodActivityInput" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:ns2="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx4="http://www.tibco.com/ns/no_namespace_schema_location/rest4BW/RSS/Feed Mapping.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
+    <xsd:import namespace="http://windyroad.org/rest-delegate.xsd"/>
+    <xsd:import namespace="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" schemaLocation="/rest4BW/Private/Schemas/StatusCodeDefinitions.xsd"/>
+    <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Schemas/rest4BW.xsd"/>
+    <xsd:import namespace="http://www.w3.org/2005/Atom" schemaLocation="/rest4BW/RSS/atom.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/rest4BW/RSS/Feed Mapping.xsd" schemaLocation="/rest4BW/RSS/Feed Mapping.xsd"/>
+    <pd:name>rest4BW/RSS/GetFeed.process</pd:name>
+    <pd:description/>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx:request"/>
+                    <xsd:element ref="pfx4:feed"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>67</pd:startX>
+    <pd:startY>78</pd:startY>
+    <pd:returnBindings>
+        <pfx:response xsi:type="ns:sc-200_OK">
+            <pfx:text-content>
+                <xsl:value-of select="tib:render-xml($GetFeed/pfx3:feed)"/>
+            </pfx:text-content>
+            <pfx:headers>
+                <xsl:attribute name="content-type">application/atom+xml</xsl:attribute>
+            </pfx:headers>
+        </pfx:response>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx:response"/>
+    <pd:endX>303</pd:endX>
+    <pd:endY>77</pd:endY>
+    <pd:errorSchemas>
+        <Error ref="pfx:error"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1338181537186</pd:targetNamespace>
+    <pd:activity name="405 Method Not Allowed">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>69</pd:x>
+        <pd:y>222</pd:y>
+        <config>
+            <faultName>Error</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <message>Method Not Allowed</message>
+                <messageCode>
+                    <xsl:value-of select="405"/>
+                </messageCode>
+                <data>
+                    <pfx:error xsi:type="ns:sc-405_Method_Not_Allowed">
+                        <pfx:text-content>Method Not Allowed</pfx:text-content>
+                        <pfx:headers/>
+                    </pfx:error>
+                </data>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="GetFeed">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>194</pd:x>
+        <pd:y>78</pd:y>
+        <config>
+            <processName>/rest4BW/RSS/Store/RDMS/GetFeed.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Start/input"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>405 Method Not Allowed</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>GetFeed</pd:to>
+        <pd:xpathDescription>GET</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>'GET'=$Start/input/pfx:request/pfx:method</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetFeed</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>
