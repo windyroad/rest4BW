@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx3="http://www.w3.org/2005/Atom" xmlns:pfx5="www.tibco.com/plugin/java/JavaMethodActivityInput" xmlns:pfx="http://windyroad.org/rest4BW.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:pfx4="http://www.tibco.com/ns/no_namespace_schema_location/rest4BW/RSS/Feed Mapping.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns2="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
+<pd:ProcessDefinition xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx3="http://www.w3.org/2005/Atom" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://windyroad.org/rest4BW.xsd" xmlns:pfx5="www.tibco.com/plugin/java/JavaMethodActivityInput" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:ns2="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx4="http://www.tibco.com/ns/no_namespace_schema_location/rest4BW/RSS/Feed Mapping.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
     <xsd:import namespace="http://windyroad.org/rest-delegate.xsd"/>
     <xsd:import namespace="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" schemaLocation="/rest4BW/Schemas/StatusCodeDefinitions.xsd"/>
     <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Schemas/rest4BW.xsd"/>
@@ -75,8 +75,8 @@
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
     <pd:endType ref="pfx3:feed"/>
-    <pd:endX>445</pd:endX>
-    <pd:endY>83</pd:endY>
+    <pd:endX>356</pd:endX>
+    <pd:endY>82</pd:endY>
     <pd:errorSchemas>
         <Error ref="pfx:error"/>
     </pd:errorSchemas>
@@ -85,8 +85,8 @@
     <pd:activity name="Get Entries">
         <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
         <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
-        <pd:x>257</pd:x>
-        <pd:y>80</pd:y>
+        <pd:x>168</pd:x>
+        <pd:y>79</pd:y>
         <config>
             <timeout>10</timeout>
             <commit>false</commit>
@@ -128,8 +128,8 @@
     <pd:activity name="Get Feed">
         <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
         <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
-        <pd:x>354</pd:x>
-        <pd:y>81</pd:y>
+        <pd:x>265</pd:x>
+        <pd:y>80</pd:y>
         <config>
             <timeout>10</timeout>
             <commit>false</commit>
@@ -148,19 +148,9 @@
             <jdbcQueryActivityInput/>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="InitDB">
-        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-        <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>156</pd:x>
-        <pd:y>80</pd:y>
-        <config>
-            <processName>/rest4BW/RSS/Store/RDMS/InitDB.process</processName>
-        </config>
-        <pd:inputBindings/>
-    </pd:activity>
     <pd:transition>
         <pd:from>Start</pd:from>
-        <pd:to>InitDB</pd:to>
+        <pd:to>Get Entries</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
@@ -175,13 +165,6 @@
     <pd:transition>
         <pd:from>Get Feed</pd:from>
         <pd:to>End</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>InitDB</pd:from>
-        <pd:to>Get Entries</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
