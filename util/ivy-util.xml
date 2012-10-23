@@ -165,7 +165,7 @@
 		                 resolver="snapshots"
 		                 prefix="snapshots" />
 		<echo level="info">Snapshots Version: ${snapshots.new.revision}</echo>
-		<propertycopy name="publish.revision" from="${ivy.resolver}.new.revision" />
+		<wrivy:propertycopy name="publish.revision" from="${ivy.resolver}.new.revision" />
 	</target>
 
 	<macrodef name="propertycopy" uri="org.windyroad.ivy-util">
