@@ -133,7 +133,7 @@
 					                  failonerror="@{failonerror}"
 					                  license="${bwunit.license}"
 					                  create-dtl-file="true"
-					                  custom-cp-ext="%EXISTING-VALUE%${path.separator}${dep.h2.h2.jar}"
+					                  custom-cp-ext-prepend="%EXISTING-VALUE%${path.separator}${dep.h2.h2.jar}"
 					                  aliases-refid="@{aliases-refid}"
 					                  scope="test/@{phase}TestSuite/" />
 				</sequential>
