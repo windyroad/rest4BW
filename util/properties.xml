@@ -14,5 +14,4 @@
     <echo>LOADING: config/default.properties</echo>
     <property file="config/default.properties" />
 
-	<echo>${rest4BW.projlib}</echo>
 </project>

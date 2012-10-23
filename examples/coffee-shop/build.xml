@@ -12,14 +12,10 @@
 	<defaultexcludes echo="false" add="**/*.hg" />
 	<defaultexcludes echo="false" add="**/*.hg/**" />
 
-    <echo>YYY ${ant.refid:bw.aliases}</echo>
-
 	<propertyset id="bw.aliases">
 		<propertyref name="rest4BW.projlib" />
 	</propertyset>
 
-	<echo>XXX ${ant.refid:bw.aliases}</echo>
-	
 	<target name="init">
 		<mkdir dir="build" />
 	</target>
@@ -76,7 +72,9 @@
 	<target name="report-uat-tests"
 	        description="Run UATs and create a JUnit compatible report"
 	        depends="-load-ant-contrib,retrieve-test">
-		<bwubuild:report-bwunit-tests phase="uat" srcdir="examples/${ant.project.name}/src/main/bw" />
+		<bwubuild:report-bwunit-tests phase="uat"
+		                              srcdir="examples/${ant.project.name}/src/main/bw"
+		                              aliases-refid="bw.aliases" />
 	</target>
 
 	<target name="pre-commit" description="Run pre-commit tests" depends="run-quick-tests" />
