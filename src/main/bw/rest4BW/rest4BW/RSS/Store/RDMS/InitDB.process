@@ -2,7 +2,7 @@
 <pd:ProcessDefinition xmlns:r4bw="http://windyroad.org/rest4BW.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx="http://www.tibco.com/ns/no_namespace_schema_location/rest4BW/RSS/Feed Mapping.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
     <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/rest4BW/RSS/Feed Mapping.xsd" schemaLocation="/rest4BW/RSS/Feed Mapping.xsd"/>
     <xsd:import namespace="http://www.w3.org/1999/XSL/Transform"/>
-    <pd:name>test/quickTestSuite/eventFeedTestCase/steps/An Empty Data Store.process</pd:name>
+    <pd:name>rest4BW/RSS/Store/RDMS/InitDB.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startX>150</pd:startX>
     <pd:startY>64</pd:startY>
@@ -12,11 +12,33 @@
         </entries>
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
-    <pd:endX>521</pd:endX>
-    <pd:endY>63</pd:endY>
+    <pd:endX>597</pd:endX>
+    <pd:endY>62</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1350505462311</pd:targetNamespace>
+    <pd:activity name="Create Table">
+        <pd:type>com.tibco.plugin.jdbc.JDBCGeneralActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCGeneralActivity</pd:resourceType>
+        <pd:x>436</pd:x>
+        <pd:y>132</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <commit>false</commit>
+            <maxRows>100</maxRows>
+            <jdbcSharedConfig>/rest4BW/RSS/Store/RDMS/Event Store Connection.sharedjdbc</jdbcSharedConfig>
+        </config>
+        <pd:inputBindings>
+            <jdbcGeneralActivityInput>
+                <statement>create table Public.Entries (  ID VARCHAR not null, 
+	Title VARCHAR, 
+	Content CLOB, 
+	type VARCHAR,
+	published timestamp,
+	updated timestamp );</statement>
+            </jdbcGeneralActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
     <pd:activity name="Find Table">
         <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
         <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
@@ -81,23 +103,6 @@
             <jdbcQueryActivityInput/>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="Drop Table">
-        <pd:type>com.tibco.plugin.jdbc.JDBCGeneralActivity</pd:type>
-        <pd:resourceType>ae.activities.JDBCGeneralActivity</pd:resourceType>
-        <pd:x>392</pd:x>
-        <pd:y>135</pd:y>
-        <config>
-            <timeout>10</timeout>
-            <commit>false</commit>
-            <maxRows>100</maxRows>
-            <jdbcSharedConfig>/rest4BW/RSS/Store/RDMS/Event Store Connection.sharedjdbc</jdbcSharedConfig>
-        </config>
-        <pd:inputBindings>
-            <jdbcGeneralActivityInput>
-                <statement>drop table Public.Entries;</statement>
-            </jdbcGeneralActivityInput>
-        </pd:inputBindings>
-    </pd:activity>
     <pd:transition>
         <pd:from>Start</pd:from>
         <pd:to>Find Table</pd:to>
@@ -107,7 +112,14 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Find Table</pd:from>
-        <pd:to>Drop Table</pd:to>
+        <pd:to>Create Table</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Find Table</pd:from>
+        <pd:to>End</pd:to>
         <pd:xpathDescription>found table</pd:xpathDescription>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
@@ -115,17 +127,10 @@
         <pd:xpath>exists($Find-Table/resultSet/Record)</pd:xpath>
     </pd:transition>
     <pd:transition>
-        <pd:from>Drop Table</pd:from>
+        <pd:from>Create Table</pd:from>
         <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Find Table</pd:from>
-        <pd:to>End</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>otherwise</pd:conditionType>
     </pd:transition>
 </pd:ProcessDefinition>

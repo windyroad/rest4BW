@@ -5,7 +5,7 @@
     <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Schemas/rest4BW.xsd"/>
     <xsd:import namespace="http://www.w3.org/2005/Atom" schemaLocation="/rest4BW/RSS/atom.xsd"/>
     <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/rest4BW/RSS/Feed Mapping.xsd" schemaLocation="/rest4BW/RSS/Feed Mapping.xsd"/>
-    <pd:name>rest4BW/RSS/feed.process</pd:name>
+    <pd:name>rest4BW/RSS/Store/RDMS/GetFeed.process</pd:name>
     <pd:description/>
     <pd:startName>Start</pd:startName>
     <pd:startType>
@@ -21,118 +21,72 @@
     <pd:startX>67</pd:startX>
     <pd:startY>78</pd:startY>
     <pd:returnBindings>
-        <pfx:response xsi:type="ns:sc-200_OK">
-            <pfx:text-content>
-                <xsl:value-of select="$Render-XML/xmlString"/>
-            </pfx:text-content>
-            <pfx:headers>
-                <xsl:attribute name="content-type">application/atom+xml</xsl:attribute>
-            </pfx:headers>
-        </pfx:response>
+        <pfx3:feed>
+            <pfx3:generator>
+                <xsl:attribute name="uri">
+                    <xsl:value-of select="'http://windyroad.org/software/open-source/rest4bw/'"/>
+                </xsl:attribute>rest4BW</pfx3:generator>
+            <pfx3:id>
+                <xsl:value-of select="$Start/input/feed/@id"/>
+            </pfx3:id>
+            <pfx3:link>
+                <xsl:attribute name="href">
+                    <xsl:value-of select="$Start/input/feed/@href"/>
+                </xsl:attribute>
+                <xsl:attribute name="rel">self</xsl:attribute>
+            </pfx3:link>
+            <pfx3:title>
+                <xsl:attribute name="type">text</xsl:attribute>
+                <xsl:value-of select="$Start/input/feed/@title"/>
+            </pfx3:title>
+            <pfx3:updated>
+                <xsl:value-of select="tib:if-absent($Get-Feed/resultSet/Record[1]/FEED_UPDATED, current-dateTime())"/>
+            </pfx3:updated>
+            <xsl:for-each select="$Get-Entries/resultSet/Record">
+                <pfx3:entry>
+                    <pfx3:content>
+                        <xsl:if test="TYPE">
+                            <xsl:if test="TYPE">
+                                <xsl:attribute name="type">
+                                    <xsl:value-of select="TYPE"/>
+                                </xsl:attribute>
+                            </xsl:if>
+                        </xsl:if>
+                        <xsl:value-of select="CONTENT"/>
+                    </pfx3:content>
+                    <pfx3:id>
+                        <xsl:value-of select="ID"/>
+                    </pfx3:id>
+                    <pfx3:title>
+                        <xsl:value-of select="TITLE"/>
+                    </pfx3:title>
+                    <pfx3:published>
+                        <xsl:value-of select="PUBLISHED"/>
+                    </pfx3:published>
+                    <pfx3:updated>
+                        <xsl:value-of select="UPDATED"/>
+                    </pfx3:updated>
+                </pfx3:entry>
+            </xsl:for-each>
+            <pfx3:author>
+                <pfx3:name>Business Unit</pfx3:name>
+            </pfx3:author>
+        </pfx3:feed>
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
-    <pd:endType ref="pfx:response"/>
-    <pd:endX>521</pd:endX>
-    <pd:endY>80</pd:endY>
+    <pd:endType ref="pfx3:feed"/>
+    <pd:endX>445</pd:endX>
+    <pd:endY>83</pd:endY>
     <pd:errorSchemas>
         <Error ref="pfx:error"/>
     </pd:errorSchemas>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1338181537186</pd:targetNamespace>
-    <pd:activity name="405 Method Not Allowed">
-        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
-        <pd:resourceType>ae.activities.throw</pd:resourceType>
-        <pd:x>69</pd:x>
-        <pd:y>222</pd:y>
-        <config>
-            <faultName>Error</faultName>
-        </config>
-        <pd:inputBindings>
-            <ns2:ActivityInput>
-                <message>Method Not Allowed</message>
-                <messageCode>
-                    <xsl:value-of select="405"/>
-                </messageCode>
-                <data>
-                    <pfx:error xsi:type="ns:sc-405_Method_Not_Allowed">
-                        <pfx:text-content>Method Not Allowed</pfx:text-content>
-                        <pfx:headers/>
-                    </pfx:error>
-                </data>
-            </ns2:ActivityInput>
-        </pd:inputBindings>
-    </pd:activity>
-    <pd:activity name="Render XML">
-        <pd:type>com.tibco.plugin.xml.XMLRendererActivity</pd:type>
-        <pd:resourceType>ae.activities.XMLRendererActivity</pd:resourceType>
-        <pd:x>410</pd:x>
-        <pd:y>76</pd:y>
-        <config>
-            <renderAsText>text</renderAsText>
-            <validateInput>true</validateInput>
-            <renderDefaultPrefix>true</renderDefaultPrefix>
-            <textEncoding>UTF-8</textEncoding>
-            <term ref="pfx3:feed"/>
-        </config>
-        <pd:inputBindings>
-            <pfx3:feed>
-                <pfx3:generator>
-                    <xsl:attribute name="uri">
-                        <xsl:value-of select="'http://windyroad.org/software/open-source/rest4bw/'"/>
-                    </xsl:attribute>rest4BW</pfx3:generator>
-                <pfx3:id>
-                    <xsl:value-of select="$Start/input/feed/@id"/>
-                </pfx3:id>
-                <pfx3:link>
-                    <xsl:attribute name="href">
-                        <xsl:value-of select="$Start/input/feed/@href"/>
-                    </xsl:attribute>
-                    <xsl:attribute name="rel">self</xsl:attribute>
-                </pfx3:link>
-                <pfx3:title>
-                    <xsl:attribute name="type">text</xsl:attribute>
-                    <xsl:value-of select="$Start/input/feed/@title"/>
-                </pfx3:title>
-                <pfx3:updated>
-                    <xsl:value-of select="tib:if-absent($Get-Feed/resultSet/Record[1]/FEED_UPDATED, current-dateTime())"/>
-                </pfx3:updated>
-                <xsl:for-each select="$Get-Entries/resultSet/Record">
-                    <pfx3:entry>
-                        <pfx3:content>
-                            <xsl:if test="TYPE">
-                                <xsl:if test="TYPE">
-                                    <xsl:attribute name="type">
-                                        <xsl:value-of select="TYPE"/>
-                                    </xsl:attribute>
-                                </xsl:if>
-                            </xsl:if>
-                            <xsl:value-of select="CONTENT"/>
-                        </pfx3:content>
-                        <pfx3:id>
-                            <xsl:value-of select="ID"/>
-                        </pfx3:id>
-                        <pfx3:title>
-                            <xsl:value-of select="TITLE"/>
-                        </pfx3:title>
-                        <pfx3:published>
-                            <xsl:value-of select="PUBLISHED"/>
-                        </pfx3:published>
-                        <pfx3:updated>
-                            <xsl:value-of select="UPDATED"/>
-                        </pfx3:updated>
-                    </pfx3:entry>
-                </xsl:for-each>
-                <pfx3:author>
-                    <pfx3:name>Business Unit</pfx3:name>
-                </pfx3:author>
-            </pfx3:feed>
-        </pd:inputBindings>
-    </pd:activity>
     <pd:activity name="Get Entries">
         <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
         <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
-        <pd:x>207</pd:x>
-        <pd:y>72</pd:y>
+        <pd:x>257</pd:x>
+        <pd:y>80</pd:y>
         <config>
             <timeout>10</timeout>
             <commit>false</commit>
@@ -174,8 +128,8 @@
     <pd:activity name="Get Feed">
         <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
         <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
-        <pd:x>306</pd:x>
-        <pd:y>77</pd:y>
+        <pd:x>354</pd:x>
+        <pd:y>81</pd:y>
         <config>
             <timeout>10</timeout>
             <commit>false</commit>
@@ -194,24 +148,19 @@
             <jdbcQueryActivityInput/>
         </pd:inputBindings>
     </pd:activity>
+    <pd:activity name="InitDB">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>156</pd:x>
+        <pd:y>80</pd:y>
+        <config>
+            <processName>/rest4BW/RSS/Store/RDMS/InitDB.process</processName>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
     <pd:transition>
         <pd:from>Start</pd:from>
-        <pd:to>405 Method Not Allowed</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>otherwise</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Start</pd:from>
-        <pd:to>Get Entries</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>xpath</pd:conditionType>
-        <pd:xpath>'GET'=$Start/input/pfx:request/pfx:method</pd:xpath>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Render XML</pd:from>
-        <pd:to>End</pd:to>
+        <pd:to>InitDB</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
@@ -225,7 +174,14 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Get Feed</pd:from>
-        <pd:to>Render XML</pd:to>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>InitDB</pd:from>
+        <pd:to>Get Entries</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>

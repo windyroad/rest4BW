@@ -33,7 +33,7 @@
     <pd:endType>
         <xsd:element name="entries" type="xsd:int"/>
     </pd:endType>
-    <pd:endX>504</pd:endX>
+    <pd:endX>547</pd:endX>
     <pd:endY>65</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
@@ -41,8 +41,8 @@
     <pd:activity name="JDBC Update">
         <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
         <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
-        <pd:x>383</pd:x>
-        <pd:y>64</pd:y>
+        <pd:x>452</pd:x>
+        <pd:y>66</pd:y>
         <config>
             <timeout>10</timeout>
             <commit>false</commit>
@@ -129,6 +129,16 @@
         </config>
         <pd:inputBindings/>
     </pd:activity>
+    <pd:activity name="InitDB">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>357</pd:x>
+        <pd:y>64</pd:y>
+        <config>
+            <processName>/rest4BW/RSS/Store/RDMS/InitDB.process</processName>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
     <pd:transition>
         <pd:from>JDBC Update</pd:from>
         <pd:to>End</pd:to>
@@ -145,6 +155,13 @@
     </pd:transition>
     <pd:transition>
         <pd:from>An Empty Data Store</pd:from>
+        <pd:to>InitDB</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>InitDB</pd:from>
         <pd:to>JDBC Update</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>

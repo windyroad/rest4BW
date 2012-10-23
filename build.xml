@@ -149,7 +149,7 @@
 
 
 
-	<target name="pre-commit" description="Run pre-commit tests" depends="validate-projlib,run-quick-tests">
+	<target name="pre-commit" description="Run pre-commit tests" depends="validate,run-quick-tests">
 	</target>
 
 	<target name="post-commit" description="Run post-commit tests" depends="report-quick-tests">
