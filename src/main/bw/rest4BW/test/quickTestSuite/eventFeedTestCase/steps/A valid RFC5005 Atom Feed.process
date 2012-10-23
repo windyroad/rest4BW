@@ -2,7 +2,7 @@
 <pd:ProcessDefinition xmlns:pfx2="http://windyroad.org/wr-http.xsd" xmlns:pfx="http://windyroad.org/rest4BW.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
     <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Schemas/rest4BW.xsd"/>
     <xsd:import namespace="http://www.w3.org/2005/Atom" schemaLocation="/rest4BW/RSS/atom.xsd"/>
-    <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/rest4BW/Private/Schemas/HttpConnection.xsd"/>
+    <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/rest4BW/Schemas/HttpConnection.xsd"/>
     <pd:name>test/quickTestSuite/eventFeedTestCase/steps/A valid RFC5005 Atom Feed.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType ref="pfx2:response"/>

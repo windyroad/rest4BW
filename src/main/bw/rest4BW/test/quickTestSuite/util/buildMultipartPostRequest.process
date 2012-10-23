@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://windyroad.org/wr-http.xsd">
-    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/rest4BW/Private/Schemas/HttpConnection.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/rest4BW/Schemas/HttpConnection.xsd"/>
     <pd:name>test/quickTestSuite/util/buildMultipartPostRequest.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startX>150</pd:startX>

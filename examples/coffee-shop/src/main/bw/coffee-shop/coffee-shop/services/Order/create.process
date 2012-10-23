@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:pfx="http://windyroad.org/rest4BW.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns4="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns3="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx4="http://windyroad.org/coffee-shop" xmlns:pfx3="http://www.tibco.com/schemas/coffee-shop/coffee-shop/shared variables/Schema.xsd" xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Private/Schemas/rest4BW.xsd"/>
+    <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Schemas/rest4BW.xsd"/>
     <xsd:import namespace="http://windyroad.org/rest-delegate.xsd"/>
     <xsd:import namespace="http://www.tibco.com/schemas/coffee-shop/coffee-shop/shared variables/Schema.xsd" schemaLocation="/coffee-shop/shared variables/Schema.xsd"/>
     <pd:name>coffee-shop/services/Order/create.process</pd:name>

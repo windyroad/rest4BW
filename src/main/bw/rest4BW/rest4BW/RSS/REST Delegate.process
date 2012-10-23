@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://windyroad.org/rest4BW.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:ns2="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
     <xsd:import namespace="http://windyroad.org/rest-delegate.xsd"/>
-    <xsd:import namespace="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" schemaLocation="/rest4BW/Private/Schemas/StatusCodeDefinitions.xsd"/>
+    <xsd:import namespace="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" schemaLocation="/rest4BW/Schemas/StatusCodeDefinitions.xsd"/>
     <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Schemas/rest4BW.xsd"/>
     <pd:name>rest4BW/RSS/REST Delegate.process</pd:name>
     <pd:description/>

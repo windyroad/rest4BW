@@ -6,7 +6,7 @@
 	 targetNamespace="http://windyroad.org/rest4BW.xsd"
 	 elementFormDefault="qualified"
 	 attributeFormDefault="unqualified">
-	<xs:import namespace="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" schemaLocation="../Private/Schemas/StatusCodeDefinitions.xsd"/>
+	<xs:import namespace="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" schemaLocation="../Schemas/StatusCodeDefinitions.xsd"/>
 	<xs:element name="query">
 		<xs:complexType>
 			<xs:sequence>

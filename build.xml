@@ -139,20 +139,23 @@
 
 
 
-	<target name="validate-projlib" description="Validate the compiled projlib">
-		<tibant:validate dir="src/main/bw"
-		                 project="rest4BW"
-		                 expected-errors="0"
-		                 max-warnings="0"
-		                 custom-cp-ext="%EXISTING-VALUE%${path.separator}${dep.xxx.jar}" />
+	<!-- we valdate the projlib by running validate on the coffee-shop. If there are problems with
+	the projlib then the coffee shop wont validate -->
+	<target name="validate-projlib" depends="projlib" description="Validate the compiled projlib">
+		<subant target="validate" >
+			<fileset dir="examples/coffee-shop" includes="build.xml"/>
+		</subant>
 	</target>
 
 
-
-	<target name="pre-commit" description="Run pre-commit tests" depends="validate,run-quick-tests">
+    <!-- for pre-commit, we validate the projlib, which will validate and build the projlib and then
+    validate the coffee-shop using the built projlib. If all that is good, then it will run the quick tests -->
+	<target name="pre-commit" description="Run pre-commit tests" depends="validate-projlib,run-quick-tests">
 	</target>
 
-	<target name="post-commit" description="Run post-commit tests" depends="report-quick-tests">
+    <!-- for post-commit, we validate the projlib, which will validate and build the projlib and then
+    validate the coffee-shop using the built projlib. If all that is good, then it will run the quick tests -->
+	<target name="post-commit" description="Run post-commit tests" depends="validate-projlib,report-quick-tests">
 	</target>
 
 	<target name="upload-docs-to-website" depends="-load-ant-contrib,-init-scp">
