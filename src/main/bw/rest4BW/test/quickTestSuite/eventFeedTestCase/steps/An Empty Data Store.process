@@ -12,8 +12,8 @@
         </entries>
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
-    <pd:endX>521</pd:endX>
-    <pd:endY>63</pd:endY>
+    <pd:endX>598</pd:endX>
+    <pd:endY>60</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1350505462311</pd:targetNamespace>
@@ -98,6 +98,16 @@
             </jdbcGeneralActivityInput>
         </pd:inputBindings>
     </pd:activity>
+    <pd:activity name="InitDB">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>469</pd:x>
+        <pd:y>62</pd:y>
+        <config>
+            <processName>/rest4BW/RSS/Store/RDMS/InitDB.process</processName>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
     <pd:transition>
         <pd:from>Start</pd:from>
         <pd:to>Find Table</pd:to>
@@ -116,16 +126,23 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Drop Table</pd:from>
-        <pd:to>End</pd:to>
+        <pd:to>InitDB</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
         <pd:from>Find Table</pd:from>
-        <pd:to>End</pd:to>
+        <pd:to>InitDB</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>InitDB</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
     </pd:transition>
 </pd:ProcessDefinition>
