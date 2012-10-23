@@ -12,9 +12,13 @@
 	<defaultexcludes echo="false" add="**/*.hg" />
 	<defaultexcludes echo="false" add="**/*.hg/**" />
 
+    <echo>YYY ${ant.refid:bw.aliases}</echo>
+
 	<propertyset id="bw.aliases">
 		<propertyref name="rest4BW.projlib" />
 	</propertyset>
+
+	<echo>XXX ${ant.refid:bw.aliases}</echo>
 	
 	<target name="init">
 		<mkdir dir="build" />
