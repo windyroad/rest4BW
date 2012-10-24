@@ -40,7 +40,7 @@
                 <xsl:value-of select="$Start/input/feed/@title"/>
             </pfx3:title>
             <pfx3:updated>
-                <xsl:value-of select="tib:if-absent($Get-Feed/resultSet/Record[1]/FEED_UPDATED, current-dateTime())"/>
+                <xsl:value-of select="tib:if-absent($Get-Entries/resultSet/Record[1]/FEED_UPDATED, current-dateTime())"/>
             </pfx3:updated>
             <xsl:for-each select="$Get-Entries/resultSet/Record">
                 <pfx3:entry>
@@ -75,8 +75,8 @@
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
     <pd:endType ref="pfx3:feed"/>
-    <pd:endX>356</pd:endX>
-    <pd:endY>82</pd:endY>
+    <pd:endX>320</pd:endX>
+    <pd:endY>81</pd:endY>
     <pd:errorSchemas>
         <Error ref="pfx:error"/>
     </pd:errorSchemas>
@@ -85,7 +85,7 @@
     <pd:activity name="Get Entries">
         <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
         <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
-        <pd:x>168</pd:x>
+        <pd:x>186</pd:x>
         <pd:y>79</pd:y>
         <config>
             <timeout>10</timeout>
@@ -93,13 +93,26 @@
             <maxRows>100</maxRows>
             <emptyStrAsNil>false</emptyStrAsNil>
             <jdbcSharedConfig>/rest4BW/RSS/Store/RDMS/Event Store Connection.sharedjdbc</jdbcSharedConfig>
-            <statement>select * from entries</statement>
+            <statement>select * from (select *, ((rownum-1) / ?) pagenum from entries) 
+outer left join (select max(updated) feed_updated from entries)
+where pagenum = (select (count(*)/?) COUNT from ENTRIES) 
+order by PUBLISHED desc</statement>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>pagesize</parameterName>
+                    <dataType>INTEGER</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>pagesize</parameterName>
+                    <dataType>INTEGER</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
             <oraObjects/>
             <oraTables/>
             <QueryOutputCachedSchemaColumns>ID</QueryOutputCachedSchemaColumns>
             <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
             <QueryOutputCachedSchemaDataTypesName>VARCHAR</QueryOutputCachedSchemaDataTypesName>
-            <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
             <QueryOutputCachedSchemaColumns>TITLE</QueryOutputCachedSchemaColumns>
             <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
             <QueryOutputCachedSchemaDataTypesName>VARCHAR</QueryOutputCachedSchemaDataTypesName>
@@ -120,51 +133,50 @@
             <QueryOutputCachedSchemaDataTypes>93</QueryOutputCachedSchemaDataTypes>
             <QueryOutputCachedSchemaDataTypesName>TIMESTAMP</QueryOutputCachedSchemaDataTypesName>
             <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
-        </config>
-        <pd:inputBindings>
-            <jdbcQueryActivityInput/>
-        </pd:inputBindings>
-    </pd:activity>
-    <pd:activity name="Get Feed">
-        <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
-        <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
-        <pd:x>265</pd:x>
-        <pd:y>80</pd:y>
-        <config>
-            <timeout>10</timeout>
-            <commit>false</commit>
-            <maxRows>100</maxRows>
-            <emptyStrAsNil>false</emptyStrAsNil>
-            <jdbcSharedConfig>/rest4BW/RSS/Store/RDMS/Event Store Connection.sharedjdbc</jdbcSharedConfig>
-            <statement>select max(updated) feed_updated from entries</statement>
-            <oraObjects/>
-            <oraTables/>
+            <QueryOutputCachedSchemaColumns>PAGENUM</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>4</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>INTEGER</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
             <QueryOutputCachedSchemaColumns>FEED_UPDATED</QueryOutputCachedSchemaColumns>
             <QueryOutputCachedSchemaDataTypes>93</QueryOutputCachedSchemaDataTypes>
             <QueryOutputCachedSchemaDataTypesName>TIMESTAMP</QueryOutputCachedSchemaDataTypesName>
             <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
         </config>
         <pd:inputBindings>
-            <jdbcQueryActivityInput/>
+            <jdbcQueryActivityInput>
+                <pagesize>
+                    <xsl:choose>
+                        <xsl:when test="exists($Start/input/feed/@pagesize)">
+                            <xsl:value-of select="$Start/input/feed/@pagesize"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </pagesize>
+                <pagesize>
+                    <xsl:choose>
+                        <xsl:when test="exists($Start/input/feed/@pagesize)">
+                            <xsl:value-of select="$Start/input/feed/@pagesize"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </pagesize>
+            </jdbcQueryActivityInput>
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>
+        <pd:from>Get Entries</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
         <pd:from>Start</pd:from>
         <pd:to>Get Entries</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Get Entries</pd:from>
-        <pd:to>Get Feed</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Get Feed</pd:from>
-        <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
