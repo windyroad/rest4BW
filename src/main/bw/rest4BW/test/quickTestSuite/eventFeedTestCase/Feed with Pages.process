@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:ns1="http://windyroad.org/wr-http.xsd" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:ns3="http://www.w3.org/2005/Atom" xmlns:ns2="http://windyroad.org/rest4BW.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
+<pd:ProcessDefinition xmlns:ns1="http://windyroad.org/wr-http.xsd" xmlns:ns3="http://www.w3.org/2005/Atom" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns2="http://windyroad.org/rest4BW.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
     <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/rest4BW/Schemas/HttpConnection.xsd"/>
-    <pd:name>test/quickTestSuite/eventFeedTestCase/Feed with Entries.process</pd:name>
+    <pd:name>test/quickTestSuite/eventFeedTestCase/Feed with Pages.process</pd:name>
     <pd:description>@Timeout(60000)</pd:description>
     <pd:startName>Start</pd:startName>
     <pd:startX>50</pd:startX>
     <pd:startY>106</pd:startY>
     <pd:returnBindings/>
     <pd:endName>End</pd:endName>
-    <pd:endX>827</pd:endX>
-    <pd:endY>106</pd:endY>
+    <pd:endX>913</pd:endX>
+    <pd:endY>111</pd:endY>
     <pd:errorSchemas>
         <rollback>
             <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="rollback">
@@ -142,6 +142,116 @@
                         <xsl:value-of select="5"/>
                     </content>
                 </entry>
+                <entry>
+                    <xsl:attribute name="id">
+                        <xsl:value-of select="6"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="title">
+                        <xsl:value-of select="6"/>
+                    </xsl:attribute>
+                    <content>
+                        <xsl:value-of select="6"/>
+                    </content>
+                </entry>
+                <entry>
+                    <xsl:attribute name="id">
+                        <xsl:value-of select="7"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="title">
+                        <xsl:value-of select="7"/>
+                    </xsl:attribute>
+                    <content>
+                        <xsl:value-of select="7"/>
+                    </content>
+                </entry>
+                <entry>
+                    <xsl:attribute name="id">
+                        <xsl:value-of select="8"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="title">
+                        <xsl:value-of select="8"/>
+                    </xsl:attribute>
+                    <content>
+                        <xsl:value-of select="8"/>
+                    </content>
+                </entry>
+                <entry>
+                    <xsl:attribute name="id">
+                        <xsl:value-of select="9"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="title">
+                        <xsl:value-of select="9"/>
+                    </xsl:attribute>
+                    <content>
+                        <xsl:value-of select="9"/>
+                    </content>
+                </entry>
+                <entry>
+                    <xsl:attribute name="id">
+                        <xsl:value-of select="10"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="title">
+                        <xsl:value-of select="10"/>
+                    </xsl:attribute>
+                    <content>
+                        <xsl:value-of select="10"/>
+                    </content>
+                </entry>
+                <entry>
+                    <xsl:attribute name="id">
+                        <xsl:value-of select="11"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="title">
+                        <xsl:value-of select="11"/>
+                    </xsl:attribute>
+                    <content>
+                        <xsl:value-of select="11"/>
+                    </content>
+                </entry>
+                <entry>
+                    <xsl:attribute name="id">
+                        <xsl:value-of select="12"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="title">
+                        <xsl:value-of select="12"/>
+                    </xsl:attribute>
+                    <content>
+                        <xsl:value-of select="12"/>
+                    </content>
+                </entry>
+                <entry>
+                    <xsl:attribute name="id">
+                        <xsl:value-of select="13"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="title">
+                        <xsl:value-of select="13"/>
+                    </xsl:attribute>
+                    <content>
+                        <xsl:value-of select="13"/>
+                    </content>
+                </entry>
+                <entry>
+                    <xsl:attribute name="id">
+                        <xsl:value-of select="14"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="title">
+                        <xsl:value-of select="14"/>
+                    </xsl:attribute>
+                    <content>
+                        <xsl:value-of select="14"/>
+                    </content>
+                </entry>
+                <entry>
+                    <xsl:attribute name="id">
+                        <xsl:value-of select="15"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="title">
+                        <xsl:value-of select="15"/>
+                    </xsl:attribute>
+                    <content>
+                        <xsl:value-of select="15"/>
+                    </content>
+                </entry>
             </input>
         </pd:inputBindings>
     </pd:activity>
@@ -157,8 +267,23 @@
             <input>
                 <xsl:copy-of select="$Then-the-response-is-a-valid-RFC5005-Atom-Feed/ns3:feed"/>
                 <expectedEntryCount>
-                    <xsl:value-of select="count($And-the-feed-has-N-entries/output/entry)"/>
+                    <xsl:value-of select="count($And-the-feed-has-N-entries/output/entry) mod $Given-a-feed-at-PATH/feed/@pagesize"/>
                 </expectedEntryCount>
+            </input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="And the Entries Should Be">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>806</pd:x>
+        <pd:y>118</pd:y>
+        <config>
+            <processName>/test/quickTestSuite/eventFeedTestCase/steps/The Entries Should Be.process</processName>
+        </config>
+        <pd:inputBindings>
+            <input>
+                <xsl:copy-of select="$Then-the-response-is-a-valid-RFC5005-Atom-Feed/ns3:feed"/>
+                <xsl:copy-of select="$And-the-feed-has-N-entries/output/entry[position() > 10]"/>
             </input>
         </pd:inputBindings>
     </pd:activity>
@@ -192,7 +317,7 @@
     </pd:transition>
     <pd:transition>
         <pd:from>And there should be [N] entries in the feed</pd:from>
-        <pd:to>End</pd:to>
+        <pd:to>And the Entries Should Be</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
@@ -200,6 +325,13 @@
     <pd:transition>
         <pd:from>Start</pd:from>
         <pd:to>Given a feed at [PATH]</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>And the Entries Should Be</pd:from>
+        <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
