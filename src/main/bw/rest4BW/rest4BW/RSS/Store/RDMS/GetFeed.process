@@ -35,6 +35,14 @@
                 </xsl:attribute>
                 <xsl:attribute name="rel">self</xsl:attribute>
             </pfx3:link>
+            <xsl:if test="$Get-Entries/resultSet/Record[1]/PAGES > 0">
+                <pfx3:link>
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="concat($Start/input/feed/@href, '?page=', $Get-Entries/resultSet/Record[1]/PAGES - 1)"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="rel">prev-archive</xsl:attribute>
+                </pfx3:link>
+            </xsl:if>
             <pfx3:title>
                 <xsl:attribute name="type">text</xsl:attribute>
                 <xsl:value-of select="$Start/input/feed/@title"/>
@@ -86,7 +94,7 @@
         <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
         <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
         <pd:x>186</pd:x>
-        <pd:y>79</pd:y>
+        <pd:y>78</pd:y>
         <config>
             <timeout>10</timeout>
             <commit>false</commit>
@@ -94,19 +102,9 @@
             <emptyStrAsNil>false</emptyStrAsNil>
             <jdbcSharedConfig>/rest4BW/RSS/Store/RDMS/Event Store Connection.sharedjdbc</jdbcSharedConfig>
             <statement>select * from (select *, ((rownum-1) / ?) pagenum from entries) 
-outer left join (select max(updated) feed_updated from entries)
+outer left join (select max(updated) feed_updated, (count(*)/?) PAGES from entries)
 where pagenum = (select (count(*)/?) COUNT from ENTRIES) 
 order by PUBLISHED desc</statement>
-            <Prepared_Param_DataType>
-                <parameter>
-                    <parameterName>pagesize</parameterName>
-                    <dataType>INTEGER</dataType>
-                </parameter>
-                <parameter>
-                    <parameterName>pagesize</parameterName>
-                    <dataType>INTEGER</dataType>
-                </parameter>
-            </Prepared_Param_DataType>
             <oraObjects/>
             <oraTables/>
             <QueryOutputCachedSchemaColumns>ID</QueryOutputCachedSchemaColumns>
@@ -141,9 +139,37 @@ order by PUBLISHED desc</statement>
             <QueryOutputCachedSchemaDataTypes>93</QueryOutputCachedSchemaDataTypes>
             <QueryOutputCachedSchemaDataTypesName>TIMESTAMP</QueryOutputCachedSchemaDataTypesName>
             <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>PAGES</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>-5</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>BIGINT</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>pagesize</parameterName>
+                    <dataType>INTEGER</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>pagesize</parameterName>
+                    <dataType>INTEGER</dataType>
+                </parameter>
+                <parameter>
+                    <parameterName>pagesize</parameterName>
+                    <dataType>INTEGER</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
         </config>
         <pd:inputBindings>
             <jdbcQueryActivityInput>
+                <pagesize>
+                    <xsl:choose>
+                        <xsl:when test="exists($Start/input/feed/@pagesize)">
+                            <xsl:value-of select="$Start/input/feed/@pagesize"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </pagesize>
                 <pagesize>
                     <xsl:choose>
                         <xsl:when test="exists($Start/input/feed/@pagesize)">
