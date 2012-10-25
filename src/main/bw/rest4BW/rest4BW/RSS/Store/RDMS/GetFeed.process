@@ -104,7 +104,7 @@
             <statement>select * from (select *, ((rownum-1) / ?) pagenum from entries) 
 outer left join (select max(updated) feed_updated, (count(*)/?) PAGES from entries)
 where pagenum = (select (count(*)/?) COUNT from ENTRIES) 
-order by PUBLISHED desc</statement>
+order by rownum desc</statement>
             <oraObjects/>
             <oraTables/>
             <QueryOutputCachedSchemaColumns>ID</QueryOutputCachedSchemaColumns>
@@ -157,6 +157,7 @@ order by PUBLISHED desc</statement>
                     <dataType>INTEGER</dataType>
                 </parameter>
             </Prepared_Param_DataType>
+            <optionalOrNillable>false</optionalOrNillable>
         </config>
         <pd:inputBindings>
             <jdbcQueryActivityInput>
@@ -197,7 +198,7 @@ order by PUBLISHED desc</statement>
         <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
         <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
         <pd:x>210</pd:x>
-        <pd:y>170</pd:y>
+        <pd:y>168</pd:y>
         <config>
             <timeout>10</timeout>
             <commit>false</commit>
@@ -206,7 +207,7 @@ order by PUBLISHED desc</statement>
             <statement>select * from (select *, ((rownum-1) / ?) pagenum from entries) 
 outer left join (select max(updated) feed_updated, (count(*)/?) PAGES from entries)
 where pagenum = ? 
-order by PUBLISHED desc</statement>
+order by rownum desc</statement>
             <Prepared_Param_DataType>
                 <parameter>
                     <parameterName>pagesize</parameterName>
@@ -260,6 +261,7 @@ order by PUBLISHED desc</statement>
             <QueryOutputCachedSchemaDataTypes>-5</QueryOutputCachedSchemaDataTypes>
             <QueryOutputCachedSchemaDataTypesName>BIGINT</QueryOutputCachedSchemaDataTypesName>
             <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <optionalOrNillable>false</optionalOrNillable>
         </config>
         <pd:inputBindings>
             <jdbcQueryActivityInput>
