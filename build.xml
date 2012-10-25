@@ -28,7 +28,7 @@
 	</target>
 
 	<target name="validate" depends="-load-ant-contrib">
-		<bwunit:validate-project dir="src/main/bw" project="rest4BW" max-warnings="0" create-dtl-file="true" />
+		<bwunit:validate-project dir="src/main/bw" project="rest4BW" max-warnings="1" create-dtl-file="true" />
 	</target>
 
 	<target name="projlib" depends="-load-ant-contrib,validate">
