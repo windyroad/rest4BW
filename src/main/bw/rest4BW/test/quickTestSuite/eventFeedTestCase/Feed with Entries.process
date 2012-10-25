@@ -8,8 +8,8 @@
     <pd:startY>106</pd:startY>
     <pd:returnBindings/>
     <pd:endName>End</pd:endName>
-    <pd:endX>827</pd:endX>
-    <pd:endY>106</pd:endY>
+    <pd:endX>948</pd:endX>
+    <pd:endY>104</pd:endY>
     <pd:errorSchemas>
         <rollback>
             <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="rollback">
@@ -162,6 +162,18 @@
             </input>
         </pd:inputBindings>
     </pd:activity>
+    <pd:activity name="And there shouldn't be a prev-archive link">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>817</pd:x>
+        <pd:y>122</pd:y>
+        <config>
+            <processName>/test/quickTestSuite/eventFeedTestCase/steps/There shouldn't be a prev-archive link.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Then-the-response-is-a-valid-RFC5005-Atom-Feed/ns3:feed"/>
+        </pd:inputBindings>
+    </pd:activity>
     <pd:transition>
         <pd:from>Given a feed at [PATH]</pd:from>
         <pd:to>And the feed has [N] entries</pd:to>
@@ -192,7 +204,7 @@
     </pd:transition>
     <pd:transition>
         <pd:from>And there should be [N] entries in the feed</pd:from>
-        <pd:to>End</pd:to>
+        <pd:to>And there shouldn't be a prev-archive link</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
@@ -200,6 +212,13 @@
     <pd:transition>
         <pd:from>Start</pd:from>
         <pd:to>Given a feed at [PATH]</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>And there shouldn't be a prev-archive link</pd:from>
+        <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
