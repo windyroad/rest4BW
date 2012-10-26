@@ -8,8 +8,8 @@
     <pd:startY>106</pd:startY>
     <pd:returnBindings/>
     <pd:endName>End</pd:endName>
-    <pd:endX>971</pd:endX>
-    <pd:endY>357</pd:endY>
+    <pd:endX>1105</pd:endX>
+    <pd:endY>354</pd:endY>
     <pd:errorSchemas>
         <rollback>
             <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="rollback">
@@ -361,6 +361,18 @@
             <xsl:copy-of select="$Then-the-response-should-be-a-valid-RFC5005-Atom-Feed/atom:feed"/>
         </pd:inputBindings>
     </pd:activity>
+    <pd:activity name="And there shouldn't be a next-archive link">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>984</pd:x>
+        <pd:y>372</pd:y>
+        <config>
+            <processName>/test/quickTestSuite/eventFeedTestCase/steps/There shouldn't be a next-archive link.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Then-the-response-should-be-a-valid-RFC5005-Atom-Feed/atom:feed"/>
+        </pd:inputBindings>
+    </pd:activity>
     <pd:transition>
         <pd:from>Given a feed at [PATH]</pd:from>
         <pd:to>And the feed has [N] entries</pd:to>
@@ -440,6 +452,13 @@
     </pd:transition>
     <pd:transition>
         <pd:from>And there should be an archive element</pd:from>
+        <pd:to>And there shouldn't be a next-archive link</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>And there shouldn't be a next-archive link</pd:from>
         <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
