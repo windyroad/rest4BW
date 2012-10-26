@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:ns1="http://windyroad.org/wr-http.xsd" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:ns3="http://www.w3.org/2005/Atom" xmlns:ns2="http://windyroad.org/rest4BW.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
+<pd:ProcessDefinition xmlns:ns1="http://windyroad.org/wr-http.xsd" xmlns:ns3="http://www.w3.org/2005/Atom" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns2="http://windyroad.org/rest4BW.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
     <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/rest4BW/Schemas/HttpConnection.xsd"/>
     <pd:name>test/quickTestSuite/eventFeedTestCase/Feed with Entries.process</pd:name>
     <pd:description>@Timeout(60000)</pd:description>
@@ -8,8 +8,8 @@
     <pd:startY>106</pd:startY>
     <pd:returnBindings/>
     <pd:endName>End</pd:endName>
-    <pd:endX>948</pd:endX>
-    <pd:endY>104</pd:endY>
+    <pd:endX>847</pd:endX>
+    <pd:endY>313</pd:endY>
     <pd:errorSchemas>
         <rollback>
             <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="rollback">
@@ -24,8 +24,8 @@
     <pd:activity name="Then the response is a valid RFC5005 Atom Feed">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>542</pd:x>
-        <pd:y>122</pd:y>
+        <pd:x>175</pd:x>
+        <pd:y>339</pd:y>
         <config>
             <processName>/test/quickTestSuite/eventFeedTestCase/steps/A valid RFC5005 Atom Feed.process</processName>
         </config>
@@ -36,8 +36,8 @@
     <pd:activity name="When [PATH] is requested">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>416</pd:x>
-        <pd:y>115</pd:y>
+        <pd:x>162</pd:x>
+        <pd:y>219</pd:y>
         <config>
             <processName>/test/quickTestSuite/eventFeedTestCase/steps/[PATH] is requested.process</processName>
         </config>
@@ -148,8 +148,8 @@
     <pd:activity name="And there should be [N] entries in the feed">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>687</pd:x>
-        <pd:y>122</pd:y>
+        <pd:x>320</pd:x>
+        <pd:y>336</pd:y>
         <config>
             <processName>/test/quickTestSuite/eventFeedTestCase/steps/There should be [N] entries in the feed.process</processName>
         </config>
@@ -165,10 +165,34 @@
     <pd:activity name="And there shouldn't be a prev-archive link">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>817</pd:x>
-        <pd:y>122</pd:y>
+        <pd:x>447</pd:x>
+        <pd:y>335</pd:y>
         <config>
             <processName>/test/quickTestSuite/eventFeedTestCase/steps/There shouldn't be a prev-archive link.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Then-the-response-is-a-valid-RFC5005-Atom-Feed/ns3:feed"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="And there shouldn't be an archive element">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>572</pd:x>
+        <pd:y>331</pd:y>
+        <config>
+            <processName>/test/quickTestSuite/eventFeedTestCase/steps/There shouldn't be an archive element.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Then-the-response-is-a-valid-RFC5005-Atom-Feed/ns3:feed"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="There shouldn't be a next-archive link">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>713</pd:x>
+        <pd:y>327</pd:y>
+        <config>
+            <processName>/test/quickTestSuite/eventFeedTestCase/steps/There shouldn't be a next-archive link.process</processName>
         </config>
         <pd:inputBindings>
             <xsl:copy-of select="$Then-the-response-is-a-valid-RFC5005-Atom-Feed/ns3:feed"/>
@@ -218,6 +242,20 @@
     </pd:transition>
     <pd:transition>
         <pd:from>And there shouldn't be a prev-archive link</pd:from>
+        <pd:to>And there shouldn't be an archive element</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>And there shouldn't be an archive element</pd:from>
+        <pd:to>There shouldn't be a next-archive link</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>There shouldn't be a next-archive link</pd:from>
         <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
