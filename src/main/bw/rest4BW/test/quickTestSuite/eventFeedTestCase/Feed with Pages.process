@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:ns1="http://windyroad.org/wr-http.xsd" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns2="http://windyroad.org/rest4BW.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
+<pd:ProcessDefinition xmlns:ns1="http://windyroad.org/wr-http.xsd" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:ns2="http://windyroad.org/rest4BW.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
     <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/rest4BW/Schemas/HttpConnection.xsd"/>
     <pd:name>test/quickTestSuite/eventFeedTestCase/Feed with Pages.process</pd:name>
     <pd:description>@Timeout(60000)</pd:description>
@@ -299,6 +299,18 @@
             <xsl:copy-of select="$Then-the-response-is-a-valid-RFC5005-Atom-Feed/atom:feed"/>
         </pd:inputBindings>
     </pd:activity>
+    <pd:activity name="And there shouldn't be an archive element">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>971</pd:x>
+        <pd:y>256</pd:y>
+        <config>
+            <processName>/test/quickTestSuite/eventFeedTestCase/steps/There shouldn't be an archive element.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Then-the-response-is-a-valid-RFC5005-Atom-Feed/atom:feed"/>
+        </pd:inputBindings>
+    </pd:activity>
     <pd:transition>
         <pd:from>Given a feed at [PATH]</pd:from>
         <pd:to>And the feed has [N] entries</pd:to>
@@ -350,6 +362,13 @@
     </pd:transition>
     <pd:transition>
         <pd:from>And there should be a prev-archive link</pd:from>
+        <pd:to>And there shouldn't be an archive element</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>And there shouldn't be an archive element</pd:from>
         <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
