@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx3="http://www.w3.org/2005/Atom" xmlns:pfx5="www.tibco.com/plugin/java/JavaMethodActivityInput" xmlns:pfx="http://windyroad.org/rest4BW.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:pfx4="http://www.tibco.com/ns/no_namespace_schema_location/rest4BW/RSS/Feed Mapping.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns2="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
+<pd:ProcessDefinition xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx3="http://www.w3.org/2005/Atom" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://windyroad.org/rest4BW.xsd" xmlns:pfx5="www.tibco.com/plugin/java/JavaMethodActivityInput" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:ns2="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx4="http://www.tibco.com/ns/no_namespace_schema_location/rest4BW/RSS/Feed Mapping.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
     <xsd:import namespace="http://windyroad.org/rest-delegate.xsd"/>
     <xsd:import namespace="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" schemaLocation="/rest4BW/Schemas/StatusCodeDefinitions.xsd"/>
     <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Schemas/rest4BW.xsd"/>
@@ -29,20 +29,46 @@
             <pfx3:id>
                 <xsl:value-of select="$Start/input/feed/@id"/>
             </pfx3:id>
-            <pfx3:link>
-                <xsl:attribute name="href">
-                    <xsl:value-of select="$Start/input/feed/@href"/>
-                </xsl:attribute>
-                <xsl:attribute name="rel">self</xsl:attribute>
-            </pfx3:link>
-            <xsl:if test="$Get-Subscription-Doc/resultSet/Record[1]/PAGES > 0">
-                <pfx3:link>
-                    <xsl:attribute name="href">
-                        <xsl:value-of select="concat($Start/input/feed/@href, '?page=', $Get-Subscription-Doc/resultSet/Record[1]/PAGES - 1)"/>
-                    </xsl:attribute>
-                    <xsl:attribute name="rel">prev-archive</xsl:attribute>
-                </pfx3:link>
-            </xsl:if>
+            <xsl:choose>
+                <xsl:when test="exists($Get-Subscription-Doc/resultSet)">
+                    <pfx3:link>
+                        <xsl:attribute name="href">
+                            <xsl:value-of select="$Start/input/feed/@href"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="rel">self</xsl:attribute>
+                    </pfx3:link>
+                    <xsl:if test="$Get-Subscription-Doc/resultSet/Record[1]/PAGES > 0">
+                        <pfx3:link>
+                            <xsl:attribute name="href">
+                                <xsl:value-of select="concat($Start/input/feed/@href, '?page=', $Get-Subscription-Doc/resultSet/Record[1]/PAGES - 1)"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="rel">prev-archive</xsl:attribute>
+                        </pfx3:link>
+                    </xsl:if>
+                </xsl:when>
+                <xsl:otherwise>
+                    <pfx3:link>
+                        <xsl:attribute name="href">
+                            <xsl:value-of select="concat($Start/input/feed/@href, '?page=', $Get-Archive-Doc/resultSet/Record[1]/PAGENUM)"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="rel">self</xsl:attribute>
+                    </pfx3:link>
+                    <pfx3:link>
+                        <xsl:attribute name="href">
+                            <xsl:value-of select="$Start/input/feed/@href"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="rel">current</xsl:attribute>
+                    </pfx3:link>
+                    <xsl:if test="$Get-Archive-Doc/resultSet/Record[1]/PAGENUM > 0">
+                        <pfx3:link>
+                            <xsl:attribute name="href">
+                                <xsl:value-of select="concat($Start/input/feed/@href, '?page=', $Get-Subscription-Doc/resultSet/Record[1]/PAGES - 1)"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="rel">prev-archive</xsl:attribute>
+                        </pfx3:link>
+                    </xsl:if>
+                </xsl:otherwise>
+            </xsl:choose>
             <pfx3:title>
                 <xsl:attribute name="type">text</xsl:attribute>
                 <xsl:value-of select="$Start/input/feed/@title"/>
