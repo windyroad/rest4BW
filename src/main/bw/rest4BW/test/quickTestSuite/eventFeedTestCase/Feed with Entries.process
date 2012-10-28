@@ -8,8 +8,8 @@
     <pd:startY>106</pd:startY>
     <pd:returnBindings/>
     <pd:endName>End</pd:endName>
-    <pd:endX>847</pd:endX>
-    <pd:endY>313</pd:endY>
+    <pd:endX>934</pd:endX>
+    <pd:endY>99</pd:endY>
     <pd:errorSchemas>
         <rollback>
             <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="rollback">
@@ -21,13 +21,13 @@
     </pd:errorSchemas>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1350505246251</pd:targetNamespace>
-    <pd:activity name="Then the response is a valid RFC5005 Atom Feed">
+    <pd:activity name="Then the response is a valid RFC5005 Subscription Document">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>175</pd:x>
-        <pd:y>339</pd:y>
+        <pd:x>550</pd:x>
+        <pd:y>122</pd:y>
         <config>
-            <processName>/test/quickTestSuite/eventFeedTestCase/steps/A valid RFC5005 Atom Feed.process</processName>
+            <processName>/test/quickTestSuite/eventFeedTestCase/steps/A valid RFC5005 Subscription Document.process</processName>
         </config>
         <pd:inputBindings>
             <xsl:copy-of select="$When-PATH-is-requested/ns1:response"/>
@@ -36,8 +36,8 @@
     <pd:activity name="When [PATH] is requested">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>162</pd:x>
-        <pd:y>219</pd:y>
+        <pd:x>409</pd:x>
+        <pd:y>117</pd:y>
         <config>
             <processName>/test/quickTestSuite/eventFeedTestCase/steps/[PATH] is requested.process</processName>
         </config>
@@ -148,14 +148,14 @@
     <pd:activity name="And there should be [N] entries in the feed">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>320</pd:x>
-        <pd:y>336</pd:y>
+        <pd:x>685</pd:x>
+        <pd:y>117</pd:y>
         <config>
             <processName>/test/quickTestSuite/eventFeedTestCase/steps/There should be [N] entries in the feed.process</processName>
         </config>
         <pd:inputBindings>
             <input>
-                <xsl:copy-of select="$Then-the-response-is-a-valid-RFC5005-Atom-Feed/ns3:feed"/>
+                <xsl:copy-of select="$Then-the-response-is-a-valid-RFC5005-Subscription-Document/ns3:feed"/>
                 <expectedEntryCount>
                     <xsl:value-of select="count($And-the-feed-has-N-entries/output/entry)"/>
                 </expectedEntryCount>
@@ -165,37 +165,13 @@
     <pd:activity name="And there shouldn't be a prev-archive link">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>447</pd:x>
-        <pd:y>335</pd:y>
+        <pd:x>822</pd:x>
+        <pd:y>118</pd:y>
         <config>
             <processName>/test/quickTestSuite/eventFeedTestCase/steps/There shouldn't be a prev-archive link.process</processName>
         </config>
         <pd:inputBindings>
-            <xsl:copy-of select="$Then-the-response-is-a-valid-RFC5005-Atom-Feed/ns3:feed"/>
-        </pd:inputBindings>
-    </pd:activity>
-    <pd:activity name="And there shouldn't be an archive element">
-        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-        <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>572</pd:x>
-        <pd:y>331</pd:y>
-        <config>
-            <processName>/test/quickTestSuite/eventFeedTestCase/steps/There shouldn't be an archive element.process</processName>
-        </config>
-        <pd:inputBindings>
-            <xsl:copy-of select="$Then-the-response-is-a-valid-RFC5005-Atom-Feed/ns3:feed"/>
-        </pd:inputBindings>
-    </pd:activity>
-    <pd:activity name="There shouldn't be a next-archive link">
-        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-        <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>713</pd:x>
-        <pd:y>327</pd:y>
-        <config>
-            <processName>/test/quickTestSuite/eventFeedTestCase/steps/There shouldn't be a next-archive link.process</processName>
-        </config>
-        <pd:inputBindings>
-            <xsl:copy-of select="$Then-the-response-is-a-valid-RFC5005-Atom-Feed/ns3:feed"/>
+            <xsl:copy-of select="$Then-the-response-is-a-valid-RFC5005-Subscription-Document/ns3:feed"/>
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>
@@ -207,13 +183,13 @@
     </pd:transition>
     <pd:transition>
         <pd:from>When [PATH] is requested</pd:from>
-        <pd:to>Then the response is a valid RFC5005 Atom Feed</pd:to>
+        <pd:to>Then the response is a valid RFC5005 Subscription Document</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>Then the response is a valid RFC5005 Atom Feed</pd:from>
+        <pd:from>Then the response is a valid RFC5005 Subscription Document</pd:from>
         <pd:to>And there should be [N] entries in the feed</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
@@ -242,20 +218,6 @@
     </pd:transition>
     <pd:transition>
         <pd:from>And there shouldn't be a prev-archive link</pd:from>
-        <pd:to>And there shouldn't be an archive element</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>And there shouldn't be an archive element</pd:from>
-        <pd:to>There shouldn't be a next-archive link</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>There shouldn't be a next-archive link</pd:from>
         <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
