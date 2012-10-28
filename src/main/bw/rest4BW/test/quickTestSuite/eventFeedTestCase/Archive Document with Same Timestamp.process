@@ -21,13 +21,13 @@
     </pd:errorSchemas>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1350505246251</pd:targetNamespace>
-    <pd:activity name="And the response is a valid RFC5005 Atom Feed">
+    <pd:activity name="And the response is a valid RFC5005 Subscription Document">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>522</pd:x>
-        <pd:y>121</pd:y>
+        <pd:x>529</pd:x>
+        <pd:y>135</pd:y>
         <config>
-            <processName>/test/quickTestSuite/eventFeedTestCase/steps/A valid RFC5005 Atom Feed.process</processName>
+            <processName>/test/quickTestSuite/eventFeedTestCase/steps/A valid RFC5005 Subscription Document.process</processName>
         </config>
         <pd:inputBindings>
             <xsl:copy-of select="$And-PATH-is-requested/ns1:response"/>
@@ -311,13 +311,13 @@
             <ns1:request>
                 <ns1:Method>GET</ns1:Method>
                 <ns1:RequestURI>
-                    <xsl:value-of select="$And-the-response-is-a-valid-RFC5005-Atom-Feed/atom:feed/atom:link[@rel='prev-archive']/@href"/>
+                    <xsl:value-of select="$And-the-response-is-a-valid-RFC5005-Subscription-Document/atom:feed/atom:link[@rel='prev-archive']/@href"/>
                 </ns1:RequestURI>
                 <ns1:Command>
-                    <xsl:value-of select="concat('/', substring-after(substring-after(substring-before($And-the-response-is-a-valid-RFC5005-Atom-Feed/atom:feed/atom:link[@rel='prev-archive']/@href, &quot;?&quot;), 'http://'), '/'))"/>
+                    <xsl:value-of select="concat('/', substring-after(substring-after(substring-before($And-the-response-is-a-valid-RFC5005-Subscription-Document/atom:feed/atom:link[@rel='prev-archive']/@href, &quot;?&quot;), 'http://'), '/'))"/>
                 </ns1:Command>
                 <ns1:QueryString>
-                    <xsl:value-of select="substring-after($And-the-response-is-a-valid-RFC5005-Atom-Feed/atom:feed/atom:link[@rel='prev-archive']/@href, &quot;?&quot;)"/>
+                    <xsl:value-of select="substring-after($And-the-response-is-a-valid-RFC5005-Subscription-Document/atom:feed/atom:link[@rel='prev-archive']/@href, &quot;?&quot;)"/>
                 </ns1:QueryString>
                 <ns1:Context>
                     <ns1:RemoteAddress>localhost</ns1:RemoteAddress>
@@ -346,13 +346,13 @@
     </pd:transition>
     <pd:transition>
         <pd:from>And [PATH] is requested</pd:from>
-        <pd:to>And the response is a valid RFC5005 Atom Feed</pd:to>
+        <pd:to>And the response is a valid RFC5005 Subscription Document</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>And the response is a valid RFC5005 Atom Feed</pd:from>
+        <pd:from>And the response is a valid RFC5005 Subscription Document</pd:from>
         <pd:to>When the prev-archive is requested</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
