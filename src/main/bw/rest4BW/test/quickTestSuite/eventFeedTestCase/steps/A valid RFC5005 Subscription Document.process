@@ -39,11 +39,11 @@
             <processName>/BWUnit/Public/Asserts/AssertDoesNotExist.process</processName>
         </config>
         <pd:inputBindings>
-            <ns1:exists-input xmlns:ns1="http://windyroad.org/bwunit-asserts-0.0.0.xsd">
-                <ns1:content>
+            <ns:exists-input>
+                <ns:content>
                     <xsl:copy-of select="$A-valid-RFC5005-Atom-Feed/atom:feed/fh:archive"/>
-                </ns1:content>
-            </ns1:exists-input>
+                </ns:content>
+            </ns:exists-input>
         </pd:inputBindings>
     </pd:activity>
     <pd:activity name="There shouldn't be a next-archive link">
