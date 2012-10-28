@@ -21,13 +21,13 @@
     </pd:errorSchemas>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1350505246251</pd:targetNamespace>
-    <pd:activity name="Then the response is a valid RFC5005 Atom Feed">
+    <pd:activity name="Then the response is a valid RFC5005 Subscription Document">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
         <pd:x>542</pd:x>
         <pd:y>122</pd:y>
         <config>
-            <processName>/test/quickTestSuite/eventFeedTestCase/steps/A valid RFC5005 Atom Feed.process</processName>
+            <processName>/test/quickTestSuite/eventFeedTestCase/steps/A valid RFC5005 Subscription Document.process</processName>
         </config>
         <pd:inputBindings>
             <xsl:copy-of select="$When-PATH-is-requested/ns1:response"/>
@@ -155,7 +155,7 @@
         </config>
         <pd:inputBindings>
             <input>
-                <xsl:copy-of select="$Then-the-response-is-a-valid-RFC5005-Atom-Feed/ns3:feed"/>
+                <xsl:copy-of select="$Then-the-response-is-a-valid-RFC5005-Subscription-Document/ns3:feed"/>
                 <expectedEntryCount>
                     <xsl:value-of select="count($And-the-feed-has-N-entries/output/entry)"/>
                 </expectedEntryCount>
@@ -172,7 +172,7 @@
         </config>
         <pd:inputBindings>
             <input>
-                <xsl:copy-of select="$Then-the-response-is-a-valid-RFC5005-Atom-Feed/ns3:feed"/>
+                <xsl:copy-of select="$Then-the-response-is-a-valid-RFC5005-Subscription-Document/ns3:feed"/>
                 <xsl:copy-of select="$And-the-feed-has-N-entries/output/entry"/>
             </input>
         </pd:inputBindings>
@@ -186,13 +186,13 @@
     </pd:transition>
     <pd:transition>
         <pd:from>When [PATH] is requested</pd:from>
-        <pd:to>Then the response is a valid RFC5005 Atom Feed</pd:to>
+        <pd:to>Then the response is a valid RFC5005 Subscription Document</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>Then the response is a valid RFC5005 Atom Feed</pd:from>
+        <pd:from>Then the response is a valid RFC5005 Subscription Document</pd:from>
         <pd:to>And there should be [N] entries in the feed</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
