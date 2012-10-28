@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pfx2="http://windyroad.org/wr-http.xsd" xmlns:pfx="http://windyroad.org/rest4BW.xsd" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:fh="http://purl.org/syndication/history/1.0">
+    <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Schemas/rest4BW.xsd"/>
+    <xsd:import namespace="http://www.w3.org/2005/Atom" schemaLocation="/rest4BW/RSS/atom.xsd"/>
+    <xsd:import namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/rest4BW/Schemas/HttpConnection.xsd"/>
+    <pd:name>test/quickTestSuite/eventFeedTestCase/steps/A valid RFC5005 Subscription Document.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx2:response"/>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$A-valid-RFC5005-Atom-Feed/atom:feed"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="atom:feed"/>
+    <pd:endX>703</pd:endX>
+    <pd:endY>65</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1350505462311</pd:targetNamespace>
+    <pd:activity name="A valid RFC5005 Atom Feed">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>277</pd:x>
+        <pd:y>71</pd:y>
+        <config>
+            <processName>/test/quickTestSuite/eventFeedTestCase/steps/A valid RFC5005 Atom Feed.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Start/pfx2:response"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="There shouldn't be an archive element">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>412</pd:x>
+        <pd:y>72</pd:y>
+        <config>
+            <processName>/BWUnit/Public/Asserts/AssertDoesNotExist.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns1:exists-input xmlns:ns1="http://windyroad.org/bwunit-asserts-0.0.0.xsd">
+                <ns1:content>
+                    <xsl:copy-of select="$A-valid-RFC5005-Atom-Feed/atom:feed/fh:archive"/>
+                </ns1:content>
+            </ns1:exists-input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="There shouldn't be a next-archive link">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>570</pd:x>
+        <pd:y>81</pd:y>
+        <config>
+            <processName>/BWUnit/Public/Asserts/AssertDoesNotExist.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:exists-input>
+                <ns:content>
+                    <xsl:copy-of select="$A-valid-RFC5005-Atom-Feed/atom:feed/atom:link[@rel='next-archive']"/>
+                </ns:content>
+            </ns:exists-input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>A valid RFC5005 Atom Feed</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>A valid RFC5005 Atom Feed</pd:from>
+        <pd:to>There shouldn't be an archive element</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>There shouldn't be an archive element</pd:from>
+        <pd:to>There shouldn't be a next-archive link</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>There shouldn't be a next-archive link</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>
