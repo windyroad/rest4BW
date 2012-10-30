@@ -120,7 +120,7 @@
 		<sequential>
 			<loadfile property="bwunit.license" srcfile="${dep.bwunit.BWUnit.license}" />
 			<mkdir dir="build/@{phase}/${ant.project.name}" />
-			<bwunit:run-tests dir="src/main/bw"
+			<bwunit:run-tests dir="@{srcdir}"
 			                  project="${ant.project.name}"
 			                  result-dest-dir="build/@{phase}/${ant.project.name}"
 			                  force="${bwunit.force}"
