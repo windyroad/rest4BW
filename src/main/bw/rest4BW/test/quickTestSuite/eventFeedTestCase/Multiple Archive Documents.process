@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:ns1="http://windyroad.org/wr-http.xsd" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:ns="http://windyroad.org/bwunit-asserts-0.0.0.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns2="http://windyroad.org/rest4BW.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
     <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://windyroad.org/wr-http.xsd" schemaLocation="/rest4BW/Schemas/HttpConnection.xsd"/>
-    <pd:name>test/quickTestSuite/eventFeedTestCase/Feed with Pages.process</pd:name>
+    <pd:name>test/quickTestSuite/eventFeedTestCase/Multiple Archive Documents.process</pd:name>
     <pd:description>@Timeout(60000)</pd:description>
     <pd:startName>Start</pd:startName>
     <pd:startX>50</pd:startX>
     <pd:startY>106</pd:startY>
     <pd:returnBindings/>
     <pd:endName>End</pd:endName>
-    <pd:endX>922</pd:endX>
-    <pd:endY>104</pd:endY>
+    <pd:endX>849</pd:endX>
+    <pd:endY>351</pd:endY>
     <pd:errorSchemas>
         <rollback>
             <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="rollback">
@@ -21,19 +21,19 @@
     </pd:errorSchemas>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1350505246251</pd:targetNamespace>
-    <pd:activity name="Then the response is a valid RFC5005 Subscription Document">
+    <pd:activity name="And the response is a valid RFC5005 Atom Feed">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>542</pd:x>
-        <pd:y>128</pd:y>
+        <pd:x>522</pd:x>
+        <pd:y>121</pd:y>
         <config>
-            <processName>/test/quickTestSuite/eventFeedTestCase/steps/A valid RFC5005 Subscription Document.process</processName>
+            <processName>/test/quickTestSuite/eventFeedTestCase/steps/A valid RFC5005 Atom Feed.process</processName>
         </config>
         <pd:inputBindings>
-            <xsl:copy-of select="$When-PATH-is-requested/ns1:response"/>
+            <xsl:copy-of select="$And-PATH-is-requested/ns1:response"/>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="When [PATH] is requested">
+    <pd:activity name="And [PATH] is requested">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
         <pd:x>416</pd:x>
@@ -73,6 +73,9 @@
                     <xsl:value-of select="'http://localhost/mytestfeed'"/>
                 </xsl:attribute>
                 <xsl:attribute name="title">My Test Feed</xsl:attribute>
+                <xsl:attribute name="pagesize">
+                    <xsl:value-of select="5"/>
+                </xsl:attribute>
                 <path>/mytestfeed</path>
             </feed>
         </pd:inputBindings>
@@ -258,14 +261,14 @@
     <pd:activity name="And there should be [N] entries in the feed">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>687</pd:x>
-        <pd:y>122</pd:y>
+        <pd:x>326</pd:x>
+        <pd:y>367</pd:y>
         <config>
             <processName>/test/quickTestSuite/eventFeedTestCase/steps/There should be [N] entries in the feed.process</processName>
         </config>
         <pd:inputBindings>
             <input>
-                <xsl:copy-of select="$Then-the-response-is-a-valid-RFC5005-Subscription-Document/atom:feed"/>
+                <xsl:copy-of select="$And-the-response-is-a-valid-RFC5005-Archive-Document/atom:feed"/>
                 <expectedEntryCount>
                     <xsl:value-of select="$Given-a-feed-at-PATH/feed/@pagesize"/>
                 </expectedEntryCount>
@@ -275,15 +278,121 @@
     <pd:activity name="And the Entries Should Be">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>797</pd:x>
-        <pd:y>116</pd:y>
+        <pd:x>452</pd:x>
+        <pd:y>364</pd:y>
         <config>
             <processName>/test/quickTestSuite/eventFeedTestCase/steps/The Entries Should Be.process</processName>
         </config>
         <pd:inputBindings>
             <input>
-                <xsl:copy-of select="$Then-the-response-is-a-valid-RFC5005-Subscription-Document/atom:feed"/>
-                <xsl:copy-of select="$And-the-feed-has-N-entries/output/entry[position() > 5]"/>
+                <xsl:copy-of select="$Then-the-response-should-be-a-valid-RFC5005--Archive-Document/atom:feed"/>
+                <xsl:copy-of select="$And-the-feed-has-N-entries/output/entry[position() &lt; 6]"/>
+            </input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="And there shouldn't be a prev-archive link">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>583</pd:x>
+        <pd:y>369</pd:y>
+        <config>
+            <processName>/test/quickTestSuite/eventFeedTestCase/steps/There shouldn't be a prev-archive link.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Then-the-response-should-be-a-valid-RFC5005--Archive-Document/atom:feed"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="And the prev-archive is requested">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>656</pd:x>
+        <pd:y>121</pd:y>
+        <config>
+            <processName>/test/quickTestSuite/eventFeedTestCase/steps/[PATH] is requested.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns1:request>
+                <ns1:Method>GET</ns1:Method>
+                <ns1:RequestURI>
+                    <xsl:value-of select="$And-the-response-is-a-valid-RFC5005-Atom-Feed/atom:feed/atom:link[@rel='prev-archive']/@href"/>
+                </ns1:RequestURI>
+                <ns1:Command>
+                    <xsl:value-of select="concat('/', substring-after(substring-after(substring-before($And-the-response-is-a-valid-RFC5005-Atom-Feed/atom:feed/atom:link[@rel='prev-archive']/@href, &quot;?&quot;), 'http://'), '/'))"/>
+                </ns1:Command>
+                <ns1:QueryString>
+                    <xsl:value-of select="substring-after($And-the-response-is-a-valid-RFC5005-Atom-Feed/atom:feed/atom:link[@rel='prev-archive']/@href, &quot;?&quot;)"/>
+                </ns1:QueryString>
+                <ns1:Context>
+                    <ns1:RemoteAddress>localhost</ns1:RemoteAddress>
+                </ns1:Context>
+            </ns1:request>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="And the response is a valid RFC5005 Archive Document">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>790</pd:x>
+        <pd:y>118</pd:y>
+        <config>
+            <processName>/test/quickTestSuite/eventFeedTestCase/steps/A valid RFC5005 Archive Document.process</processName>
+        </config>
+        <pd:inputBindings>
+            <input>
+                <xsl:copy-of select="$And-the-prev-archive-is-requested/ns1:response"/>
+                <xsl:copy-of select="$Given-a-feed-at-PATH/feed"/>
+            </input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="And there should be a next-archive link">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>728</pd:x>
+        <pd:y>369</pd:y>
+        <config>
+            <processName>/test/quickTestSuite/eventFeedTestCase/steps/There should be a next-archive link.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Then-the-response-should-be-a-valid-RFC5005--Archive-Document/atom:feed"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="When the next prev-archive is requested">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>165</pd:x>
+        <pd:y>237</pd:y>
+        <config>
+            <processName>/test/quickTestSuite/eventFeedTestCase/steps/[PATH] is requested.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns1:request>
+                <ns1:Method>GET</ns1:Method>
+                <ns1:RequestURI>
+                    <xsl:value-of select="$And-the-response-is-a-valid-RFC5005-Archive-Document/atom:feed/atom:link[@rel='prev-archive']/@href"/>
+                </ns1:RequestURI>
+                <ns1:Command>
+                    <xsl:value-of select="concat('/', substring-after(substring-after(substring-before($And-the-response-is-a-valid-RFC5005-Archive-Document/atom:feed/atom:link[@rel='prev-archive']/@href, &quot;?&quot;), 'http://'), '/'))"/>
+                </ns1:Command>
+                <ns1:QueryString>
+                    <xsl:value-of select="substring-after($And-the-response-is-a-valid-RFC5005-Archive-Document/atom:feed/atom:link[@rel='prev-archive']/@href, &quot;?&quot;)"/>
+                </ns1:QueryString>
+                <ns1:Context>
+                    <ns1:RemoteAddress>localhost</ns1:RemoteAddress>
+                </ns1:Context>
+            </ns1:request>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Then the response should be a valid RFC5005  Archive Document">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>169</pd:x>
+        <pd:y>376</pd:y>
+        <config>
+            <processName>/test/quickTestSuite/eventFeedTestCase/steps/A valid RFC5005 Archive Document.process</processName>
+        </config>
+        <pd:inputBindings>
+            <input>
+                <xsl:copy-of select="$When-the-next-prev-archive-is-requested/ns1:response"/>
+                <xsl:copy-of select="$Given-a-feed-at-PATH/feed"/>
             </input>
         </pd:inputBindings>
     </pd:activity>
@@ -295,22 +404,22 @@
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>When [PATH] is requested</pd:from>
-        <pd:to>Then the response is a valid RFC5005 Subscription Document</pd:to>
+        <pd:from>And [PATH] is requested</pd:from>
+        <pd:to>And the response is a valid RFC5005 Atom Feed</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>Then the response is a valid RFC5005 Subscription Document</pd:from>
-        <pd:to>And there should be [N] entries in the feed</pd:to>
+        <pd:from>And the response is a valid RFC5005 Atom Feed</pd:from>
+        <pd:to>And the prev-archive is requested</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
         <pd:from>And the feed has [N] entries</pd:from>
-        <pd:to>When [PATH] is requested</pd:to>
+        <pd:to>And [PATH] is requested</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
@@ -331,7 +440,49 @@
     </pd:transition>
     <pd:transition>
         <pd:from>And the Entries Should Be</pd:from>
+        <pd:to>And there shouldn't be a prev-archive link</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>And the prev-archive is requested</pd:from>
+        <pd:to>And the response is a valid RFC5005 Archive Document</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>And the response is a valid RFC5005 Archive Document</pd:from>
+        <pd:to>When the next prev-archive is requested</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>And there should be a next-archive link</pd:from>
         <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>And there shouldn't be a prev-archive link</pd:from>
+        <pd:to>And there should be a next-archive link</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>When the next prev-archive is requested</pd:from>
+        <pd:to>Then the response should be a valid RFC5005  Archive Document</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Then the response should be a valid RFC5005  Archive Document</pd:from>
+        <pd:to>And there should be [N] entries in the feed</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>

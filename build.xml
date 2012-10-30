@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project default="help"
+<project default="designer"
          name="rest4BW"
          xmlns="antlib:org.apache.tools.ant"
          xmlns:bwubuild="org.windyroad.bwunit.build"

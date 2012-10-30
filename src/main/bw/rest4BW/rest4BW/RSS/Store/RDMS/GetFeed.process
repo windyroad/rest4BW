@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx3="http://www.w3.org/2005/Atom" xmlns:pfx="http://windyroad.org/rest4BW.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://www.tibco.com/ns/no_namespace_schema_location/rest4BW/RSS/Feed Mapping.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://purl.org/syndication/history/1.0" xmlns:pfx5="www.tibco.com/plugin/java/JavaMethodActivityInput" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns2="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema">
+<pd:ProcessDefinition xmlns:pfx2="http://windyroad.org/rest-delegate.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pfx3="http://www.w3.org/2005/Atom" xmlns:pfx="http://windyroad.org/rest4BW.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://www.tibco.com/ns/no_namespace_schema_location/rest4BW/RSS/Feed Mapping.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://purl.org/syndication/history/1.0" xmlns:pfx5="www.tibco.com/plugin/java/JavaMethodActivityInput" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx6="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns2="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema">
     <xsd:import namespace="http://windyroad.org/rest-delegate.xsd"/>
     <xsd:import namespace="http://windyroad.org/HTTP1.1-StatusCodeDefinitions" schemaLocation="/rest4BW/Schemas/StatusCodeDefinitions.xsd"/>
     <xsd:import namespace="http://windyroad.org/rest4BW.xsd" schemaLocation="/rest4BW/Schemas/rest4BW.xsd"/>
@@ -23,6 +23,7 @@
     <pd:startY>78</pd:startY>
     <pd:returnBindings>
         <pfx3:feed>
+            <xsl:variable name="archive-pages" select="ceiling(($Get-Subscription-Doc/resultSet/Record[1]/ENTRIES | $Get-Archive-Doc/resultSet/Record/ENTRIES)[1] div $Start/input/feed/@pagesize)"/>
             <pfx3:generator>
                 <xsl:attribute name="uri">
                     <xsl:value-of select="'http://windyroad.org/software/open-source/rest4bw/'"/>
@@ -74,10 +75,10 @@
                         </xsl:attribute>
                         <xsl:attribute name="rel">self</xsl:attribute>
                     </pfx3:link>
-                    <xsl:if test="$Get-Subscription-Doc/resultSet/Record[1]/PAGES > 0">
+                    <xsl:if test="$archive-pages > 1">
                         <pfx3:link>
                             <xsl:attribute name="href">
-                                <xsl:value-of select="concat($Start/input/feed/@href, '?page=', $Get-Subscription-Doc/resultSet/Record[1]/PAGES - 1)"/>
+                                <xsl:value-of select="concat($Start/input/feed/@href, '?page=', $archive-pages - 2)"/>
                             </xsl:attribute>
                             <xsl:attribute name="rel">prev-archive</xsl:attribute>
                         </pfx3:link>
@@ -96,10 +97,18 @@
                         </xsl:attribute>
                         <xsl:attribute name="rel">current</xsl:attribute>
                     </pfx3:link>
+                    <xsl:if test="$Get-Archive-Doc/resultSet/Record[1]/PAGENUM &lt; ($archive-pages - 2)">
+                        <pfx3:link>
+                            <xsl:attribute name="href">
+                                <xsl:value-of select="concat($Start/input/feed/@href, '?page=', $Get-Archive-Doc/resultSet/Record[1]/PAGENUM + 1)"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="rel">next-archive</xsl:attribute>
+                        </pfx3:link>
+                    </xsl:if>
                     <xsl:if test="$Get-Archive-Doc/resultSet/Record[1]/PAGENUM > 0">
                         <pfx3:link>
                             <xsl:attribute name="href">
-                                <xsl:value-of select="concat($Start/input/feed/@href, '?page=', $Get-Subscription-Doc/resultSet/Record[1]/PAGES - 1)"/>
+                                <xsl:value-of select="concat($Start/input/feed/@href, '?page=', $Get-Archive-Doc/resultSet/Record[1]/PAGENUM - 1)"/>
                             </xsl:attribute>
                             <xsl:attribute name="rel">prev-archive</xsl:attribute>
                         </pfx3:link>
@@ -129,16 +138,17 @@
             <maxRows>100</maxRows>
             <emptyStrAsNil>false</emptyStrAsNil>
             <jdbcSharedConfig>/rest4BW/RSS/Store/RDMS/Event Store Connection.sharedjdbc</jdbcSharedConfig>
-            <statement>select * from (select *, ((rownum-1) / ?) pagenum from entries) 
-outer left join (select max(updated) feed_updated, (count(*)/?) PAGES from entries)
-where pagenum = (select (count(*)/?) COUNT from ENTRIES) 
+            <statement>select * from entries 
+outer left join (select max(updated) feed_updated, count(*) ENTRIES from entries)
 order by rownum desc</statement>
+            <optionalOrNillable>false</optionalOrNillable>
+            <Prepared_Param_DataType/>
             <oraObjects/>
             <oraTables/>
             <QueryOutputCachedSchemaColumns>ID</QueryOutputCachedSchemaColumns>
             <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
             <QueryOutputCachedSchemaDataTypesName>VARCHAR</QueryOutputCachedSchemaDataTypesName>
-            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
             <QueryOutputCachedSchemaColumns>TITLE</QueryOutputCachedSchemaColumns>
             <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
             <QueryOutputCachedSchemaDataTypesName>VARCHAR</QueryOutputCachedSchemaDataTypesName>
@@ -159,66 +169,22 @@ order by rownum desc</statement>
             <QueryOutputCachedSchemaDataTypes>93</QueryOutputCachedSchemaDataTypes>
             <QueryOutputCachedSchemaDataTypesName>TIMESTAMP</QueryOutputCachedSchemaDataTypesName>
             <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
-            <QueryOutputCachedSchemaColumns>PAGENUM</QueryOutputCachedSchemaColumns>
-            <QueryOutputCachedSchemaDataTypes>4</QueryOutputCachedSchemaDataTypes>
-            <QueryOutputCachedSchemaDataTypesName>INTEGER</QueryOutputCachedSchemaDataTypesName>
-            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
             <QueryOutputCachedSchemaColumns>FEED_UPDATED</QueryOutputCachedSchemaColumns>
             <QueryOutputCachedSchemaDataTypes>93</QueryOutputCachedSchemaDataTypes>
             <QueryOutputCachedSchemaDataTypesName>TIMESTAMP</QueryOutputCachedSchemaDataTypesName>
             <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
-            <QueryOutputCachedSchemaColumns>PAGES</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaColumns>ENTRIES</QueryOutputCachedSchemaColumns>
             <QueryOutputCachedSchemaDataTypes>-5</QueryOutputCachedSchemaDataTypes>
             <QueryOutputCachedSchemaDataTypesName>BIGINT</QueryOutputCachedSchemaDataTypesName>
             <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
-            <Prepared_Param_DataType>
-                <parameter>
-                    <parameterName>pagesize</parameterName>
-                    <dataType>INTEGER</dataType>
-                </parameter>
-                <parameter>
-                    <parameterName>pagesize</parameterName>
-                    <dataType>INTEGER</dataType>
-                </parameter>
-                <parameter>
-                    <parameterName>pagesize</parameterName>
-                    <dataType>INTEGER</dataType>
-                </parameter>
-            </Prepared_Param_DataType>
-            <optionalOrNillable>false</optionalOrNillable>
         </config>
         <pd:inputBindings>
             <jdbcQueryActivityInput>
-                <pagesize>
-                    <xsl:choose>
-                        <xsl:when test="exists($Start/input/feed/@pagesize)">
-                            <xsl:value-of select="$Start/input/feed/@pagesize"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </pagesize>
-                <pagesize>
-                    <xsl:choose>
-                        <xsl:when test="exists($Start/input/feed/@pagesize)">
-                            <xsl:value-of select="$Start/input/feed/@pagesize"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </pagesize>
-                <pagesize>
-                    <xsl:choose>
-                        <xsl:when test="exists($Start/input/feed/@pagesize)">
-                            <xsl:value-of select="$Start/input/feed/@pagesize"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </pagesize>
+                <xsl:if test="$Start/input/feed/@pagesize">
+                    <maxRows>
+                        <xsl:value-of select="$Start/input/feed/@pagesize"/>
+                    </maxRows>
+                </xsl:if>
             </jdbcQueryActivityInput>
         </pd:inputBindings>
     </pd:activity>
@@ -233,14 +199,12 @@ order by rownum desc</statement>
             <maxRows>100</maxRows>
             <emptyStrAsNil>false</emptyStrAsNil>
             <statement>select * from (select *, ((rownum-1) / ?) pagenum from entries) 
-outer left join (select max(updated) feed_updated, (count(*)/?) PAGES from entries)
+outer left join (select max(updated) feed_updated, count(*) ENTRIES from entries)
 where pagenum = ? 
 order by rownum desc</statement>
+            <jdbcSharedConfig>/rest4BW/RSS/Store/RDMS/Event Store Connection.sharedjdbc</jdbcSharedConfig>
+            <optionalOrNillable>false</optionalOrNillable>
             <Prepared_Param_DataType>
-                <parameter>
-                    <parameterName>pagesize</parameterName>
-                    <dataType>VARCHAR</dataType>
-                </parameter>
                 <parameter>
                     <parameterName>pagesize</parameterName>
                     <dataType>VARCHAR</dataType>
@@ -250,7 +214,6 @@ order by rownum desc</statement>
                     <dataType>VARCHAR</dataType>
                 </parameter>
             </Prepared_Param_DataType>
-            <jdbcSharedConfig>/rest4BW/RSS/Store/RDMS/Event Store Connection.sharedjdbc</jdbcSharedConfig>
             <oraObjects/>
             <oraTables/>
             <QueryOutputCachedSchemaColumns>ID</QueryOutputCachedSchemaColumns>
@@ -285,11 +248,10 @@ order by rownum desc</statement>
             <QueryOutputCachedSchemaDataTypes>93</QueryOutputCachedSchemaDataTypes>
             <QueryOutputCachedSchemaDataTypesName>TIMESTAMP</QueryOutputCachedSchemaDataTypesName>
             <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
-            <QueryOutputCachedSchemaColumns>PAGES</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaColumns>ENTRIES</QueryOutputCachedSchemaColumns>
             <QueryOutputCachedSchemaDataTypes>-5</QueryOutputCachedSchemaDataTypes>
             <QueryOutputCachedSchemaDataTypesName>BIGINT</QueryOutputCachedSchemaDataTypesName>
             <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
-            <optionalOrNillable>false</optionalOrNillable>
         </config>
         <pd:inputBindings>
             <jdbcQueryActivityInput>
@@ -303,19 +265,14 @@ order by rownum desc</statement>
                         </xsl:otherwise>
                     </xsl:choose>
                 </pagesize>
-                <pagesize>
-                    <xsl:choose>
-                        <xsl:when test="exists($Start/input/feed/@pagesize)">
-                            <xsl:value-of select="$Start/input/feed/@pagesize"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </pagesize>
                 <page>
                     <xsl:value-of select="$Start/input/pfx:request/pfx:query/pfx:item[@name='page']/@value"/>
                 </page>
+                <xsl:if test="$Start/input/feed/@pagesize">
+                    <maxRows>
+                        <xsl:value-of select="$Start/input/feed/@pagesize"/>
+                    </maxRows>
+                </xsl:if>
             </jdbcQueryActivityInput>
         </pd:inputBindings>
     </pd:activity>
@@ -349,4 +306,20 @@ order by rownum desc</statement>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
+    <pd:label>
+        <pd:name>Label</pd:name>
+        <pd:description>select * from (select *, ((rownum-1) / ?) pagenum from entries) 
+outer left join (select max(updated) feed_updated, (count(*)/?) PAGES from entries)
+where pagenum = (select (count(*)/?) COUNT from ENTRIES) 
+order by rownum desc</pd:description>
+        <pd:x>663</pd:x>
+        <pd:y>110</pd:y>
+        <pd:width>548</pd:width>
+        <pd:height>174</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-1</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
 </pd:ProcessDefinition>

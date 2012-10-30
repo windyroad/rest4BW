@@ -8,8 +8,8 @@
     <pd:startY>106</pd:startY>
     <pd:returnBindings/>
     <pd:endName>End</pd:endName>
-    <pd:endX>849</pd:endX>
-    <pd:endY>351</pd:endY>
+    <pd:endX>950</pd:endX>
+    <pd:endY>353</pd:endY>
     <pd:errorSchemas>
         <rollback>
             <xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="rollback">
@@ -334,7 +334,10 @@
             <processName>/test/quickTestSuite/eventFeedTestCase/steps/A valid RFC5005 Archive Document.process</processName>
         </config>
         <pd:inputBindings>
-            <xsl:copy-of select="$When-the-prev-archive-is-requested/ns1:response"/>
+            <input>
+                <xsl:copy-of select="$When-the-prev-archive-is-requested/ns1:response"/>
+                <xsl:copy-of select="$Given-a-feed-at-PATH/feed"/>
+            </input>
         </pd:inputBindings>
     </pd:activity>
     <pd:activity name="And there shouldn't be a next-archive link">
